@@ -4,6 +4,7 @@ import { useDirectorySettings } from "@/hooks/useDirectorySettings";
 import type { SettingsFormState } from "@/hooks/useSettingsForm";
 
 const getAppConfigDirOverrideMock = vi.hoisted(() => vi.fn());
+const getDefaultAppConfigDirMock = vi.hoisted(() => vi.fn());
 const getConfigDirMock = vi.hoisted(() => vi.fn());
 const selectConfigDirectoryMock = vi.hoisted(() => vi.fn());
 const setAppConfigDirOverrideMock = vi.hoisted(() => vi.fn());
@@ -16,6 +17,7 @@ const toastErrorMock = vi.hoisted(() => vi.fn());
 vi.mock("@/lib/api", () => ({
   settingsApi: {
     getAppConfigDirOverride: getAppConfigDirOverrideMock,
+    getDefaultAppConfigDir: getDefaultAppConfigDirMock,
     getConfigDir: getConfigDirMock,
     selectConfigDirectory: selectConfigDirectoryMock,
     setAppConfigDirOverride: setAppConfigDirOverrideMock,
@@ -48,7 +50,12 @@ const createSettings = (
   enableClaudePluginIntegration: false,
   claudeConfigDir: "/claude/custom",
   codexConfigDir: "/codex/custom",
+  openclawConfigDir: "/openclaw/custom",
   language: "zh",
+  themeMode: "dark",
+  themePalette: "tech-blue",
+  uiDensity: "comfortable",
+  motionPreference: "system",
   ...overrides,
 });
 
@@ -64,11 +71,15 @@ describe("useDirectorySettings", () => {
     );
 
     getAppConfigDirOverrideMock.mockResolvedValue(null);
+    getDefaultAppConfigDirMock.mockResolvedValue(
+      "/home/mock/.sdkwork/codebox",
+    );
     getConfigDirMock.mockImplementation(async (app: string) => {
       if (app === "claude") return "/remote/claude";
       if (app === "codex") return "/remote/codex";
       if (app === "gemini") return "/remote/gemini";
-      return "/remote/opencode";
+      if (app === "opencode") return "/remote/opencode";
+      return "/remote/openclaw";
     });
     selectConfigDirectoryMock.mockReset();
   });
@@ -89,6 +100,7 @@ describe("useDirectorySettings", () => {
       codex: "/remote/codex",
       gemini: "/remote/gemini",
       opencode: "/remote/opencode",
+      openclaw: "/remote/openclaw",
     });
   });
 
@@ -113,6 +125,29 @@ describe("useDirectorySettings", () => {
       claudeConfigDir: "/picked/claude",
     });
     expect(result.current.resolvedDirs.claude).toBe("/picked/claude");
+  });
+
+  it("updates openclaw directory when browsing succeeds", async () => {
+    selectConfigDirectoryMock.mockResolvedValue("/picked/openclaw");
+
+    const { result } = renderHook(() =>
+      useDirectorySettings({
+        settings: createSettings({ openclawConfigDir: undefined }),
+        onUpdateSettings,
+      }),
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    await act(async () => {
+      await result.current.browseDirectory("openclaw");
+    });
+
+    expect(selectConfigDirectoryMock).toHaveBeenCalledWith("/remote/openclaw");
+    expect(onUpdateSettings).toHaveBeenCalledWith({
+      openclawConfigDir: "/picked/openclaw",
+    });
+    expect(result.current.resolvedDirs.openclaw).toBe("/picked/openclaw");
   });
 
   it("reports error when directory selection fails", async () => {
@@ -178,7 +213,7 @@ describe("useDirectorySettings", () => {
 
     expect(result.current.appConfigDir).toBe("/new/app");
     expect(selectConfigDirectoryMock).toHaveBeenCalledWith(
-      "/home/mock/.cc-switch",
+      "/home/mock/.sdkwork/codebox",
     );
   });
 
@@ -208,7 +243,9 @@ describe("useDirectorySettings", () => {
     });
     expect(result.current.resolvedDirs.claude).toBe("/home/mock/.claude");
     expect(result.current.resolvedDirs.codex).toBe("/home/mock/.codex");
-    expect(result.current.resolvedDirs.appConfig).toBe("/home/mock/.cc-switch");
+    expect(result.current.resolvedDirs.appConfig).toBe(
+      "/home/mock/.sdkwork/codebox",
+    );
   });
 
   it("resetAllDirectories applies provided resolved values", async () => {
@@ -223,6 +260,7 @@ describe("useDirectorySettings", () => {
         "/server/codex",
         "/server/gemini",
         "/server/opencode",
+        "/server/openclaw",
       );
     });
 
@@ -230,5 +268,6 @@ describe("useDirectorySettings", () => {
     expect(result.current.resolvedDirs.codex).toBe("/server/codex");
     expect(result.current.resolvedDirs.gemini).toBe("/server/gemini");
     expect(result.current.resolvedDirs.opencode).toBe("/server/opencode");
+    expect(result.current.resolvedDirs.openclaw).toBe("/server/openclaw");
   });
 });

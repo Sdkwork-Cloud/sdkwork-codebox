@@ -1,156 +1,105 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  Plus,
-  Settings,
-  ArrowLeft,
-  Book,
-  Wrench,
-  RefreshCw,
-  History,
-  BarChart2,
-  Download,
-  FolderArchive,
-  Search,
-  FolderOpen,
-  KeyRound,
-  Shield,
-  Cpu,
-} from "lucide-react";
 import type { Provider, VisibleApps } from "@/types";
 import type { EnvConflict } from "@/types/env";
 import { useProvidersQuery, useSettingsQuery } from "@/lib/query";
-import {
-  providersApi,
-  settingsApi,
-  type AppId,
-  type ProviderSwitchEvent,
-} from "@/lib/api";
-import { checkAllEnvConflicts, checkEnvConflicts } from "@/lib/api/env";
+import { providersApi, settingsApi, type AppId } from "@/lib/api";
+import { checkAllEnvConflicts } from "@/lib/api/env";
+import { openclawKeys } from "@/lib/query/openclawKeys";
 import { useProviderActions } from "@/hooks/useProviderActions";
-import { openclawKeys, useOpenClawHealth } from "@/hooks/useOpenClaw";
+import { useOpenClawHealth } from "@/hooks/useOpenClaw";
 import { useProxyStatus } from "@/hooks/useProxyStatus";
-import { useAutoCompact } from "@/hooks/useAutoCompact";
 import { useLastValidValue } from "@/hooks/useLastValidValue";
 import { extractErrorMessage } from "@/utils/errorUtils";
-import { isTextEditableTarget } from "@/utils/domUtils";
-import { cn } from "@/lib/utils";
-import { isWindows, isLinux } from "@/lib/platform";
-import { AppSwitcher } from "@/components/AppSwitcher";
-import { ProviderList } from "@/components/providers/ProviderList";
 import { AddProviderDialog } from "@/components/providers/AddProviderDialog";
 import { EditProviderDialog } from "@/components/providers/EditProviderDialog";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { SettingsPage } from "@/components/settings/SettingsPage";
-import { UpdateBadge } from "@/components/UpdateBadge";
 import { EnvWarningBanner } from "@/components/env/EnvWarningBanner";
-import { ProxyToggle } from "@/components/proxy/ProxyToggle";
-import { FailoverToggle } from "@/components/proxy/FailoverToggle";
-import UsageScriptModal from "@/components/UsageScriptModal";
-import UnifiedMcpPanel from "@/components/mcp/UnifiedMcpPanel";
-import PromptPanel from "@/components/prompts/PromptPanel";
-import { SkillsPage } from "@/components/skills/SkillsPage";
-import UnifiedSkillsPanel from "@/components/skills/UnifiedSkillsPanel";
 import { DeepLinkImportDialog } from "@/components/DeepLinkImportDialog";
-import { AgentsPanel } from "@/components/agents/AgentsPanel";
-import { UniversalProviderPanel } from "@/components/universal";
-import { McpIcon } from "@/components/BrandIcons";
-import { Button } from "@/components/ui/button";
-import { SessionManagerPage } from "@/components/sessions/SessionManagerPage";
 import {
   useDisableCurrentOmo,
   useDisableCurrentOmoSlim,
 } from "@/lib/query/omo";
-import WorkspaceFilesPanel from "@/components/workspace/WorkspaceFilesPanel";
-import EnvPanel from "@/components/openclaw/EnvPanel";
-import ToolsPanel from "@/components/openclaw/ToolsPanel";
-import AgentsDefaultsPanel from "@/components/openclaw/AgentsDefaultsPanel";
-import OpenClawHealthBanner from "@/components/openclaw/OpenClawHealthBanner";
-
-type View =
-  | "providers"
-  | "settings"
-  | "prompts"
-  | "skills"
-  | "skillsDiscovery"
-  | "mcp"
-  | "agents"
-  | "universal"
-  | "sessions"
-  | "workspace"
-  | "openclawEnv"
-  | "openclawTools"
-  | "openclawAgents";
-
-interface WebDavSyncStatusUpdatedPayload {
-  source?: string;
-  status?: string;
-  error?: string;
-}
-
-const DRAG_BAR_HEIGHT = isWindows() || isLinux() ? 0 : 28; // px
-const HEADER_HEIGHT = 64; // px
-const CONTENT_TOP_OFFSET = DRAG_BAR_HEIGHT + HEADER_HEIGHT;
-
-const STORAGE_KEY = "cc-switch-last-app";
-const VALID_APPS: AppId[] = [
-  "claude",
-  "codex",
-  "gemini",
-  "opencode",
-  "openclaw",
-];
-
-const getInitialApp = (): AppId => {
-  const saved = localStorage.getItem(STORAGE_KEY) as AppId | null;
-  if (saved && VALID_APPS.includes(saved)) {
-    return saved;
-  }
-  return "claude";
-};
-
-const VIEW_STORAGE_KEY = "cc-switch-last-view";
-const VALID_VIEWS: View[] = [
-  "providers",
-  "settings",
-  "prompts",
-  "skills",
-  "skillsDiscovery",
-  "mcp",
-  "agents",
-  "universal",
-  "sessions",
-  "workspace",
-  "openclawEnv",
-  "openclawTools",
-  "openclawAgents",
-];
-
-const getInitialView = (): View => {
-  const saved = localStorage.getItem(VIEW_STORAGE_KEY) as View | null;
-  if (saved && VALID_VIEWS.includes(saved)) {
-    return saved;
-  }
-  return "providers";
-};
+import { AppContent } from "./shell/AppContent";
+import { AppHeader } from "./shell/AppHeader";
+import {
+  DRAG_BAR_HEIGHT,
+  getBackView,
+  getDomainForView,
+  getFirstVisibleApp,
+  getInitialApp,
+  getInitialDomain,
+  getInitialProductViewState,
+  getInitialViewState,
+  normalizeViewState,
+  persistNavigationState,
+  resolveViewForDomain,
+  type ControlCenterView,
+  type Domain,
+  type NavigationContext,
+  type DomainViewState,
+  type ProductViewState,
+  type ProviderConfirmAction,
+  type View,
+} from "./shell/navigation";
+import { AppSidebar } from "./shell/AppSidebar";
+import { useShellEffects } from "./shell/useShellEffects";
 
 function App() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const hasSkillsSupport = true;
+  const initialApp = getInitialApp();
 
-  const [activeApp, setActiveApp] = useState<AppId>(getInitialApp);
-  const [currentView, setCurrentView] = useState<View>(getInitialView);
-  const [settingsDefaultTab, setSettingsDefaultTab] = useState("general");
+  const [activeApp, setActiveApp] = useState<AppId>(initialApp);
+  const [activeDomain, setActiveDomain] = useState<Domain>(() =>
+    getInitialDomain(initialApp, hasSkillsSupport),
+  );
+  const [viewState, setViewState] = useState<DomainViewState>(() =>
+    getInitialViewState(initialApp, hasSkillsSupport),
+  );
+  const [productViewState, setProductViewState] = useState<ProductViewState>(
+    () => getInitialProductViewState(hasSkillsSupport),
+  );
+  const [navigationHistory, setNavigationHistory] = useState<
+    NavigationContext[]
+  >([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const currentView =
+    activeDomain === "products"
+      ? productViewState[activeApp]
+      : viewState[activeDomain];
+  const currentContextRef = useRef<NavigationContext>({
+    activeApp,
+    activeDomain,
+    view: currentView,
+  });
+  const navigationHistoryRef = useRef<NavigationContext[]>([]);
 
   useEffect(() => {
-    localStorage.setItem(VIEW_STORAGE_KEY, currentView);
-  }, [currentView]);
+    currentContextRef.current = {
+      activeApp,
+      activeDomain,
+      view: currentView,
+    };
+  }, [activeApp, activeDomain, currentView]);
+
+  useEffect(() => {
+    navigationHistoryRef.current = navigationHistory;
+  }, [navigationHistory]);
+
+  useEffect(() => {
+    persistNavigationState(
+      activeDomain,
+      {
+        ...viewState,
+        products: productViewState[activeApp],
+      },
+      productViewState,
+    );
+  }, [activeApp, activeDomain, productViewState, viewState]);
 
   const { data: settingsData } = useSettingsQuery();
   const visibleApps: VisibleApps = settingsData?.visibleApps ?? {
@@ -161,57 +110,236 @@ function App() {
     openclaw: true,
   };
 
-  const getFirstVisibleApp = (): AppId => {
-    if (visibleApps.claude) return "claude";
-    if (visibleApps.codex) return "codex";
-    if (visibleApps.gemini) return "gemini";
-    if (visibleApps.opencode) return "opencode";
-    if (visibleApps.openclaw) return "openclaw";
-    return "claude"; // fallback
-  };
+  useEffect(() => {
+    setNavigationHistory((prev) => {
+      const next = prev.filter((entry) => visibleApps[entry.activeApp]);
+      return next.length === prev.length ? prev : next;
+    });
+  }, [visibleApps]);
 
   useEffect(() => {
     if (!visibleApps[activeApp]) {
-      setActiveApp(getFirstVisibleApp());
+      const nextApp = getFirstVisibleApp(visibleApps);
+      setNavigationHistory([]);
+      setActiveApp(nextApp);
+      setViewState((prev) =>
+        normalizeViewState(
+          nextApp,
+          {
+            ...prev,
+            products: productViewState[nextApp],
+          },
+          hasSkillsSupport,
+        ),
+      );
     }
-  }, [visibleApps, activeApp]);
+  }, [visibleApps, activeApp, hasSkillsSupport, productViewState]);
 
-  // Fallback from sessions view when switching to an app without session support
-  useEffect(() => {
-    if (
-      currentView === "sessions" &&
-      activeApp !== "claude" &&
-      activeApp !== "codex" &&
-      activeApp !== "opencode" &&
-      activeApp !== "openclaw" &&
-      activeApp !== "gemini"
-    ) {
-      setCurrentView("providers");
+  const applyViewChange = useCallback(
+    (targetApp: AppId, nextView: View) => {
+      const nextDomain = getDomainForView(nextView);
+      const resolvedView = resolveViewForDomain(
+        nextDomain,
+        nextView,
+        targetApp,
+        hasSkillsSupport,
+      ) as View;
+      const resolvedProductView =
+        nextDomain === "products"
+          ? (resolvedView as ProductViewState[AppId])
+          : productViewState[targetApp];
+
+      if (nextDomain === "products") {
+        setProductViewState((prev) => ({
+          ...prev,
+          [targetApp]: resolvedProductView as ProductViewState[AppId],
+        }));
+      }
+
+      setViewState((prev) =>
+        normalizeViewState(
+          targetApp,
+          {
+            ...prev,
+            products: resolvedProductView,
+            [nextDomain]: resolvedView,
+          },
+          hasSkillsSupport,
+        ),
+      );
+      setActiveApp(targetApp);
+      setActiveDomain(nextDomain);
+    },
+    [hasSkillsSupport, productViewState],
+  );
+
+  const handleSelectApp = useCallback(
+    (nextApp: AppId) => {
+      setNavigationHistory([]);
+      setActiveApp(nextApp);
+      setViewState((prev) =>
+        normalizeViewState(
+          nextApp,
+          {
+            ...prev,
+            products: productViewState[nextApp],
+          },
+          hasSkillsSupport,
+        ),
+      );
+      setActiveDomain("products");
+    },
+    [hasSkillsSupport, productViewState],
+  );
+
+  const pushNavigationContext = useCallback((context: NavigationContext) => {
+    const lastContext = navigationHistoryRef.current.at(-1);
+    const isDuplicate =
+      lastContext?.activeApp === context.activeApp &&
+      lastContext.activeDomain === context.activeDomain &&
+      lastContext.view === context.view;
+
+    if (!isDuplicate) {
+      setNavigationHistory((prev) => [...prev, context]);
     }
-  }, [activeApp, currentView]);
+  }, []);
+
+  const handleSetCurrentView = useCallback(
+    (nextView: View) => {
+      const currentContext = currentContextRef.current;
+      const nextDomain = getDomainForView(nextView);
+      const resolvedNextView = resolveViewForDomain(
+        nextDomain,
+        nextView,
+        activeApp,
+        hasSkillsSupport,
+      ) as View;
+      const isSameContext =
+        currentContext.activeApp === activeApp &&
+        currentContext.activeDomain === nextDomain &&
+        currentContext.view === resolvedNextView;
+      const shouldPreserveReturnTarget =
+        (currentContext.activeDomain === "products" &&
+          nextDomain === "extensions") ||
+        (currentContext.activeDomain === nextDomain && nextDomain !== "products");
+
+      if (isSameContext) {
+        return;
+      }
+
+      if (shouldPreserveReturnTarget) {
+        pushNavigationContext(currentContext);
+      } else if (nextDomain === "products") {
+        setNavigationHistory([]);
+      }
+      applyViewChange(activeApp, resolvedNextView);
+    },
+    [activeApp, applyViewChange, hasSkillsSupport, pushNavigationContext],
+  );
+
+  const handleOpenContextView = useCallback(
+    (nextView: View) => {
+      const currentContext = currentContextRef.current;
+      const nextDomain = getDomainForView(nextView);
+      const resolvedNextView = resolveViewForDomain(
+        nextDomain,
+        nextView,
+        activeApp,
+        hasSkillsSupport,
+      ) as View;
+      const isSameContext =
+        currentContext.activeApp === activeApp &&
+        currentContext.activeDomain === nextDomain &&
+        currentContext.view === resolvedNextView;
+
+      if (isSameContext) {
+        return;
+      }
+
+      pushNavigationContext(currentContext);
+
+      applyViewChange(activeApp, resolvedNextView);
+    },
+    [activeApp, applyViewChange, hasSkillsSupport, pushNavigationContext],
+  );
+
+  const resolveFallbackBackView = useCallback(
+    (context: NavigationContext): View => {
+      if (context.view === "skillsDiscovery") {
+        return "skills";
+      }
+
+      if (context.activeDomain === "products") {
+        return getBackView(context.view);
+      }
+
+      return productViewState[context.activeApp];
+    },
+    [productViewState],
+  );
+
+  const handleNavigateBack = useCallback(() => {
+    const currentContext = currentContextRef.current;
+    const lastContext = navigationHistoryRef.current.at(-1);
+
+    if (lastContext) {
+      setNavigationHistory((prev) => prev.slice(0, -1));
+      applyViewChange(lastContext.activeApp, lastContext.view);
+      return;
+    }
+
+    const fallbackView = resolveFallbackBackView(currentContext);
+
+    if (fallbackView === currentContext.view) {
+      return;
+    }
+
+    applyViewChange(currentContext.activeApp, fallbackView);
+  }, [applyViewChange, resolveFallbackBackView]);
+
+  const canGoBack =
+    navigationHistory.length > 0 || activeDomain !== "products";
+
+  const returnTarget = useMemo<NavigationContext | null>(() => {
+    const lastContext = navigationHistory.at(-1);
+    if (lastContext) {
+      return lastContext;
+    }
+
+    const currentContext = currentContextRef.current;
+    const fallbackView = resolveFallbackBackView(currentContext);
+    if (fallbackView === currentContext.view) {
+      return null;
+    }
+
+    return {
+      activeApp: currentContext.activeApp,
+      activeDomain: getDomainForView(fallbackView),
+      view: fallbackView,
+    };
+  }, [navigationHistory, resolveFallbackBackView]);
+
+  const handleOpenControlCenter = useCallback(
+    (tab: ControlCenterView) => {
+      handleOpenContextView(tab);
+    },
+    [handleOpenContextView],
+  );
 
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
   const [usageProvider, setUsageProvider] = useState<Provider | null>(null);
-  const [confirmAction, setConfirmAction] = useState<{
-    provider: Provider;
-    action: "remove" | "delete";
-  } | null>(null);
+  const [confirmAction, setConfirmAction] =
+    useState<ProviderConfirmAction | null>(null);
   const [envConflicts, setEnvConflicts] = useState<EnvConflict[]>([]);
   const [showEnvBanner, setShowEnvBanner] = useState(false);
 
   const effectiveEditingProvider = useLastValidValue(editingProvider);
   const effectiveUsageProvider = useLastValidValue(usageProvider);
 
-  const toolbarRef = useRef<HTMLDivElement>(null);
-  const isToolbarCompact = useAutoCompact(toolbarRef);
-
   const promptPanelRef = useRef<any>(null);
   const mcpPanelRef = useRef<any>(null);
   const skillsPageRef = useRef<any>(null);
   const unifiedSkillsPanelRef = useRef<any>(null);
-  const addActionButtonClass =
-    "bg-orange-500 hover:bg-orange-600 dark:bg-orange-500 dark:hover:bg-orange-600 text-white shadow-lg shadow-orange-500/30 dark:shadow-orange-500/40 rounded-full w-8 h-8";
-
   const {
     isRunning: isProxyRunning,
     takeoverStatus,
@@ -232,6 +360,7 @@ function App() {
   const currentProviderId = data?.currentProviderId ?? "";
   const isOpenClawView =
     activeApp === "openclaw" &&
+    activeDomain === "products" &&
     (currentView === "providers" ||
       currentView === "workspace" ||
       currentView === "sessions" ||
@@ -240,13 +369,6 @@ function App() {
       currentView === "openclawAgents");
   const { data: openclawHealthWarnings = [] } =
     useOpenClawHealth(isOpenClawView);
-  const hasSkillsSupport = true;
-  const hasSessionSupport =
-    activeApp === "claude" ||
-    activeApp === "codex" ||
-    activeApp === "opencode" ||
-    activeApp === "openclaw" ||
-    activeApp === "gemini";
 
   const {
     addProvider,
@@ -291,234 +413,18 @@ function App() {
     });
   };
 
-  useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-
-    const setupListener = async () => {
-      try {
-        unsubscribe = await providersApi.onSwitched(
-          async (event: ProviderSwitchEvent) => {
-            if (event.appType === activeApp) {
-              await refetch();
-            }
-          },
-        );
-      } catch (error) {
-        console.error("[App] Failed to subscribe provider switch event", error);
-      }
-    };
-
-    setupListener();
-    return () => {
-      unsubscribe?.();
-    };
-  }, [activeApp, refetch]);
-
-  useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-
-    const setupListener = async () => {
-      try {
-        const { listen } = await import("@tauri-apps/api/event");
-        unsubscribe = await listen("universal-provider-synced", async () => {
-          await queryClient.invalidateQueries({ queryKey: ["providers"] });
-          try {
-            await providersApi.updateTrayMenu();
-          } catch (error) {
-            console.error("[App] Failed to update tray menu", error);
-          }
-        });
-      } catch (error) {
-        console.error(
-          "[App] Failed to subscribe universal-provider-synced event",
-          error,
-        );
-      }
-    };
-
-    setupListener();
-    return () => {
-      unsubscribe?.();
-    };
-  }, [queryClient]);
-
-  useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-    let active = true;
-
-    const setupListener = async () => {
-      try {
-        const off = await listen(
-          "webdav-sync-status-updated",
-          async (event) => {
-            const payload = (event.payload ??
-              {}) as WebDavSyncStatusUpdatedPayload;
-            await queryClient.invalidateQueries({ queryKey: ["settings"] });
-
-            if (payload.source !== "auto" || payload.status !== "error") {
-              return;
-            }
-
-            toast.error(
-              t("settings.webdavSync.autoSyncFailedToast", {
-                error: payload.error || t("common.unknown"),
-              }),
-            );
-          },
-        );
-        if (!active) {
-          off();
-          return;
-        }
-        unsubscribe = off;
-      } catch (error) {
-        console.error(
-          "[App] Failed to subscribe webdav-sync-status-updated event",
-          error,
-        );
-      }
-    };
-
-    void setupListener();
-    return () => {
-      active = false;
-      unsubscribe?.();
-    };
-  }, [queryClient, t]);
-
-  useEffect(() => {
-    const checkEnvOnStartup = async () => {
-      try {
-        const allConflicts = await checkAllEnvConflicts();
-        const flatConflicts = Object.values(allConflicts).flat();
-
-        if (flatConflicts.length > 0) {
-          setEnvConflicts(flatConflicts);
-          const dismissed = sessionStorage.getItem("env_banner_dismissed");
-          if (!dismissed) {
-            setShowEnvBanner(true);
-          }
-        }
-      } catch (error) {
-        console.error(
-          "[App] Failed to check environment conflicts on startup:",
-          error,
-        );
-      }
-    };
-
-    checkEnvOnStartup();
-  }, []);
-
-  useEffect(() => {
-    const checkMigration = async () => {
-      try {
-        const migrated = await invoke<boolean>("get_migration_result");
-        if (migrated) {
-          toast.success(
-            t("migration.success", { defaultValue: "配置迁移成功" }),
-            { closeButton: true },
-          );
-        }
-      } catch (error) {
-        console.error("[App] Failed to check migration result:", error);
-      }
-    };
-
-    checkMigration();
-  }, [t]);
-
-  useEffect(() => {
-    const checkSkillsMigration = async () => {
-      try {
-        const result = await invoke<{ count: number; error?: string } | null>(
-          "get_skills_migration_result",
-        );
-        if (result?.error) {
-          toast.error(t("migration.skillsFailed"), {
-            description: t("migration.skillsFailedDescription"),
-            closeButton: true,
-          });
-          console.error("[App] Skills SSOT migration failed:", result.error);
-          return;
-        }
-        if (result && result.count > 0) {
-          toast.success(t("migration.skillsSuccess", { count: result.count }), {
-            closeButton: true,
-          });
-          await queryClient.invalidateQueries({ queryKey: ["skills"] });
-        }
-      } catch (error) {
-        console.error("[App] Failed to check skills migration result:", error);
-      }
-    };
-
-    checkSkillsMigration();
-  }, [t, queryClient]);
-
-  useEffect(() => {
-    const checkEnvOnSwitch = async () => {
-      try {
-        const conflicts = await checkEnvConflicts(activeApp);
-
-        if (conflicts.length > 0) {
-          setEnvConflicts((prev) => {
-            const existingKeys = new Set(
-              prev.map((c) => `${c.varName}:${c.sourcePath}`),
-            );
-            const newConflicts = conflicts.filter(
-              (c) => !existingKeys.has(`${c.varName}:${c.sourcePath}`),
-            );
-            return [...prev, ...newConflicts];
-          });
-          const dismissed = sessionStorage.getItem("env_banner_dismissed");
-          if (!dismissed) {
-            setShowEnvBanner(true);
-          }
-        }
-      } catch (error) {
-        console.error(
-          "[App] Failed to check environment conflicts on app switch:",
-          error,
-        );
-      }
-    };
-
-    checkEnvOnSwitch();
-  }, [activeApp]);
-
-  const currentViewRef = useRef(currentView);
-
-  useEffect(() => {
-    currentViewRef.current = currentView;
-  }, [currentView]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "," && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        setCurrentView("settings");
-        return;
-      }
-
-      if (event.key !== "Escape" || event.defaultPrevented) return;
-
-      if (document.body.style.overflow === "hidden") return;
-
-      const view = currentViewRef.current;
-      if (view === "providers") return;
-
-      if (isTextEditableTarget(event.target)) return;
-
-      event.preventDefault();
-      setCurrentView(view === "skillsDiscovery" ? "skills" : "providers");
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  useShellEffects({
+    activeApp,
+    activeDomain,
+    currentView,
+    navigateBack: handleNavigateBack,
+    openContextView: handleOpenContextView,
+    queryClient,
+    refetchProviders: refetch,
+    setEnvConflicts,
+    setShowEnvBanner,
+    t,
+  });
 
   const handleOpenWebsite = async (url: string) => {
     try {
@@ -686,157 +592,12 @@ function App() {
     }
   };
 
-  const renderContent = () => {
-    const content = (() => {
-      switch (currentView) {
-        case "settings":
-          return (
-            <SettingsPage
-              open={true}
-              onOpenChange={() => setCurrentView("providers")}
-              onImportSuccess={handleImportSuccess}
-              defaultTab={settingsDefaultTab}
-            />
-          );
-        case "prompts":
-          return (
-            <PromptPanel
-              ref={promptPanelRef}
-              open={true}
-              onOpenChange={() => setCurrentView("providers")}
-              appId={activeApp}
-            />
-          );
-        case "skills":
-          return (
-            <UnifiedSkillsPanel
-              ref={unifiedSkillsPanelRef}
-              onOpenDiscovery={() => setCurrentView("skillsDiscovery")}
-            />
-          );
-        case "skillsDiscovery":
-          return (
-            <SkillsPage
-              ref={skillsPageRef}
-              initialApp={
-                activeApp === "opencode" || activeApp === "openclaw"
-                  ? "claude"
-                  : activeApp
-              }
-            />
-          );
-        case "mcp":
-          return (
-            <UnifiedMcpPanel
-              ref={mcpPanelRef}
-              onOpenChange={() => setCurrentView("providers")}
-            />
-          );
-        case "agents":
-          return (
-            <AgentsPanel onOpenChange={() => setCurrentView("providers")} />
-          );
-        case "universal":
-          return (
-            <div className="px-6 pt-4">
-              <UniversalProviderPanel />
-            </div>
-          );
-
-        case "sessions":
-          return <SessionManagerPage key={activeApp} appId={activeApp} />;
-        case "workspace":
-          return <WorkspaceFilesPanel />;
-        case "openclawEnv":
-          return <EnvPanel />;
-        case "openclawTools":
-          return <ToolsPanel />;
-        case "openclawAgents":
-          return <AgentsDefaultsPanel />;
-        default:
-          return (
-            <div className="px-6 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
-              <div className="flex-1 overflow-y-auto overflow-x-hidden pb-12 px-1">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeApp}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="space-y-4"
-                  >
-                    <ProviderList
-                      providers={providers}
-                      currentProviderId={currentProviderId}
-                      appId={activeApp}
-                      isLoading={isLoading}
-                      isProxyRunning={isProxyRunning}
-                      isProxyTakeover={
-                        isProxyRunning && isCurrentAppTakeoverActive
-                      }
-                      activeProviderId={activeProviderId}
-                      onSwitch={switchProvider}
-                      onEdit={(provider) => {
-                        setEditingProvider(provider);
-                      }}
-                      onDelete={(provider) =>
-                        setConfirmAction({ provider, action: "delete" })
-                      }
-                      onRemoveFromConfig={
-                        activeApp === "opencode" || activeApp === "openclaw"
-                          ? (provider) =>
-                              setConfirmAction({ provider, action: "remove" })
-                          : undefined
-                      }
-                      onDisableOmo={
-                        activeApp === "opencode" ? handleDisableOmo : undefined
-                      }
-                      onDisableOmoSlim={
-                        activeApp === "opencode"
-                          ? handleDisableOmoSlim
-                          : undefined
-                      }
-                      onDuplicate={handleDuplicateProvider}
-                      onConfigureUsage={setUsageProvider}
-                      onOpenWebsite={handleOpenWebsite}
-                      onOpenTerminal={
-                        activeApp === "claude" ? handleOpenTerminal : undefined
-                      }
-                      onCreate={() => setIsAddOpen(true)}
-                      onSetAsDefault={
-                        activeApp === "openclaw" ? setAsDefaultModel : undefined
-                      }
-                    />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-          );
-      }
-    })();
-
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentView}
-          className="flex-1 min-h-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {content}
-        </motion.div>
-      </AnimatePresence>
-    );
-  };
-
   return (
     <div
-      className="flex flex-col h-screen overflow-hidden bg-background text-foreground selection:bg-primary/30"
-      style={{ overflowX: "hidden", paddingTop: CONTENT_TOP_OFFSET }}
+      className="app-shell relative flex h-screen flex-col overflow-hidden text-foreground selection:bg-primary/30"
+      style={{ overflowX: "hidden", paddingTop: DRAG_BAR_HEIGHT }}
     >
+      <div className="app-shell-overlay pointer-events-none absolute inset-0" />
       <div
         className="fixed top-0 left-0 right-0 z-[60]"
         data-tauri-drag-region
@@ -866,378 +627,81 @@ function App() {
           }}
         />
       )}
+      <div className="relative flex min-h-0 flex-1 gap-3 p-3 pt-4">
+        <AppSidebar
+          activeApp={activeApp}
+          activeDomain={activeDomain}
+          controlCenterEntryView={viewState["control-center"] as ControlCenterView}
+          isCurrentAppTakeoverActive={isCurrentAppTakeoverActive}
+          isProxyRunning={isProxyRunning}
+          onOpenControlCenter={handleOpenControlCenter}
+          setActiveApp={handleSelectApp}
+          visibleApps={visibleApps}
+        />
 
-      <header
-        className="fixed z-50 w-full transition-all duration-300 bg-background/80 backdrop-blur-md"
-        data-tauri-drag-region
-        style={
-          {
-            WebkitAppRegion: "drag",
-            top: DRAG_BAR_HEIGHT,
-            height: HEADER_HEIGHT,
-          } as any
-        }
-      >
-        <div
-          className="flex h-full items-center justify-between gap-2 px-6"
-          data-tauri-drag-region
-          style={{ WebkitAppRegion: "drag" } as any}
-        >
-          <div
-            className="flex items-center gap-1"
-            style={{ WebkitAppRegion: "no-drag" } as any}
-          >
-            {currentView !== "providers" ? (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    setCurrentView(
-                      currentView === "skillsDiscovery"
-                        ? "skills"
-                        : "providers",
-                    )
-                  }
-                  className="mr-2 rounded-lg"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                </Button>
-                <h1 className="text-lg font-semibold">
-                  {currentView === "settings" && t("settings.title")}
-                  {currentView === "prompts" &&
-                    t("prompts.title", { appName: t(`apps.${activeApp}`) })}
-                  {currentView === "skills" && t("skills.title")}
-                  {currentView === "skillsDiscovery" && t("skills.title")}
-                  {currentView === "mcp" && t("mcp.unifiedPanel.title")}
-                  {currentView === "agents" && t("agents.title")}
-                  {currentView === "universal" &&
-                    t("universalProvider.title", {
-                      defaultValue: "统一供应商",
-                    })}
-                  {currentView === "sessions" && t("sessionManager.title")}
-                  {currentView === "workspace" && t("workspace.title")}
-                  {currentView === "openclawEnv" && t("openclaw.env.title")}
-                  {currentView === "openclawTools" && t("openclaw.tools.title")}
-                  {currentView === "openclawAgents" &&
-                    t("openclaw.agents.title")}
-                </h1>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <div className="relative inline-flex items-center">
-                  <a
-                    href="https://github.com/farion1231/cc-switch"
-                    target="_blank"
-                    rel="noreferrer"
-                    className={cn(
-                      "text-xl font-semibold transition-colors",
-                      isProxyRunning && isCurrentAppTakeoverActive
-                        ? "text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300"
-                        : "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300",
-                    )}
-                  >
-                    CC Switch
-                  </a>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setSettingsDefaultTab("general");
-                    setCurrentView("settings");
-                  }}
-                  title={t("common.settings")}
-                  className="hover:bg-black/5 dark:hover:bg-white/5"
-                >
-                  <Settings className="w-4 h-4" />
-                </Button>
-                <UpdateBadge
-                  onClick={() => {
-                    setSettingsDefaultTab("about");
-                    setCurrentView("settings");
-                  }}
-                />
-                {isCurrentAppTakeoverActive && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      setSettingsDefaultTab("usage");
-                      setCurrentView("settings");
-                    }}
-                    title={t("usage.title", {
-                      defaultValue: "使用统计",
-                    })}
-                    className="hover:bg-black/5 dark:hover:bg-white/5"
-                  >
-                    <BarChart2 className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
+        <section className="app-main-panel relative flex min-w-0 flex-1 flex-col overflow-hidden rounded-[32px] border border-border/70">
+          <div className="app-main-panel-glow pointer-events-none absolute inset-x-0 top-0 h-32" />
+          <AppHeader
+            activeApp={activeApp}
+            activeDomain={activeDomain}
+            currentView={currentView}
+            runtimeEntryView={viewState.runtime}
+            hasSkillsSupport={hasSkillsSupport}
+            isCurrentAppTakeoverActive={isCurrentAppTakeoverActive}
+            isProxyRunning={isProxyRunning}
+            canGoBack={canGoBack}
+            onBack={handleNavigateBack}
+            onOpenAddProvider={() => setIsAddOpen(true)}
+            openContextView={handleOpenContextView}
+            setCurrentView={handleSetCurrentView}
+            promptPanelRef={promptPanelRef}
+            mcpPanelRef={mcpPanelRef}
+            skillsPageRef={skillsPageRef}
+            unifiedSkillsPanelRef={unifiedSkillsPanelRef}
+            enableLocalProxy={settingsData?.enableLocalProxy}
+            enableFailoverToggle={settingsData?.enableFailoverToggle}
+            activeProviderId={activeProviderId}
+          />
 
-          <div className="flex flex-1 min-w-0 items-center justify-end gap-1.5">
-            {currentView === "providers" &&
-              activeApp !== "opencode" &&
-              activeApp !== "openclaw" && (
-                <div
-                  className="flex shrink-0 items-center gap-1.5"
-                  style={{ WebkitAppRegion: "no-drag" } as any}
-                >
-                  {settingsData?.enableLocalProxy && (
-                    <ProxyToggle activeApp={activeApp} />
-                  )}
-                  {settingsData?.enableFailoverToggle && (
-                    <FailoverToggle activeApp={activeApp} />
-                  )}
-                </div>
-              )}
-            <div
-              ref={toolbarRef}
-              className="flex flex-1 min-w-0 overflow-x-hidden items-center"
-            >
-              <div
-                className="flex shrink-0 items-center gap-1.5 ml-auto"
-                style={{ WebkitAppRegion: "no-drag" } as any}
-              >
-                {currentView === "prompts" && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => promptPanelRef.current?.openAdd()}
-                    className="hover:bg-black/5 dark:hover:bg-white/5"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    {t("prompts.add")}
-                  </Button>
-                )}
-                {currentView === "mcp" && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => mcpPanelRef.current?.openImport()}
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      {t("mcp.importExisting")}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => mcpPanelRef.current?.openAdd()}
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      {t("mcp.addMcp")}
-                    </Button>
-                  </>
-                )}
-                {currentView === "skills" && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        unifiedSkillsPanelRef.current?.openInstallFromZip()
-                      }
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <FolderArchive className="w-4 h-4 mr-2" />
-                      {t("skills.installFromZip.button")}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        unifiedSkillsPanelRef.current?.openImport()
-                      }
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      {t("skills.import")}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setCurrentView("skillsDiscovery")}
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <Search className="w-4 h-4 mr-2" />
-                      {t("skills.discover")}
-                    </Button>
-                  </>
-                )}
-                {currentView === "skillsDiscovery" && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => skillsPageRef.current?.refresh()}
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <RefreshCw className="w-4 h-4 mr-2" />
-                      {t("skills.refresh")}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => skillsPageRef.current?.openRepoManager()}
-                      className="hover:bg-black/5 dark:hover:bg-white/5"
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      {t("skills.repoManager")}
-                    </Button>
-                  </>
-                )}
-                {currentView === "providers" && (
-                  <>
-                    <AppSwitcher
-                      activeApp={activeApp}
-                      onSwitch={setActiveApp}
-                      visibleApps={visibleApps}
-                      compact={isToolbarCompact}
-                    />
-
-                    <div className="flex items-center gap-1 p-1 bg-muted rounded-xl">
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={
-                            activeApp === "openclaw" ? "openclaw" : "default"
-                          }
-                          className="flex items-center gap-1"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          {activeApp === "openclaw" ? (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("workspace")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("workspace.manage")}
-                              >
-                                <FolderOpen className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("openclawEnv")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("openclaw.env.title")}
-                              >
-                                <KeyRound className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("openclawTools")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("openclaw.tools.title")}
-                              >
-                                <Shield className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("openclawAgents")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("openclaw.agents.title")}
-                              >
-                                <Cpu className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("sessions")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("sessionManager.title")}
-                              >
-                                <History className="w-4 h-4" />
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("skills")}
-                                className={cn(
-                                  "text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5",
-                                  "transition-all duration-200 ease-in-out overflow-hidden",
-                                  hasSkillsSupport
-                                    ? "opacity-100 w-8 scale-100 px-2"
-                                    : "opacity-0 w-0 scale-75 pointer-events-none px-0 -ml-1",
-                                )}
-                                title={t("skills.manage")}
-                              >
-                                <Wrench className="flex-shrink-0 w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("prompts")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("prompts.manage")}
-                              >
-                                <Book className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("sessions")}
-                                className={cn(
-                                  "text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5",
-                                  "transition-all duration-200 ease-in-out overflow-hidden",
-                                  hasSessionSupport
-                                    ? "opacity-100 w-8 scale-100 px-2"
-                                    : "opacity-0 w-0 scale-75 pointer-events-none px-0 -ml-1",
-                                )}
-                                title={t("sessionManager.title")}
-                              >
-                                <History className="flex-shrink-0 w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setCurrentView("mcp")}
-                                className="text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
-                                title={t("mcp.title")}
-                              >
-                                <McpIcon size={16} />
-                              </Button>
-                            </>
-                          )}
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-
-                    <Button
-                      onClick={() => setIsAddOpen(true)}
-                      size="icon"
-                      className={`ml-2 ${addActionButtonClass}`}
-                    >
-                      <Plus className="w-5 h-5" />
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="flex-1 min-h-0 flex flex-col overflow-y-auto animate-fade-in">
-        {isOpenClawView && openclawHealthWarnings.length > 0 && (
-          <OpenClawHealthBanner warnings={openclawHealthWarnings} />
-        )}
-        {renderContent()}
-      </main>
+          <AppContent
+            activeApp={activeApp}
+            activeDomain={activeDomain}
+            activeProviderId={activeProviderId}
+            currentProviderId={currentProviderId}
+            currentView={currentView}
+            effectiveUsageProvider={effectiveUsageProvider}
+            handleDisableOmo={handleDisableOmo}
+            handleDisableOmoSlim={handleDisableOmoSlim}
+            handleDuplicateProvider={handleDuplicateProvider}
+            handleImportSuccess={handleImportSuccess}
+            handleOpenTerminal={handleOpenTerminal}
+            handleOpenWebsite={handleOpenWebsite}
+            isCurrentAppTakeoverActive={isCurrentAppTakeoverActive}
+            isLoading={isLoading}
+            isOpenClawView={isOpenClawView}
+            isProxyRunning={isProxyRunning}
+            canGoBack={canGoBack}
+            onBack={handleNavigateBack}
+            openclawHealthWarnings={openclawHealthWarnings}
+            openContextView={handleOpenContextView}
+            promptPanelRef={promptPanelRef}
+            mcpPanelRef={mcpPanelRef}
+            providers={providers}
+            saveUsageScript={saveUsageScript}
+            setAsDefaultModel={setAsDefaultModel}
+            setConfirmAction={setConfirmAction}
+            setCurrentView={handleSetCurrentView}
+            setEditingProvider={setEditingProvider}
+            setIsAddOpen={setIsAddOpen}
+            setUsageProvider={setUsageProvider}
+            skillsPageRef={skillsPageRef}
+            switchProvider={switchProvider}
+            returnTarget={returnTarget}
+            unifiedSkillsPanelRef={unifiedSkillsPanelRef}
+            usageProvider={usageProvider}
+          />
+        </section>
+      </div>
 
       <AddProviderDialog
         open={isAddOpen}
@@ -1258,21 +722,6 @@ function App() {
         appId={activeApp}
         isProxyTakeover={isProxyRunning && isCurrentAppTakeoverActive}
       />
-
-      {effectiveUsageProvider && (
-        <UsageScriptModal
-          key={effectiveUsageProvider.id}
-          provider={effectiveUsageProvider}
-          appId={activeApp}
-          isOpen={Boolean(usageProvider)}
-          onClose={() => setUsageProvider(null)}
-          onSave={(script) => {
-            if (usageProvider) {
-              void saveUsageScript(usageProvider, script);
-            }
-          }}
-        />
-      )}
 
       <ConfirmDialog
         isOpen={Boolean(confirmAction)}

@@ -1,7 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import "@testing-library/jest-dom";
-import { createContext, useContext, type ComponentProps } from "react";
+import {
+  createContext,
+  useContext,
+  type ComponentProps,
+} from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SettingsPage } from "@/components/settings/SettingsPage";
 
@@ -65,6 +69,10 @@ const createSettingsMock = (overrides: Partial<SettingsMock> = {}) => {
       minimizeToTrayOnClose: true,
       enableClaudePluginIntegration: false,
       language: "zh",
+      themeMode: "dark",
+      themePalette: "tech-blue",
+      uiDensity: "comfortable",
+      motionPreference: "system",
       claudeConfigDir: "/claude",
       codexConfigDir: "/codex",
     },
@@ -194,7 +202,17 @@ vi.mock("@/components/settings/LanguageSettings", () => ({
 }));
 
 vi.mock("@/components/settings/ThemeSettings", () => ({
-  ThemeSettings: () => <div>theme-settings</div>,
+  ThemeSettings: ({ settings, onChange }: any) => (
+    <div>
+      <span>theme-settings:{settings.themeMode}</span>
+      <button onClick={() => onChange({ themeMode: "light" })}>
+        change-theme
+      </button>
+      <button onClick={() => onChange({ themePalette: "zinc" })}>
+        change-palette
+      </button>
+    </div>
+  ),
 }));
 
 vi.mock("@/components/settings/WindowSettings", () => ({
@@ -316,7 +334,16 @@ describe("SettingsPage Component", () => {
     expect(importExportMock.resetStatus).toHaveBeenCalledTimes(1);
   });
 
-  it("should render general and advanced tabs and trigger child callbacks", () => {
+  it("should preserve the requested default control-center section without stale tab feedback", async () => {
+    const onTabChange = vi.fn();
+
+    renderSettingsPage({ defaultTab: "about", onTabChange });
+
+    await waitFor(() => expect(screen.getByText("about:false")).toBeInTheDocument());
+    expect(onTabChange).not.toHaveBeenCalledWith("appearance");
+  });
+
+  it("should render appearance, data-sync and directories sections and trigger child callbacks", () => {
     const onOpenChange = vi.fn();
     // 设置 selectedFile 后，按钮显示 settings.import（可执行导入）
     importExportMock = createImportExportMock({
@@ -325,8 +352,20 @@ describe("SettingsPage Component", () => {
 
     renderSettingsPage({ onOpenChange });
 
+    expect(screen.getByText("theme-settings:dark")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText("change-theme"));
+    expect(settingsMock.updateSettings).toHaveBeenCalledWith({
+      themeMode: "light",
+    });
+
+    fireEvent.click(screen.getByText("change-palette"));
+    expect(settingsMock.updateSettings).toHaveBeenCalledWith({
+      themePalette: "zinc",
+    });
+
+    fireEvent.click(screen.getByText("settings.controlCenter.general"));
     expect(screen.getByText("language:zh")).toBeInTheDocument();
-    expect(screen.getByText("theme-settings")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("change-language"));
     expect(settingsMock.updateSettings).toHaveBeenCalledWith({
@@ -338,15 +377,13 @@ describe("SettingsPage Component", () => {
       minimizeToTrayOnClose: false,
     });
 
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
+    fireEvent.click(screen.getByText("settings.controlCenter.dataSync"));
     fireEvent.click(screen.getByText("settings.advanced.cloudSync.title"));
     expect(screen.getByText("webdav-sync-section:none")).toBeInTheDocument();
     fireEvent.click(screen.getByText("settings.advanced.data.title"));
 
     // 有文件时，点击导入按钮执行 importConfig
-    fireEvent.click(
-      screen.getByRole("button", { name: /settings\.import/ }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /settings\.import/ }));
     expect(importExportMock.importConfig).toHaveBeenCalled();
 
     fireEvent.click(
@@ -381,8 +418,8 @@ describe("SettingsPage Component", () => {
 
     renderSettingsPage({ onOpenChange });
 
-    // 保存按钮在 advanced tab 中
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
+    // 保存按钮在目录分区中
+    fireEvent.click(screen.getByText("settings.controlCenter.directories"));
     fireEvent.click(screen.getByRole("button", { name: /common\.save/ }));
 
     await waitFor(() => {
@@ -441,8 +478,7 @@ describe("SettingsPage Component", () => {
   it("should trigger directory management callbacks inside advanced tab", () => {
     renderSettingsPage();
 
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
-    fireEvent.click(screen.getByText("settings.advanced.configDir.title"));
+    fireEvent.click(screen.getByText("settings.controlCenter.directories"));
 
     fireEvent.click(screen.getByText("browse-directory"));
     expect(settingsMock.browseDirectory).toHaveBeenCalledWith("claude");

@@ -1,17 +1,20 @@
 {
-  "name": "cc-switch",
+  "name": "codebox",
   "version": "3.12.1",
   "description": "All-in-One Assistant for Claude Code, Codex & Gemini CLI",
   "type": "module",
   "scripts": {
     "dev": "pnpm tauri dev",
     "build": "pnpm tauri build",
+    "build:packages": "pnpm -r --filter './packages/*' build",
     "tauri": "tauri",
     "dev:renderer": "vite",
     "build:renderer": "vite build",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,json}\"",
+    "typecheck:packages": "pnpm -r --filter './packages/*' typecheck",
+    "lint": "pnpm format:check",
+    "format": "prettier --write \"{src,packages,tests}/**/*.{js,jsx,ts,tsx,css,json}\"",
+    "format:check": "prettier --check \"{src,packages,tests}/**/*.{js,jsx,ts,tsx,css,json}\"",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest watch"
   },
@@ -37,6 +40,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.3.0",
     "vite": "^7.3.0",
+    "vite-node": "2.1.9",
     "vitest": "^2.0.5"
   },
   "dependencies": {

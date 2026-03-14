@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { UpdateProvider } from "./contexts/UpdateContext";
 import "./index.css";
-// 导入国际化配置
-import i18n from "./i18n";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { UpdateProvider } from "@/contexts/UpdateContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import { queryClient } from "@/lib/query";
 import { Toaster } from "@/components/ui/sonner";
+import i18n from "@/i18n";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { message } from "@tauri-apps/plugin-dialog";
@@ -32,6 +31,22 @@ interface ConfigLoadErrorPayload {
   error?: string;
 }
 
+function getFallbackConfigPath(): string {
+  try {
+    const ua = navigator.userAgent || "";
+    const platform = (navigator.platform || "").toLowerCase();
+    const isWindows = /win/i.test(ua) || platform.includes("win");
+
+    if (isWindows) {
+      return "%USERPROFILE%\\.sdkwork\\codebox\\config.json";
+    }
+  } catch {
+    // ignore platform detection failures
+  }
+
+  return "~/.sdkwork/codebox/config.json";
+}
+
 /**
  * 处理配置加载失败：显示错误消息并强制退出应用
  * 不给用户"取消"选项，因为配置损坏时应用无法正常运行
@@ -39,7 +54,7 @@ interface ConfigLoadErrorPayload {
 async function handleConfigLoadError(
   payload: ConfigLoadErrorPayload | null,
 ): Promise<void> {
-  const path = payload?.path ?? "~/.cc-switch/config.json";
+  const path = payload?.path ?? getFallbackConfigPath();
   const detail = payload?.error ?? "Unknown error";
 
   await message(
@@ -89,7 +104,7 @@ async function bootstrap() {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="cc-switch-theme">
+        <ThemeProvider defaultTheme="system" storageKey="codebox-theme">
           <UpdateProvider>
             <App />
             <Toaster />

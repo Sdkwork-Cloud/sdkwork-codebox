@@ -5,6 +5,9 @@ use std::path::{Path, PathBuf};
 
 use crate::error::AppError;
 
+const APP_CONFIG_NAMESPACE_DIR: &str = ".sdkwork";
+const APP_CONFIG_PRODUCT_DIR: &str = "codebox";
+
 /// 获取用户主目录，带回退和日志
 ///
 /// ## Windows 注意事项
@@ -12,14 +15,15 @@ use crate::error::AppError;
 /// - `dirs::home_dir()` 在 Windows 上使用 `SHGetKnownFolderPath(FOLDERID_Profile)`，
 ///   返回的是真实用户目录（类似 `C:\\Users\\Alice`），与 v3.10.2 行为一致。
 /// - 不要直接使用 `HOME` 环境变量：它可能由 Git/Cygwin/MSYS 等第三方工具注入，
-///   且不一定等于用户目录，可能导致 `.cc-switch/cc-switch.db` 路径变化，从而“看起来像数据丢失”。
+///   且不一定等于用户目录，历史版本曾因此落到错误的 `.codebox/codebox.db` 路径，
+///   从而“看起来像数据丢失”。
 ///
 /// ## 测试隔离
 ///
-/// 为了让 Windows CI/本地测试能稳定隔离真实用户数据，可通过 `CC_SWITCH_TEST_HOME`
+/// 为了让 Windows CI/本地测试能稳定隔离真实用户数据，可通过 `CODEBOX_TEST_HOME`
 /// 显式覆盖 home dir（仅用于测试/调试场景）。
 pub fn get_home_dir() -> PathBuf {
-    if let Ok(home) = std::env::var("CC_SWITCH_TEST_HOME") {
+    if let Ok(home) = std::env::var("CODEBOX_TEST_HOME") {
         let trimmed = home.trim();
         if !trimmed.is_empty() {
             return PathBuf::from(trimmed);
@@ -85,34 +89,174 @@ pub fn get_claude_settings_path() -> PathBuf {
     settings
 }
 
-/// 获取应用配置目录路径 (~/.cc-switch)
+fn config_root_for_home(home: &Path) -> PathBuf {
+    #[cfg(target_os = "macos")]
+    {
+        return home.join("Library").join("Application Support");
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        return home.join("AppData").join("Roaming");
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        return home.join(".config");
+    }
+}
+
+fn get_legacy_platform_app_config_dir_for_home(home: &Path) -> PathBuf {
+    config_root_for_home(home)
+        .join("sdkwork")
+        .join(APP_CONFIG_PRODUCT_DIR)
+}
+
+fn get_legacy_platform_app_config_dir() -> PathBuf {
+    get_legacy_platform_app_config_dir_for_home(&get_home_dir())
+}
+
+fn get_legacy_default_app_config_dir() -> PathBuf {
+    get_home_dir().join(".codebox")
+}
+
+#[cfg(windows)]
+fn get_windows_home_env_legacy_app_config_dir() -> Option<PathBuf> {
+    std::env::var("HOME")
+        .ok()
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+        .map(PathBuf::from)
+        .map(|path| path.join(".codebox"))
+}
+
+fn get_legacy_app_config_dir_candidates() -> Vec<PathBuf> {
+    let mut candidates = Vec::new();
+
+    let mut push_unique = |path: PathBuf| {
+        if !candidates.iter().any(|item| item == &path) {
+            candidates.push(path);
+        }
+    };
+
+    push_unique(get_legacy_platform_app_config_dir());
+    push_unique(get_legacy_default_app_config_dir());
+
+    #[cfg(windows)]
+    if let Some(legacy) = get_windows_home_env_legacy_app_config_dir() {
+        push_unique(legacy);
+    }
+
+    candidates
+}
+
+fn copy_dir_recursive(source: &Path, target: &Path) -> Result<(), AppError> {
+    fs::create_dir_all(target).map_err(|e| AppError::io(target, e))?;
+
+    for entry in fs::read_dir(source).map_err(|e| AppError::io(source, e))? {
+        let entry = entry.map_err(|e| AppError::io(source, e))?;
+        let from = entry.path();
+        let to = target.join(entry.file_name());
+        let file_type = entry.file_type().map_err(|e| AppError::io(&from, e))?;
+
+        if file_type.is_dir() {
+            copy_dir_recursive(&from, &to)?;
+            continue;
+        }
+
+        if file_type.is_symlink() {
+            let metadata = fs::metadata(&from).map_err(|e| AppError::io(&from, e))?;
+            if metadata.is_dir() {
+                copy_dir_recursive(&from, &to)?;
+                continue;
+            }
+        }
+
+        if let Some(parent) = to.parent() {
+            fs::create_dir_all(parent).map_err(|e| AppError::io(parent, e))?;
+        }
+
+        fs::copy(&from, &to).map_err(|e| AppError::IoContext {
+            context: format!("复制目录内容失败 ({} -> {})", from.display(), to.display()),
+            source: e,
+        })?;
+    }
+
+    Ok(())
+}
+
+fn migrate_legacy_app_config_dir(legacy_dir: &Path, target_dir: &Path) -> Result<(), AppError> {
+    if legacy_dir == target_dir || !legacy_dir.exists() || target_dir.exists() {
+        return Ok(());
+    }
+
+    let parent = target_dir.parent().ok_or_else(|| {
+        AppError::Config(format!("无效的目标配置目录: {}", target_dir.display()))
+    })?;
+    fs::create_dir_all(parent).map_err(|e| AppError::io(parent, e))?;
+
+    match fs::rename(legacy_dir, target_dir) {
+        Ok(()) => Ok(()),
+        Err(rename_error) => {
+            log::warn!(
+                "移动旧配置目录失败，将尝试复制迁移: {} -> {} ({rename_error})",
+                legacy_dir.display(),
+                target_dir.display()
+            );
+            copy_dir_recursive(legacy_dir, target_dir).inspect_err(|_| {
+                let _ = fs::remove_dir_all(target_dir);
+            })
+        }
+    }
+}
+
+/// 获取平台默认的应用配置目录。
+///
+/// - Linux: `~/.sdkwork/codebox`
+/// - macOS: `~/.sdkwork/codebox`
+/// - Windows: `%USERPROFILE%\\.sdkwork\\codebox`
+pub fn get_default_app_config_dir() -> PathBuf {
+    get_home_dir()
+        .join(APP_CONFIG_NAMESPACE_DIR)
+        .join(APP_CONFIG_PRODUCT_DIR)
+}
+
+/// 获取应用配置目录路径。
+///
+/// 若用户设置了自定义目录，则优先使用覆盖目录；否则使用平台默认目录，
+/// 并在首次访问时自动尝试从旧版 `~/.codebox` 与历史平台原生目录迁移。
 pub fn get_app_config_dir() -> PathBuf {
     if let Some(custom) = crate::app_store::get_app_config_dir_override() {
         return custom;
     }
 
-    let default_dir = get_home_dir().join(".cc-switch");
+    let default_dir = get_default_app_config_dir();
+    if default_dir.exists() {
+        return default_dir;
+    }
 
-    // 兼容 v3.10.3：当用户环境存在 `HOME` 且与真实用户目录不同，
-    // v3.10.3 可能在 `HOME/.cc-switch/` 下创建/使用了数据库。
-    // 这里仅在“默认位置没有数据库”时回退到旧位置，避免再次出现“供应商消失”问题，
-    // 同时也避免新安装因为 `HOME` 被设置而写入非预期路径。
-    #[cfg(windows)]
-    {
-        let default_db = default_dir.join("cc-switch.db");
-        if !default_db.exists() {
-            if let Ok(home_env) = std::env::var("HOME") {
-                let trimmed = home_env.trim();
-                if !trimmed.is_empty() {
-                    let legacy_dir = PathBuf::from(trimmed).join(".cc-switch");
-                    if legacy_dir.join("cc-switch.db").exists() {
-                        log::info!(
-                            "Detected v3.10.3 legacy database at {}, using it instead of {}",
-                            legacy_dir.display(),
-                            default_dir.display()
-                        );
-                        return legacy_dir;
-                    }
+    for legacy_dir in get_legacy_app_config_dir_candidates() {
+        if !legacy_dir.exists() || legacy_dir == default_dir {
+            continue;
+        }
+
+        match migrate_legacy_app_config_dir(&legacy_dir, &default_dir) {
+            Ok(()) if default_dir.exists() => {
+                log::info!(
+                    "已将旧配置目录迁移到平台默认目录: {} -> {}",
+                    legacy_dir.display(),
+                    default_dir.display()
+                );
+                return default_dir;
+            }
+            Ok(()) => {}
+            Err(error) => {
+                log::warn!(
+                    "迁移旧配置目录失败，继续使用旧路径: {} ({error})",
+                    legacy_dir.display()
+                );
+                if !default_dir.exists() {
+                    return legacy_dir;
                 }
             }
         }
@@ -241,6 +385,21 @@ pub fn atomic_write(path: &Path, data: &[u8]) -> Result<(), AppError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::Path;
+    use std::sync::{Mutex, OnceLock};
+
+    fn config_test_mutex() -> &'static Mutex<()> {
+        static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+        LOCK.get_or_init(|| Mutex::new(()))
+    }
+
+    fn expected_test_app_config_dir(base: &Path) -> PathBuf {
+        base.join(".sdkwork").join("codebox")
+    }
+
+    fn expected_legacy_platform_app_config_dir(base: &Path) -> PathBuf {
+        get_legacy_platform_app_config_dir_for_home(base)
+    }
 
     #[test]
     fn derive_mcp_path_from_override_preserves_folder_name() {
@@ -270,6 +429,69 @@ mod tests {
     fn derive_mcp_path_from_root_like_dir_returns_none() {
         let override_dir = PathBuf::from("/");
         assert!(derive_mcp_path_from_override(&override_dir).is_none());
+    }
+
+    #[test]
+    fn app_config_dir_uses_dot_sdkwork_namespace_under_home() {
+        let _guard = config_test_mutex().lock().expect("lock config test");
+        let temp = tempfile::tempdir().expect("create temp dir");
+        let previous = std::env::var_os("CODEBOX_TEST_HOME");
+        std::env::set_var("CODEBOX_TEST_HOME", temp.path());
+
+        let dir = get_app_config_dir();
+
+        match previous {
+            Some(value) => std::env::set_var("CODEBOX_TEST_HOME", value),
+            None => std::env::remove_var("CODEBOX_TEST_HOME"),
+        }
+
+        assert_eq!(dir, expected_test_app_config_dir(temp.path()));
+    }
+
+    #[test]
+    fn app_config_dir_migrates_legacy_dot_codebox_directory() {
+        let _guard = config_test_mutex().lock().expect("lock config test");
+        let temp = tempfile::tempdir().expect("create temp dir");
+        let previous = std::env::var_os("CODEBOX_TEST_HOME");
+        std::env::set_var("CODEBOX_TEST_HOME", temp.path());
+
+        let legacy_dir = temp.path().join(".codebox");
+        std::fs::create_dir_all(&legacy_dir).expect("create legacy dir");
+        std::fs::write(legacy_dir.join("config.json"), "{}").expect("write legacy config");
+
+        let dir = get_app_config_dir();
+
+        match previous {
+            Some(value) => std::env::set_var("CODEBOX_TEST_HOME", value),
+            None => std::env::remove_var("CODEBOX_TEST_HOME"),
+        }
+
+        let expected = expected_test_app_config_dir(temp.path());
+        assert_eq!(dir, expected);
+        assert!(expected.join("config.json").exists());
+    }
+
+    #[test]
+    fn app_config_dir_migrates_previous_platform_sdkwork_directory() {
+        let _guard = config_test_mutex().lock().expect("lock config test");
+        let temp = tempfile::tempdir().expect("create temp dir");
+        let previous = std::env::var_os("CODEBOX_TEST_HOME");
+        std::env::set_var("CODEBOX_TEST_HOME", temp.path());
+
+        let legacy_dir = expected_legacy_platform_app_config_dir(temp.path());
+        std::fs::create_dir_all(&legacy_dir).expect("create legacy platform dir");
+        std::fs::write(legacy_dir.join("config.json"), "{}").expect("write legacy config");
+
+        let dir = get_app_config_dir();
+
+        match previous {
+            Some(value) => std::env::set_var("CODEBOX_TEST_HOME", value),
+            None => std::env::remove_var("CODEBOX_TEST_HOME"),
+        }
+
+        let expected = expected_test_app_config_dir(temp.path());
+        assert_eq!(dir, expected);
+        assert!(expected.join("config.json").exists());
     }
 }
 

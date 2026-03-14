@@ -9,6 +9,7 @@ const setAppConfigDirOverrideMock = vi.fn();
 const applyClaudePluginConfigMock = vi.fn();
 const applyClaudeOnboardingSkipMock = vi.fn();
 const clearClaudeOnboardingSkipMock = vi.fn();
+const setTrayVisibilityMock = vi.fn();
 const syncCurrentProvidersLiveMock = vi.fn();
 const updateTrayMenuMock = vi.fn();
 const toastErrorMock = vi.fn();
@@ -56,12 +57,16 @@ vi.mock("@/lib/api", () => ({
       applyClaudeOnboardingSkipMock(...args),
     clearClaudeOnboardingSkip: (...args: unknown[]) =>
       clearClaudeOnboardingSkipMock(...args),
-    syncCurrentProvidersLive: (...args: unknown[]) =>
-      syncCurrentProvidersLiveMock(...args),
+    setTrayVisibility: (...args: unknown[]) => setTrayVisibilityMock(...args),
   },
   providersApi: {
     updateTrayMenu: (...args: unknown[]) => updateTrayMenuMock(...args),
   },
+}));
+
+vi.mock("@/lib/api/postChangeSync", () => ({
+  syncCurrentProvidersLiveSafe: (...args: unknown[]) =>
+    syncCurrentProvidersLiveMock(...args),
 }));
 
 const createSettingsFormMock = (overrides: Record<string, unknown> = {}) => ({
@@ -69,10 +74,18 @@ const createSettingsFormMock = (overrides: Record<string, unknown> = {}) => ({
     showInTray: true,
     minimizeToTrayOnClose: true,
     enableClaudePluginIntegration: false,
+    autoSyncConfirmed: true,
     skipClaudeOnboarding: true,
     claudeConfigDir: "/claude",
     codexConfigDir: "/codex",
+    openclawConfigDir: "/openclaw",
+    currentProviderOpencode: "opencode-primary",
+    currentProviderOpenclaw: "openclaw-primary",
     language: "zh",
+    themeMode: "dark",
+    themePalette: "tech-blue",
+    uiDensity: "comfortable",
+    motionPreference: "system",
   },
   isLoading: false,
   initialLanguage: "zh",
@@ -87,9 +100,12 @@ const createDirectorySettingsMock = (
 ) => ({
   appConfigDir: undefined,
   resolvedDirs: {
-    appConfig: "/home/mock/.cc-switch",
+    appConfig: "/home/mock/.sdkwork/codebox",
     claude: "/default/claude",
     codex: "/default/codex",
+    gemini: "/default/gemini",
+    opencode: "/default/opencode",
+    openclaw: "/default/openclaw",
   },
   isLoading: false,
   initialAppConfigDir: undefined,
@@ -120,6 +136,7 @@ describe("useSettings hook", () => {
     applyClaudePluginConfigMock.mockReset();
     applyClaudeOnboardingSkipMock.mockReset();
     clearClaudeOnboardingSkipMock.mockReset();
+    setTrayVisibilityMock.mockReset();
     syncCurrentProvidersLiveMock.mockReset();
     toastErrorMock.mockReset();
     toastSuccessMock.mockReset();
@@ -129,10 +146,18 @@ describe("useSettings hook", () => {
       showInTray: true,
       minimizeToTrayOnClose: true,
       enableClaudePluginIntegration: false,
+      autoSyncConfirmed: true,
       skipClaudeOnboarding: true,
       claudeConfigDir: "/server/claude",
       codexConfigDir: "/server/codex",
+      openclawConfigDir: "/server/openclaw",
+      currentProviderOpencode: "opencode-primary",
+      currentProviderOpenclaw: "openclaw-primary",
       language: "zh",
+      themeMode: "dark",
+      themePalette: "tech-blue",
+      uiDensity: "comfortable",
+      motionPreference: "system",
     };
 
     useSettingsQueryMock.mockReturnValue({
@@ -144,6 +169,7 @@ describe("useSettings hook", () => {
       settings: {
         ...serverSettings,
         language: "zh",
+        openclawConfigDir: "/server/openclaw",
       },
     });
     directorySettingsMock = createDirectorySettingsMock();
@@ -154,6 +180,8 @@ describe("useSettings hook", () => {
     applyClaudePluginConfigMock.mockResolvedValue(true);
     applyClaudeOnboardingSkipMock.mockResolvedValue(true);
     clearClaudeOnboardingSkipMock.mockResolvedValue(true);
+    setTrayVisibilityMock.mockResolvedValue(true);
+    syncCurrentProvidersLiveMock.mockResolvedValue({ ok: true });
   });
 
   it("auto-saves and applies Claude onboarding skip when toggled on", async () => {
@@ -171,6 +199,7 @@ describe("useSettings hook", () => {
         ...serverSettings,
         language: "zh",
         skipClaudeOnboarding: false,
+        themePalette: "green-tech",
       },
     });
 
@@ -199,6 +228,7 @@ describe("useSettings hook", () => {
         ...serverSettings,
         language: "zh",
         skipClaudeOnboarding: true,
+        motionPreference: "reduced",
       },
     });
 
@@ -212,6 +242,65 @@ describe("useSettings hook", () => {
     expect(toastErrorMock).not.toHaveBeenCalled();
   });
 
+  it("auto-saves and applies Claude plugin integration immediately", async () => {
+    serverSettings = {
+      ...serverSettings,
+      enableClaudePluginIntegration: false,
+    };
+    useSettingsQueryMock.mockReturnValue({
+      data: serverSettings,
+      isLoading: false,
+    });
+
+    settingsFormMock = createSettingsFormMock({
+      settings: {
+        ...serverSettings,
+        enableClaudePluginIntegration: false,
+      },
+    });
+
+    const { result } = renderHook(() => useSettings());
+
+    await act(async () => {
+      await result.current.autoSaveSettings({
+        enableClaudePluginIntegration: true,
+      });
+    });
+
+    expect(applyClaudePluginConfigMock).toHaveBeenCalledWith({
+      official: false,
+    });
+    expect(toastErrorMock).not.toHaveBeenCalled();
+  });
+
+  it("auto-saves tray visibility changes and clears tray-only flags", async () => {
+    settingsFormMock = createSettingsFormMock({
+      settings: {
+        ...serverSettings,
+        showInTray: true,
+        minimizeToTrayOnClose: true,
+        silentStartup: true,
+      },
+    });
+
+    const { result } = renderHook(() => useSettings());
+
+    await act(async () => {
+      await result.current.autoSaveSettings({
+        showInTray: false,
+        minimizeToTrayOnClose: true,
+        silentStartup: true,
+      });
+    });
+
+    const payload = mutateAsyncMock.mock.calls.at(-1)?.[0] as Settings;
+    expect(payload.showInTray).toBe(false);
+    expect(payload.minimizeToTrayOnClose).toBe(false);
+    expect(payload.silentStartup).toBe(false);
+    expect(setTrayVisibilityMock).toHaveBeenCalledWith(false);
+    expect(toastErrorMock).not.toHaveBeenCalled();
+  });
+
   it("saves settings and flags restart when app config directory changes", async () => {
     serverSettings = {
       ...serverSettings,
@@ -219,6 +308,10 @@ describe("useSettings hook", () => {
       claudeConfigDir: "/server/claude",
       codexConfigDir: undefined,
       language: "en",
+      themeMode: "light",
+      themePalette: "zinc",
+      uiDensity: "compact",
+      motionPreference: "reduced",
     };
     useSettingsQueryMock.mockReturnValue({
       data: serverSettings,
@@ -230,8 +323,13 @@ describe("useSettings hook", () => {
         ...serverSettings,
         claudeConfigDir: "  /custom/claude  ",
         codexConfigDir: "   ",
+        openclawConfigDir: "  /custom/openclaw  ",
         language: "en",
         enableClaudePluginIntegration: true, // 状态从 false 变为 true
+        themeMode: "light",
+        themePalette: "zinc",
+        uiDensity: "compact",
+        motionPreference: "reduced",
       },
       initialLanguage: "en",
     });
@@ -253,7 +351,15 @@ describe("useSettings hook", () => {
     const payload = mutateAsyncMock.mock.calls[0][0] as Settings;
     expect(payload.claudeConfigDir).toBe("/custom/claude");
     expect(payload.codexConfigDir).toBeUndefined();
+    expect(payload.openclawConfigDir).toBe("/custom/openclaw");
+    expect(payload.autoSyncConfirmed).toBe(true);
+    expect(payload.currentProviderOpencode).toBe("opencode-primary");
+    expect(payload.currentProviderOpenclaw).toBe("openclaw-primary");
     expect(payload.language).toBe("en");
+    expect(payload.themeMode).toBe("light");
+    expect(payload.themePalette).toBe("zinc");
+    expect(payload.uiDensity).toBe("compact");
+    expect(payload.motionPreference).toBe("reduced");
     expect(setAppConfigDirOverrideMock).toHaveBeenCalledWith("/override/app");
     // 状态改变，应该调用 API
     expect(applyClaudePluginConfigMock).toHaveBeenCalledWith({
@@ -351,6 +457,7 @@ describe("useSettings hook", () => {
       ...serverSettings,
       claudeConfigDir: "  /server/claude  ",
       codexConfigDir: "   ",
+      openclawConfigDir: "  /server/openclaw  ",
       language: "zh",
     };
     useSettingsQueryMock.mockReturnValue({
@@ -382,6 +489,7 @@ describe("useSettings hook", () => {
       undefined,
       undefined, // geminiConfigDir
       undefined, // opencodeConfigDir
+      "/server/openclaw",
     );
     expect(metadataMock.setRequiresRestart).toHaveBeenCalledWith(false);
   });

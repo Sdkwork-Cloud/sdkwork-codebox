@@ -1,6 +1,6 @@
 #![allow(non_snake_case)]
 
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 
 fn merge_settings_for_save(
     mut incoming: crate::settings::AppSettings,
@@ -45,6 +45,14 @@ pub async fn get_app_config_dir_override(app: AppHandle) -> Result<Option<String
         .map(|p| p.to_string_lossy().to_string()))
 }
 
+/// 获取平台默认的 app_config_dir（忽略覆盖设置）
+#[tauri::command]
+pub async fn get_default_app_config_dir() -> Result<String, String> {
+    Ok(crate::config::get_default_app_config_dir()
+        .to_string_lossy()
+        .to_string())
+}
+
 /// 设置 app_config_dir 覆盖配置 (到 Store)
 #[tauri::command]
 pub async fn set_app_config_dir_override(
@@ -63,6 +71,24 @@ pub async fn set_auto_launch(enabled: bool) -> Result<bool, String> {
     } else {
         crate::auto_launch::disable_auto_launch().map_err(|e| format!("禁用开机自启失败: {e}"))?;
     }
+    Ok(true)
+}
+
+/// 设置系统托盘可见性
+#[tauri::command]
+pub async fn set_tray_visibility(app: AppHandle, visible: bool) -> Result<bool, String> {
+    let Some(tray) = app.tray_by_id("main") else {
+        return Ok(false);
+    };
+
+    tray.set_visible(visible)
+        .map_err(|e| format!("更新托盘显示状态失败: {e}"))?;
+
+    #[cfg(target_os = "macos")]
+    if !visible {
+        crate::tray::apply_tray_policy(&app, true);
+    }
+
     Ok(true)
 }
 

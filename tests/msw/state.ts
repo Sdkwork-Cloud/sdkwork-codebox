@@ -81,11 +81,15 @@ let settingsState: Settings = {
   showInTray: true,
   minimizeToTrayOnClose: true,
   enableClaudePluginIntegration: false,
+  autoSyncConfirmed: true,
   claudeConfigDir: "/default/claude",
   codexConfigDir: "/default/codex",
+  currentProviderOpencode: "opencode-primary",
+  currentProviderOpenclaw: "openclaw-primary",
   language: "zh",
 };
 let appConfigDirOverride: string | null = null;
+const defaultAppConfigDir = "/home/mock/.sdkwork/codebox";
 const sessionMessageKey = (providerId: string, sourcePath: string) =>
   `${providerId}:${sourcePath}`;
 
@@ -190,8 +194,11 @@ export const resetProviderState = () => {
     showInTray: true,
     minimizeToTrayOnClose: true,
     enableClaudePluginIntegration: false,
+    autoSyncConfirmed: true,
     claudeConfigDir: "/default/claude",
     codexConfigDir: "/default/codex",
+    currentProviderOpencode: "opencode-primary",
+    currentProviderOpenclaw: "openclaw-primary",
     language: "zh",
   };
   appConfigDirOverride = null;
@@ -310,11 +317,12 @@ export const listProviders = (appType: AppId) =>
 export const getSettings = () =>
   JSON.parse(JSON.stringify(settingsState)) as Settings;
 
-export const setSettings = (data: Partial<Settings>) => {
-  settingsState = { ...settingsState, ...data };
+export const setSettings = (data: Settings) => {
+  settingsState = JSON.parse(JSON.stringify(data)) as Settings;
 };
 
 export const getAppConfigDirOverride = () => appConfigDirOverride;
+export const getDefaultAppConfigDir = () => defaultAppConfigDir;
 
 export const setAppConfigDirOverrideState = (value: string | null) => {
   appConfigDirOverride = value;

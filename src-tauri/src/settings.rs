@@ -22,6 +22,22 @@ fn default_true() -> bool {
     true
 }
 
+fn default_theme_mode() -> String {
+    "dark".to_string()
+}
+
+fn default_theme_palette() -> String {
+    "tech-blue".to_string()
+}
+
+fn default_ui_density() -> String {
+    "comfortable".to_string()
+}
+
+fn default_motion_preference() -> String {
+    "system".to_string()
+}
+
 /// 主页面显示的应用配置
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -82,7 +98,7 @@ pub struct WebDavSyncStatus {
 }
 
 fn default_remote_root() -> String {
-    "cc-switch-sync".to_string()
+    "codebox-sync".to_string()
 }
 fn default_profile() -> String {
     "default".to_string()
@@ -165,7 +181,7 @@ impl WebDavSyncSettings {
 
 /// 应用设置结构
 ///
-/// 存储设备级别设置，保存在本地 `~/.cc-switch/settings.json`，不随数据库同步。
+/// 存储设备级别设置，保存在本地 `~/.sdkwork/codebox/settings.json`，不随数据库同步。
 /// 这确保了云同步场景下多设备可以独立运作。
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -205,8 +221,19 @@ pub struct AppSettings {
     /// User has confirmed the failover toggle first-run notice
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub failover_confirmed: Option<bool>,
+    /// User has confirmed the WebDAV auto-sync traffic warning
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub auto_sync_confirmed: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
+    #[serde(default = "default_theme_mode")]
+    pub theme_mode: String,
+    #[serde(default = "default_theme_palette")]
+    pub theme_palette: String,
+    #[serde(default = "default_ui_density")]
+    pub ui_density: String,
+    #[serde(default = "default_motion_preference")]
+    pub motion_preference: String,
 
     // ===== 主页面显示的应用 =====
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -294,7 +321,12 @@ impl Default for AppSettings {
             stream_check_confirmed: None,
             enable_failover_toggle: false,
             failover_confirmed: None,
+            auto_sync_confirmed: None,
             language: None,
+            theme_mode: default_theme_mode(),
+            theme_palette: default_theme_palette(),
+            ui_density: default_ui_density(),
+            motion_preference: default_motion_preference(),
             visible_apps: None,
             claude_config_dir: None,
             codex_config_dir: None,
@@ -319,11 +351,7 @@ impl Default for AppSettings {
 impl AppSettings {
     fn settings_path() -> Option<PathBuf> {
         // settings.json 保留用于旧版本迁移和无数据库场景
-        Some(
-            crate::config::get_home_dir()
-                .join(".cc-switch")
-                .join("settings.json"),
-        )
+        Some(crate::config::get_default_app_config_dir().join("settings.json"))
     }
 
     fn normalize_paths(&mut self) {
@@ -369,11 +397,45 @@ impl AppSettings {
             .filter(|s| matches!(*s, "en" | "zh" | "ja"))
             .map(|s| s.to_string());
 
+        self.theme_mode = match self.theme_mode.trim() {
+            "light" => "light".to_string(),
+            "system" => "system".to_string(),
+            _ => default_theme_mode(),
+        };
+
+        self.theme_palette = match self.theme_palette.trim() {
+            "lobster" => "lobster".to_string(),
+            "tech-blue" => "tech-blue".to_string(),
+            "green-tech" => "green-tech".to_string(),
+            "zinc" => "zinc".to_string(),
+            "violet" => "violet".to_string(),
+            "rose" => "rose".to_string(),
+            _ => default_theme_palette(),
+        };
+
+        self.ui_density = match self.ui_density.trim() {
+            "compact" => "compact".to_string(),
+            _ => default_ui_density(),
+        };
+
+        self.motion_preference = match self.motion_preference.trim() {
+            "full" => "full".to_string(),
+            "reduced" => "reduced".to_string(),
+            "system" => "system".to_string(),
+            _ => default_motion_preference(),
+        };
+
         if let Some(sync) = &mut self.webdav_sync {
             sync.normalize();
             if sync.is_empty() {
                 self.webdav_sync = None;
             }
+        }
+
+        // 无托盘时，禁止隐藏到后台，避免出现“窗口关闭后无入口恢复”的状态。
+        if !self.show_in_tray {
+            self.minimize_to_tray_on_close = false;
+            self.silent_startup = false;
         }
     }
 

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=CodeBox
+Comment=All-in-One Assistant for Claude Code, Codex & Gemini CLI
+Exec=codebox
+Icon=com.codebox.desktop
+Terminal=false
+Categories=Utility;Development;
+StartupNotify=true

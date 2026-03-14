@@ -1,6 +1,6 @@
 use serde_json::json;
 
-use cc_switch_lib::{
+use codebox_lib::{
     get_codex_auth_path, get_codex_config_path, read_json_file, switch_provider_test_hook,
     write_codex_live_atomic, AppError, AppType, McpApps, McpServer, MultiAppConfig, Provider,
 };
@@ -8,7 +8,9 @@ use cc_switch_lib::{
 #[path = "support.rs"]
 mod support;
 use std::collections::HashMap;
-use support::{create_test_state_with_config, ensure_test_home, reset_test_fs, test_mutex};
+use support::{
+    create_test_state_with_config, ensure_test_home, reset_test_fs, test_app_config_dir, test_mutex,
+};
 
 #[test]
 fn switch_provider_updates_codex_live_and_state() {
@@ -185,7 +187,7 @@ fn switch_provider_updates_claude_live_and_state() {
     reset_test_fs();
     let _home = ensure_test_home();
 
-    let settings_path = cc_switch_lib::get_claude_settings_path();
+    let settings_path = codebox_lib::get_claude_settings_path();
     if let Some(parent) = settings_path.parent() {
         std::fs::create_dir_all(parent).expect("create claude settings dir");
     }
@@ -288,13 +290,10 @@ fn switch_provider_updates_claude_live_and_state() {
 
     // v3.7.0+ 使用 SQLite 数据库而非 config.json
     // 验证数据已持久化到数据库
-    let home_dir = std::env::var("HOME").expect("HOME should be set by ensure_test_home");
-    let db_path = std::path::Path::new(&home_dir)
-        .join(".cc-switch")
-        .join("cc-switch.db");
+    let db_path = test_app_config_dir().join("codebox.db");
     assert!(
         db_path.exists(),
-        "switching provider should persist to cc-switch.db"
+        "switching provider should persist to codebox.db"
     );
 
     // 验证当前供应商已更新

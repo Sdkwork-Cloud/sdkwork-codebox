@@ -16,10 +16,61 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
+      "@/types": ["packages/sdkwork-codebox-types/src/index.ts"],
+      "@/types/*": ["packages/sdkwork-codebox-types/src/types/*"],
+      "@/i18n": ["packages/sdkwork-codebox-i18n/src/i18n/index.ts"],
+      "@/i18n/*": ["packages/sdkwork-codebox-i18n/src/i18n/*"],
+      "@/components/*": [
+        "packages/sdkwork-codebox-commons/src/components/*",
+        "packages/sdkwork-codebox-provider/src/components/*",
+        "packages/sdkwork-codebox-settings/src/components/*",
+        "packages/sdkwork-codebox-integration/src/components/*",
+        "packages/sdkwork-codebox-proxy/src/components/*",
+        "packages/sdkwork-codebox-workspace/src/components/*",
+        "packages/sdkwork-codebox-usage/src/components/*",
+        "src/components/*"
+      ],
+      "@/hooks/*": [
+        "packages/sdkwork-codebox-commons/src/hooks/*",
+        "packages/sdkwork-codebox-provider/src/hooks/*",
+        "packages/sdkwork-codebox-settings/src/hooks/*",
+        "packages/sdkwork-codebox-integration/src/hooks/*",
+        "packages/sdkwork-codebox-proxy/src/hooks/*",
+        "packages/sdkwork-codebox-workspace/src/hooks/*",
+        "src/hooks/*"
+      ],
+      "@/config/*": [
+        "packages/sdkwork-codebox-core/src/config/*",
+        "packages/sdkwork-codebox-provider/src/config/*",
+        "packages/sdkwork-codebox-integration/src/config/*",
+        "src/config/*"
+      ],
+      "@/config/appConfig": [
+        "packages/sdkwork-codebox-commons/src/config/appConfig.tsx"
+      ],
+      "@/utils/*": [
+        "packages/sdkwork-codebox-commons/src/utils/*",
+        "packages/sdkwork-codebox-provider/src/utils/*",
+        "packages/sdkwork-codebox-integration/src/utils/*",
+        "src/utils/*"
+      ],
+      "@/lib/*": [
+        "packages/sdkwork-codebox-commons/src/lib/*",
+        "packages/sdkwork-codebox-core/src/lib/*",
+        "src/lib/*"
+      ],
+      "@/icons/*": [
+        "packages/sdkwork-codebox-commons/src/icons/*",
+        "src/icons/*"
+      ],
+      "@/contexts/*": [
+        "packages/sdkwork-codebox-core/src/contexts/*",
+        "src/contexts/*"
+      ],
       "@/*": ["src/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "vite/client"]
   },
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "packages/**/*", "tests/**/*", "workspace.aliases.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

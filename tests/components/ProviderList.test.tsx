@@ -1,16 +1,62 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ReactElement } from "react";
+import i18n from "i18next";
 import type { Provider } from "@/types";
 import { ProviderList } from "@/components/providers/ProviderList";
+import zhLocale from "../../packages/sdkwork-codebox-i18n/src/i18n/locales/zh.json";
 
 const useDragSortMock = vi.fn();
 const useSortableMock = vi.fn();
 const providerCardRenderSpy = vi.fn();
+const importDefaultMock = vi.fn();
+const importOpenCodeFromLiveMock = vi.fn();
+const importOpenClawFromLiveMock = vi.fn();
+const getOpenCodeLiveProviderIdsMock = vi.fn();
+const settingsApiGetMock = vi.fn();
+const toastSuccessMock = vi.fn();
+const toastInfoMock = vi.fn();
+const toastErrorMock = vi.fn();
 
 vi.mock("@/hooks/useDragSort", () => ({
   useDragSort: (...args: unknown[]) => useDragSortMock(...args),
+}));
+
+vi.mock("@/lib/api/providers", () => ({
+  providersApi: {
+    importDefault: (...args: unknown[]) => importDefaultMock(...args),
+    importOpenCodeFromLive: (...args: unknown[]) =>
+      importOpenCodeFromLiveMock(...args),
+    importOpenClawFromLive: (...args: unknown[]) =>
+      importOpenClawFromLiveMock(...args),
+    getOpenCodeLiveProviderIds: (...args: unknown[]) =>
+      getOpenCodeLiveProviderIdsMock(...args),
+  },
+}));
+
+vi.mock("@/lib/api/settings", () => ({
+  settingsApi: {
+    get: (...args: unknown[]) => settingsApiGetMock(...args),
+  },
+}));
+
+vi.mock("@/hooks/useOpenClaw", () => ({
+  useOpenClawLiveProviderIds: () => ({ data: [] }),
+  useOpenClawDefaultModel: () => ({ data: null }),
+}));
+
+vi.mock("@/lib/query/omo", () => ({
+  useCurrentOmoProviderId: () => ({ data: null }),
+  useCurrentOmoSlimProviderId: () => ({ data: null }),
+}));
+
+vi.mock("sonner", () => ({
+  toast: {
+    success: (...args: unknown[]) => toastSuccessMock(...args),
+    info: (...args: unknown[]) => toastInfoMock(...args),
+    error: (...args: unknown[]) => toastErrorMock(...args),
+  },
 }));
 
 vi.mock("@/components/providers/ProviderCard", () => ({
@@ -124,6 +170,14 @@ beforeEach(() => {
   useDragSortMock.mockReset();
   useSortableMock.mockReset();
   providerCardRenderSpy.mockClear();
+  importDefaultMock.mockReset();
+  importOpenCodeFromLiveMock.mockReset();
+  importOpenClawFromLiveMock.mockReset();
+  getOpenCodeLiveProviderIdsMock.mockReset();
+  settingsApiGetMock.mockReset();
+  toastSuccessMock.mockReset();
+  toastInfoMock.mockReset();
+  toastErrorMock.mockReset();
 
   useSortableMock.mockImplementation(({ id }: { id: string }) => ({
     setNodeRef: vi.fn(),
@@ -139,6 +193,12 @@ beforeEach(() => {
     sensors: [],
     handleDragEnd: vi.fn(),
   });
+
+  importDefaultMock.mockResolvedValue(true);
+  importOpenCodeFromLiveMock.mockResolvedValue(1);
+  importOpenClawFromLiveMock.mockResolvedValue(1);
+  getOpenCodeLiveProviderIdsMock.mockResolvedValue([]);
+  settingsApiGetMock.mockResolvedValue({ streamCheckConfirmed: true });
 });
 
 describe("ProviderList Component", () => {
@@ -170,27 +230,69 @@ describe("ProviderList Component", () => {
       sensors: [],
       handleDragEnd: vi.fn(),
     });
+    i18n.addResourceBundle("zh", "translation", zhLocale, true, true);
 
-    renderWithQueryClient(
-      <ProviderList
-        providers={{}}
-        currentProviderId=""
-        appId="claude"
-        onSwitch={vi.fn()}
-        onEdit={vi.fn()}
-        onDelete={vi.fn()}
-        onDuplicate={vi.fn()}
-        onOpenWebsite={vi.fn()}
-        onCreate={handleCreate}
-      />,
-    );
+    try {
+      renderWithQueryClient(
+        <ProviderList
+          providers={{}}
+          currentProviderId=""
+          appId="claude"
+          onSwitch={vi.fn()}
+          onEdit={vi.fn()}
+          onDelete={vi.fn()}
+          onDuplicate={vi.fn()}
+          onOpenWebsite={vi.fn()}
+          onCreate={handleCreate}
+        />,
+      );
 
-    const addButton = screen.getByRole("button", {
-      name: "provider.addProvider",
+      const addButton = screen.getByRole("button", {
+        name: "添加供应商",
+      });
+      expect(
+        screen.getByText(
+          "除 Key 和请求地址外的数据（如插件配置）会被保存到通用配置片段，用于在不同供应商之间共享",
+        ),
+      ).toBeInTheDocument();
+      fireEvent.click(addButton);
+
+      expect(handleCreate).toHaveBeenCalledTimes(1);
+    } finally {
+      i18n.removeResourceBundle("zh", "translation");
+    }
+  });
+
+  it("should hide snippet hint for apps that did not show it before migration", () => {
+    useDragSortMock.mockReturnValueOnce({
+      sortedProviders: [],
+      sensors: [],
+      handleDragEnd: vi.fn(),
     });
-    fireEvent.click(addButton);
+    i18n.addResourceBundle("zh", "translation", zhLocale, true, true);
 
-    expect(handleCreate).toHaveBeenCalledTimes(1);
+    try {
+      renderWithQueryClient(
+        <ProviderList
+          providers={{}}
+          currentProviderId=""
+          appId="openclaw"
+          onSwitch={vi.fn()}
+          onEdit={vi.fn()}
+          onDelete={vi.fn()}
+          onDuplicate={vi.fn()}
+          onOpenWebsite={vi.fn()}
+        />,
+      );
+
+      expect(
+        screen.queryByText(
+          "除 Key 和请求地址外的数据（如插件配置）会被保存到通用配置片段，用于在不同供应商之间共享",
+        ),
+      ).not.toBeInTheDocument();
+    } finally {
+      i18n.removeResourceBundle("zh", "translation");
+    }
   });
 
   it("should render in order returned by useDragSort and pass through action callbacks", () => {
@@ -305,5 +407,99 @@ describe("ProviderList Component", () => {
     expect(
       screen.getByText("No providers match your search."),
     ).toBeInTheDocument();
+  });
+
+  it("shows visible search and import actions above additive provider lists", () => {
+    const providerAlpha = createProvider({ id: "alpha", name: "Alpha Labs" });
+
+    useDragSortMock.mockReturnValue({
+      sortedProviders: [providerAlpha],
+      sensors: [],
+      handleDragEnd: vi.fn(),
+    });
+
+    renderWithQueryClient(
+      <ProviderList
+        providers={{ alpha: providerAlpha }}
+        currentProviderId="alpha"
+        appId="opencode"
+        onSwitch={vi.fn()}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+        onDuplicate={vi.fn()}
+        onOpenWebsite={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "搜索供应商" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "导入当前配置" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "搜索供应商" }));
+
+    expect(
+      screen.getByRole("textbox", { name: "Search providers" }),
+    ).toBeInTheDocument();
+  });
+
+  it("hides bootstrap import action for populated non-additive provider lists", () => {
+    const providerAlpha = createProvider({ id: "alpha", name: "Alpha Labs" });
+
+    useDragSortMock.mockReturnValue({
+      sortedProviders: [providerAlpha],
+      sensors: [],
+      handleDragEnd: vi.fn(),
+    });
+
+    renderWithQueryClient(
+      <ProviderList
+        providers={{ alpha: providerAlpha }}
+        currentProviderId="alpha"
+        appId="claude"
+        onSwitch={vi.fn()}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+        onDuplicate={vi.fn()}
+        onOpenWebsite={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.queryByRole("button", { name: "导入当前配置" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows a contextual message when additive import finds no new providers", async () => {
+    const providerAlpha = createProvider({ id: "alpha", name: "Alpha Labs" });
+
+    useDragSortMock.mockReturnValue({
+      sortedProviders: [providerAlpha],
+      sensors: [],
+      handleDragEnd: vi.fn(),
+    });
+    importOpenCodeFromLiveMock.mockResolvedValueOnce(0);
+
+    renderWithQueryClient(
+      <ProviderList
+        providers={{ alpha: providerAlpha }}
+        currentProviderId="alpha"
+        appId="opencode"
+        onSwitch={vi.fn()}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+        onDuplicate={vi.fn()}
+        onOpenWebsite={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "导入当前配置" }));
+
+    await waitFor(() => {
+      expect(toastInfoMock).toHaveBeenCalledWith("provider.importNothingNew");
+    });
+    expect(toastInfoMock).not.toHaveBeenCalledWith("provider.noProviders");
   });
 });

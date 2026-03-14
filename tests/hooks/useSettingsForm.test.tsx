@@ -36,6 +36,7 @@ describe("useSettingsForm Hook", () => {
         enableClaudePluginIntegration: undefined,
         claudeConfigDir: "  /Users/demo  ",
         codexConfigDir: "   ",
+        openclawConfigDir: "  /Users/openclaw  ",
         language: "en",
       },
       isLoading: false,
@@ -53,7 +54,12 @@ describe("useSettingsForm Hook", () => {
     expect(settings.enableClaudePluginIntegration).toBe(false);
     expect(settings.claudeConfigDir).toBe("/Users/demo");
     expect(settings.codexConfigDir).toBeUndefined();
+    expect(settings.openclawConfigDir).toBe("/Users/openclaw");
     expect(settings.language).toBe("en");
+    expect(settings.themeMode).toBe("system");
+    expect(settings.themePalette).toBe("lobster");
+    expect(settings.uiDensity).toBe("comfortable");
+    expect(settings.motionPreference).toBe("system");
     expect(result.current.initialLanguage).toBe("en");
     expect(changeLanguageSpy).toHaveBeenCalledWith("en");
   });
@@ -104,10 +110,17 @@ describe("useSettingsForm Hook", () => {
     const { result } = renderHook(() => useSettingsForm());
 
     act(() => {
-      result.current.updateSettings({ showInTray: false });
+      result.current.updateSettings({
+        showInTray: false,
+        minimizeToTrayOnClose: true,
+        silentStartup: true,
+      });
     });
 
     expect(result.current.settings?.showInTray).toBe(false);
+    expect(result.current.settings?.minimizeToTrayOnClose).toBe(false);
+    expect(result.current.settings?.silentStartup).toBe(false);
+    expect(result.current.settings?.themeMode).toBe("system");
 
     changeLanguageSpy.mockClear();
     act(() => {
@@ -143,21 +156,33 @@ describe("useSettingsForm Hook", () => {
     act(() => {
       result.current.resetSettings({
         showInTray: false,
-        minimizeToTrayOnClose: false,
+        minimizeToTrayOnClose: true,
         enableClaudePluginIntegration: true,
+        silentStartup: true,
         claudeConfigDir: "  /reset  ",
         codexConfigDir: "   ",
+        openclawConfigDir: "  /openclaw/reset  ",
         language: "zh",
+        themeMode: "light",
+        themePalette: "zinc",
+        uiDensity: "compact",
+        motionPreference: "reduced",
       });
     });
 
     const settings = result.current.settings!;
     expect(settings.showInTray).toBe(false);
     expect(settings.minimizeToTrayOnClose).toBe(false);
+    expect(settings.silentStartup).toBe(false);
     expect(settings.enableClaudePluginIntegration).toBe(true);
     expect(settings.claudeConfigDir).toBe("/reset");
     expect(settings.codexConfigDir).toBeUndefined();
+    expect(settings.openclawConfigDir).toBe("/openclaw/reset");
     expect(settings.language).toBe("zh");
+    expect(settings.themeMode).toBe("light");
+    expect(settings.themePalette).toBe("zinc");
+    expect(settings.uiDensity).toBe("compact");
+    expect(settings.motionPreference).toBe("reduced");
     expect(result.current.initialLanguage).toBe("en");
     expect(changeLanguageSpy).toHaveBeenCalledWith("en");
   });

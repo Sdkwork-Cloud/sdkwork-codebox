@@ -17,6 +17,7 @@ import {
   getSettings,
   setSettings,
   getAppConfigDirOverride,
+  getDefaultAppConfigDir,
   setAppConfigDirOverrideState,
   getMcpConfig,
   setMcpServerEnabled,
@@ -67,6 +68,12 @@ export const handlers = [
 
   http.post(`${TAURI_ENDPOINT}/update_tray_menu`, () => success(true)),
 
+  http.post(`${TAURI_ENDPOINT}/check_env_conflicts`, () => success([])),
+  http.post(`${TAURI_ENDPOINT}/delete_env_vars`, () =>
+    success({ backupPath: "/mock/env-backup.json" }),
+  ),
+  http.post(`${TAURI_ENDPOINT}/restore_env_backup`, () => success(true)),
+
   http.post(`${TAURI_ENDPOINT}/switch_provider`, async ({ request }) => {
     const { id, app } = await withJson<{ id: string; app: AppId }>(request);
     const providers = listProviders(app);
@@ -109,6 +116,17 @@ export const handlers = [
   }),
 
   http.post(`${TAURI_ENDPOINT}/open_external`, () => success(true)),
+  http.post(`${TAURI_ENDPOINT}/open_provider_terminal`, () => success(true)),
+  http.post(`${TAURI_ENDPOINT}/remove_provider_from_live_config`, () =>
+    success(true),
+  ),
+  http.post(`${TAURI_ENDPOINT}/get_openclaw_live_provider_ids`, () =>
+    success([]),
+  ),
+  http.post(`${TAURI_ENDPOINT}/get_openclaw_default_model`, () =>
+    success(null),
+  ),
+  http.post(`${TAURI_ENDPOINT}/scan_openclaw_config_health`, () => success([])),
 
   http.post(`${TAURI_ENDPOINT}/list_sessions`, () => success(listSessions())),
 
@@ -171,6 +189,7 @@ export const handlers = [
   ),
 
   http.post(`${TAURI_ENDPOINT}/restart_app`, () => success(true)),
+  http.post(`${TAURI_ENDPOINT}/set_tray_visibility`, () => success(true)),
 
   http.post(`${TAURI_ENDPOINT}/get_settings`, () => success(getSettings())),
 
@@ -193,11 +212,18 @@ export const handlers = [
     success(getAppConfigDirOverride()),
   ),
 
+  http.post(`${TAURI_ENDPOINT}/get_default_app_config_dir`, () =>
+    success(getDefaultAppConfigDir()),
+  ),
+
   http.post(
     `${TAURI_ENDPOINT}/apply_claude_plugin_config`,
     async ({ request }) => {
       const { official } = await withJson<{ official: boolean }>(request);
-      setSettings({ enableClaudePluginIntegration: !official });
+      setSettings({
+        ...getSettings(),
+        enableClaudePluginIntegration: !official,
+      });
       return success(true);
     },
   ),
@@ -249,7 +275,7 @@ export const handlers = [
       if (!filePath) {
         return success({ success: false, message: "Missing file" });
       }
-      setSettings({ language: "en" });
+      setSettings({ ...getSettings(), language: "en" });
       return success({ success: true, backupId: "backup-123" });
     },
   ),

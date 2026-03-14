@@ -87,6 +87,22 @@ describe("AddProviderDialog", () => {
     expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("使用右侧操作抽屉承载新增供应商流程", () => {
+    render(
+      <AddProviderDialog
+        open
+        onOpenChange={vi.fn()}
+        appId="claude"
+        onSubmit={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByTestId("provider-add-operation-drawer"),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("fullscreen-panel")).not.toBeInTheDocument();
+  });
+
   it("在缺少自定义端点时回退到配置中的 baseUrl", async () => {
     const handleSubmit = vi.fn().mockResolvedValue(undefined);
 
@@ -120,6 +136,51 @@ describe("AddProviderDialog", () => {
     expect(submitted.meta?.custom_endpoints).toEqual({
       "https://claude.base": {
         url: "https://claude.base",
+        addedAt: expect.any(Number),
+        lastUsed: undefined,
+      },
+    });
+  });
+
+  it("对 Codex 配置复用共享的 TOML base_url 提取逻辑", async () => {
+    const handleSubmit = vi.fn().mockResolvedValue(undefined);
+
+    mockFormValues = {
+      name: "Codex Provider",
+      websiteUrl: "",
+      settingsConfig: JSON.stringify({
+        config: [
+          'model_provider = "openai"',
+          "",
+          "[model_providers.openai]",
+          'base_url = "https://section.example/v1"',
+          "",
+          'base_url = "https://top.example/v1"',
+        ].join("\n"),
+      }),
+    };
+
+    render(
+      <AddProviderDialog
+        open
+        onOpenChange={vi.fn()}
+        appId="codex"
+        onSubmit={handleSubmit}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "common.add",
+      }),
+    );
+
+    await waitFor(() => expect(handleSubmit).toHaveBeenCalledTimes(1));
+
+    const submitted = handleSubmit.mock.calls[0][0];
+    expect(submitted.meta?.custom_endpoints).toEqual({
+      "https://section.example/v1": {
+        url: "https://section.example/v1",
         addedAt: expect.any(Number),
         lastUsed: undefined,
       },

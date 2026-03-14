@@ -73,7 +73,14 @@ vi.mock("@/components/settings/LanguageSettings", () => ({
 }));
 
 vi.mock("@/components/settings/ThemeSettings", () => ({
-  ThemeSettings: () => <div data-testid="theme-settings">theme</div>,
+  ThemeSettings: ({ settings, onChange }: any) => (
+    <div data-testid="theme-settings">
+      <span>theme:{settings.themeMode}</span>
+      <button onClick={() => onChange({ themeMode: "light" })}>
+        change-theme
+      </button>
+    </div>
+  ),
 }));
 
 vi.mock("@/components/settings/WindowSettings", () => ({
@@ -148,14 +155,19 @@ describe("SettingsPage integration", () => {
     renderDialog();
 
     await waitFor(() =>
+      expect(screen.getByTestId("theme-settings")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByText("通用"));
+    await waitFor(() =>
       expect(screen.getByText("language:zh")).toBeInTheDocument(),
     );
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
-    fireEvent.click(screen.getByText("settings.advanced.configDir.title"));
+    fireEvent.click(screen.getByText("目录"));
     const appInput = await screen.findByPlaceholderText(
       "settings.browsePlaceholderApp",
     );
-    expect((appInput as HTMLInputElement).value).toBe("/home/mock/.cc-switch");
+    expect((appInput as HTMLInputElement).value).toBe(
+      "/home/mock/.sdkwork/codebox",
+    );
   });
 
   it("imports configuration and triggers success callback", async () => {
@@ -163,10 +175,14 @@ describe("SettingsPage integration", () => {
     renderDialog({ onImportSuccess });
 
     await waitFor(() =>
+      expect(screen.getByTestId("theme-settings")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByText("通用"));
+    await waitFor(() =>
       expect(screen.getByText("language:zh")).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
+    fireEvent.click(screen.getByText("数据与同步"));
     fireEvent.click(screen.getByText("settings.advanced.data.title"));
     fireEvent.click(screen.getByText("settings.selectConfigFile"));
     await waitFor(() =>
@@ -187,11 +203,14 @@ describe("SettingsPage integration", () => {
     renderDialog();
 
     await waitFor(() =>
+      expect(screen.getByTestId("theme-settings")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByText("通用"));
+    await waitFor(() =>
       expect(screen.getByText("language:zh")).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
-    fireEvent.click(screen.getByText("settings.advanced.configDir.title"));
+    fireEvent.click(screen.getByText("目录"));
     const appInput = await screen.findByPlaceholderText(
       "settings.browsePlaceholderApp",
     );
@@ -208,17 +227,23 @@ describe("SettingsPage integration", () => {
     );
 
     expect(getAppConfigDirOverride()).toBe("/custom/app");
+    expect(getSettings().autoSyncConfirmed).toBe(true);
+    expect(getSettings().currentProviderOpencode).toBe("opencode-primary");
+    expect(getSettings().currentProviderOpenclaw).toBe("openclaw-primary");
   });
 
   it("allows browsing and resetting directories", async () => {
     renderDialog();
 
     await waitFor(() =>
+      expect(screen.getByTestId("theme-settings")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByText("通用"));
+    await waitFor(() =>
       expect(screen.getByText("language:zh")).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
-    fireEvent.click(screen.getByText("settings.advanced.configDir.title"));
+    fireEvent.click(screen.getByText("目录"));
 
     const browseButtons = screen.getAllByTitle("settings.browseDirectory");
     const resetButtons = screen.getAllByTitle("settings.resetDefault");
@@ -226,15 +251,17 @@ describe("SettingsPage integration", () => {
     const appInput = (await screen.findByPlaceholderText(
       "settings.browsePlaceholderApp",
     )) as HTMLInputElement;
-    expect(appInput.value).toBe("/home/mock/.cc-switch");
+    expect(appInput.value).toBe("/home/mock/.sdkwork/codebox");
 
     fireEvent.click(browseButtons[0]);
     await waitFor(() =>
-      expect(appInput.value).toBe("/home/mock/.cc-switch/picked"),
+      expect(appInput.value).toBe("/home/mock/.sdkwork/codebox/picked"),
     );
 
     fireEvent.click(resetButtons[0]);
-    await waitFor(() => expect(appInput.value).toBe("/home/mock/.cc-switch"));
+    await waitFor(() =>
+      expect(appInput.value).toBe("/home/mock/.sdkwork/codebox"),
+    );
 
     const claudeInput = (await screen.findByPlaceholderText(
       "settings.browsePlaceholderClaude",
@@ -255,9 +282,13 @@ describe("SettingsPage integration", () => {
     renderDialog();
 
     await waitFor(() =>
+      expect(screen.getByTestId("theme-settings")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByText("通用"));
+    await waitFor(() =>
       expect(screen.getByText("language:zh")).toBeInTheDocument(),
     );
-    fireEvent.click(screen.getByText("settings.tabAdvanced"));
+    fireEvent.click(screen.getByText("数据与同步"));
     fireEvent.click(screen.getByText("settings.advanced.data.title"));
 
     server.use(
