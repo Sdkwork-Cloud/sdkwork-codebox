@@ -1,0 +1,132 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="workspace-bg" x1="180" y1="62" x2="1450" y2="938" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1623"/>
+      <stop offset="0.52" stop-color="#0D1828"/>
+      <stop offset="1" stop-color="#09111C"/>
+    </linearGradient>
+    <linearGradient id="workspace-panel" x1="330" y1="110" x2="1440" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101D2D"/>
+      <stop offset="1" stop-color="#0C1827"/>
+    </linearGradient>
+    <linearGradient id="workspace-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2A8DFF"/>
+      <stop offset="1" stop-color="#3EE3D3"/>
+    </linearGradient>
+    <filter id="workspace-shadow" x="12" y="16" width="1576" height="968" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0196 0 0 0 0 0.0549 0 0 0 0 0.1059 0 0 0 0.44 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3_1" result="shape"/>
+    </filter>
+    <style>
+      .title { fill: #F5FAFF; font: 700 30px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.02em; }
+      .h2 { fill: #F7FBFF; font: 600 23px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .label { fill: #F7FBFF; font: 600 16px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .body { fill: #9FB2C9; font: 500 14px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .caps { fill: #6F86A4; font: 700 12px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.22em; }
+      .small { fill: #D9E7F8; font: 600 13px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .mono { fill: #CFE1F7; font: 500 16px 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace; }
+      .mono-dim { fill: #86A1BE; font: 500 15px 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#EEF4FA"/>
+  <circle cx="1354" cy="122" r="170" fill="#2D84FF" fill-opacity="0.12"/>
+  <circle cx="1262" cy="826" r="220" fill="#35D7CB" fill-opacity="0.08"/>
+
+  <g filter="url(#workspace-shadow)">
+    <rect x="52" y="52" width="1496" height="896" rx="40" fill="url(#workspace-bg)"/>
+    <rect x="52.5" y="52.5" width="1495" height="895" rx="39.5" stroke="#1B2A3F"/>
+  </g>
+
+  <rect x="82" y="82" width="220" height="836" rx="30" fill="#0B1420" fill-opacity="0.92" stroke="#162436"/>
+  <rect x="330" y="82" width="1188" height="836" rx="30" fill="url(#workspace-panel)" stroke="#17263A"/>
+
+  <rect x="104" y="106" width="176" height="70" rx="22" fill="#112238" stroke="#203651"/>
+  <circle cx="140" cy="141" r="16" fill="url(#workspace-accent)"/>
+  <text x="168" y="137" class="small">CodeBox</text>
+  <text x="168" y="157" class="small">OPENCLAW WORKSPACE</text>
+
+  <text x="108" y="218" class="caps">PRODUCTS</text>
+  <rect x="104" y="238" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="273" class="small">Claude Code</text>
+  <rect x="104" y="306" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="341" class="small">Codex</text>
+  <rect x="104" y="374" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="409" class="small">Gemini CLI</text>
+  <rect x="104" y="442" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="477" class="small">OpenCode</text>
+  <rect x="98" y="510" width="188" height="82" rx="24" fill="#12253B" stroke="#2F8FFF" stroke-opacity="0.72"/>
+  <rect x="108" y="520" width="168" height="62" rx="18" fill="url(#workspace-accent)" fill-opacity="0.12"/>
+  <text x="136" y="557" class="label">OpenClaw</text>
+  <text x="136" y="577" class="body">Explorer plus editor tabs</text>
+
+  <rect x="360" y="104" width="1128" height="104" rx="28" fill="#0E1C2C" stroke="#1A2C43"/>
+  <text x="392" y="146" class="caps">WORKSPACE EDITOR</text>
+  <text x="392" y="182" class="title">OpenClaw Workspace</text>
+  <text x="658" y="182" class="body">The product view exposes a file explorer on the left and a multi-tab editor on the right.</text>
+
+  <rect x="360" y="226" width="1128" height="70" rx="24" fill="#0D1A29" stroke="#1A2B42"/>
+  <rect x="374" y="239" width="132" height="44" rx="16" fill="#122235"/>
+  <text x="412" y="266" class="small">Providers</text>
+  <rect x="520" y="239" width="138" height="44" rx="16" fill="url(#workspace-accent)" fill-opacity="0.16" stroke="#2D84FF" stroke-opacity="0.55"/>
+  <text x="560" y="266" class="small">Workspace</text>
+  <rect x="672" y="239" width="164" height="44" rx="16" fill="#122235"/>
+  <text x="714" y="266" class="small">Environment</text>
+  <rect x="850" y="239" width="110" height="44" rx="16" fill="#122235"/>
+  <text x="886" y="266" class="small">Tools</text>
+  <rect x="974" y="239" width="118" height="44" rx="16" fill="#122235"/>
+  <text x="1010" y="266" class="small">Agents</text>
+  <rect x="1106" y="239" width="126" height="44" rx="16" fill="#122235"/>
+  <text x="1143" y="266" class="small">Sessions</text>
+
+  <rect x="360" y="324" width="330" height="544" rx="30" fill="#0E1B2B" stroke="#17273B"/>
+  <rect x="714" y="324" width="774" height="544" rx="30" fill="#0E1B2B" stroke="#17273B"/>
+
+  <text x="392" y="366" class="caps">FILE EXPLORER</text>
+  <rect x="392" y="388" width="266" height="44" rx="18" fill="#102133" stroke="#203550"/>
+  <text x="420" y="416" class="body">Search workspace and memory...</text>
+
+  <text x="392" y="470" class="small">Workspace Files</text>
+  <rect x="392" y="486" width="266" height="54" rx="18" fill="#132742" stroke="#2A8DFF" stroke-opacity="0.72"/>
+  <text x="420" y="520" class="small">AGENTS.md</text>
+  <rect x="392" y="548" width="266" height="54" rx="18" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="582" class="small">SOUL.md</text>
+  <rect x="392" y="610" width="266" height="54" rx="18" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="644" class="small">TOOLS.md</text>
+  <rect x="392" y="672" width="266" height="54" rx="18" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="706" class="small">MEMORY.md</text>
+
+  <text x="392" y="764" class="small">Daily Memory</text>
+  <rect x="392" y="780" width="266" height="54" rx="18" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="814" class="small">2026-03-14.md</text>
+
+  <text x="746" y="366" class="caps">EDITOR TABS</text>
+  <rect x="746" y="386" width="156" height="42" rx="16" fill="url(#workspace-accent)" fill-opacity="0.16" stroke="#2D84FF" stroke-opacity="0.55"/>
+  <text x="786" y="412" class="small">AGENTS.md</text>
+  <rect x="914" y="386" width="132" height="42" rx="16" fill="#122235"/>
+  <text x="950" y="412" class="small">SOUL.md</text>
+  <rect x="1058" y="386" width="150" height="42" rx="16" fill="#122235"/>
+  <text x="1092" y="412" class="small">2026-03-14.md</text>
+
+  <rect x="746" y="446" width="710" height="334" rx="24" fill="#0B1624" stroke="#1A2D46"/>
+  <text x="774" y="490" class="mono"># OpenClaw Agent Contract</text>
+  <text x="774" y="530" class="mono-dim">## Role</text>
+  <text x="774" y="562" class="mono">You coordinate provider selection, workspace memory,</text>
+  <text x="774" y="594" class="mono">tool permissions and session continuity for this repo.</text>
+  <text x="774" y="646" class="mono-dim">## File Responsibilities</text>
+  <text x="774" y="678" class="mono">- AGENTS.md keeps operator instructions and guardrails</text>
+  <text x="774" y="710" class="mono">- SOUL.md stores long-lived behavior and style defaults</text>
+  <text x="774" y="742" class="mono">- TOOLS.md documents execution permissions and limits</text>
+
+  <rect x="746" y="798" width="214" height="42" rx="16" fill="#122235"/>
+  <text x="792" y="824" class="small">Unsaved changes</text>
+  <rect x="1262" y="798" width="194" height="42" rx="16" fill="url(#workspace-accent)"/>
+  <text x="1334" y="824" class="small" fill="#07111C">Save AGENTS.md</text>
+
+  <text x="746" y="892" class="body">Documentation preview: OpenClaw workspace with explorer folders, searchable memory files, multi-tab editing, and a focused right-side editor surface.</text>
+</svg>

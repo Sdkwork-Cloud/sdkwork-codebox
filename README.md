@@ -19,64 +19,76 @@ English | [中文](README_ZH.md) | [日本語](README_JA.md) | [Changelog](CHANG
 
 ## Overview
 
-CodeBox is an all-in-one desktop workspace for managing AI coding toolchains.
-It gives teams and individual developers a unified control plane for provider
-switching, runtime settings, proxy and failover, usage analytics, workspace
-files, prompts, skills, MCP servers, and session data across multiple coding
-assistants.
+CodeBox is a cross-platform desktop control plane for modern AI coding tools.
+It unifies provider switching, product-specific configuration, runtime control,
+workspace editing, prompts, skills, MCP, usage analytics, and deep-link import
+across Claude Code, Codex, Gemini CLI, OpenCode, and OpenClaw.
+
+The current product is structured around a clear information architecture:
+
+- a left product rail for switching between supported tools
+- top contextual tabs that change per product and remember the last valid view
+- a dedicated settings center with a left vertical tab rail
+- drawer-based provider workbenches that preserve shell context while editing
+- an OpenClaw workspace explorer plus editor for long-lived project memory
+- a runtime console for proxy, takeover, failover, usage, and diagnostics
 
 The repository is organized as a `pnpm` workspace with a React + Vite renderer,
-Tauri native host, and feature packages under `packages/` for long-term
-maintainability.
+a Tauri native host, and feature packages under `packages/` so the product can
+continue to grow without collapsing into one shell-level codepath.
 
-## Why This Repository Exists
+## Why CodeBox
 
-Modern AI coding workflows are fragmented:
+Modern AI coding workflows still fragment core operations:
 
-- each CLI tool uses different config files and environment conventions
+- each CLI uses its own config files, directory layout, and environment rules
 - switching providers often means editing JSON, TOML, or `.env` files manually
-- shared assets such as prompts, skills, MCP servers, and usage tracking are
-  usually scattered across tools
-- platform-specific paths and backup behavior are easy to get wrong
+- prompts, skills, MCP servers, and usage data drift across products
+- workspace memory and agent files are rarely surfaced as first-class UI
+- platform-specific config roots and backup behavior are easy to misconfigure
 
-CodeBox turns that into a coherent product experience with visual management,
-safe persistence, multi-product switching, and a consistent architecture.
+CodeBox turns that into a coherent desktop system with explicit product
+surfaces, safe persistence, reusable integrations, and a consistent visual
+model.
 
-## Key Capabilities
+## Experience Highlights
 
-- Unified product control center for Claude Code, Codex, Gemini CLI, OpenCode,
-  and OpenClaw
-- Provider presets, provider switching, and cross-product configuration editing
-- Settings center with product-specific tabs and configuration views
-- Local proxy, failover, takeover, and usage inspection workflows
-- MCP, prompts, skills, and deep-link import flows
-- Workspace and session management for products that expose local project files
-- Cross-platform configuration strategy based on `~/.sdkwork/codebox`
-- Tauri-backed local storage, backup, native integration, and updater flows
-
-## Product Scope
-
-CodeBox focuses on two layers at the same time:
-
-1. End-user desktop experience
-
-- visual settings center
-- provider and runtime operations
-- usage dashboards and logs
-- file/workspace editing
-
-2. Maintainable engineering architecture
-
-- root app shell kept thin
-- reusable business logic moved into feature packages
-- consistent package naming and dependency direction
-- source alias based package composition in development
+- Product shell with a left app rail, contextual header tabs, and product-aware
+  fallback behavior when a previously selected tab is not available.
+- Provider workbench drawers for add and edit flows, with app-specific and
+  universal entry points, better width usage, and less long-form scrolling.
+- OpenClaw workspace tooling with a file explorer, daily-memory search, editor
+  tabs, and dedicated surfaces for environment variables, tool permissions, and
+  agent defaults.
+- Runtime console that keeps proxy, takeover, failover, usage, and diagnostics
+  in one navigable area instead of spreading operational state across pages.
+- Settings center that separates Appearance, General, Data and Sync,
+  Directories, Advanced, and About into a dedicated left-side settings layout.
+- Deep-link import for providers, MCP, prompts, and skills, including
+  multi-product provider import when the link does not lock a target product.
+- Cross-platform config persistence standardized on `~/.sdkwork/codebox`
+  including `%USERPROFILE%\\.sdkwork\\codebox` on Windows.
 
 ## Screenshots
 
-| Main Interface                                    | Add Provider                                   |
-| ------------------------------------------------- | ---------------------------------------------- |
-| ![Main Interface](assets/screenshots/main-en.png) | ![Add Provider](assets/screenshots/add-en.png) |
+| Product Shell                                          | Settings Center                                           |
+| ------------------------------------------------------ | --------------------------------------------------------- |
+| ![Product Shell](assets/screenshots/product-shell.svg) | ![Settings Center](assets/screenshots/control-center.svg) |
+
+| Workspace Editor                                             | Provider Workbench                                               |
+| ------------------------------------------------------------ | ---------------------------------------------------------------- |
+| ![Workspace Editor](assets/screenshots/workspace-editor.svg) | ![Provider Workbench](assets/screenshots/provider-workbench.svg) |
+
+## Deep Link Import
+
+CodeBox supports `codebox://` links for provider, MCP, prompt, and skill
+imports.
+
+- Provider links can prefill provider name, endpoint, API key, and metadata.
+- Links may either lock a single target product or let the user select multiple
+  target products during import.
+- Embedded or remote config payloads can be merged before the final save step,
+  so imported providers behave like native CodeBox-managed entries.
 
 ## Downloads
 

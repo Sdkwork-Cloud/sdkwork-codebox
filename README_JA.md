@@ -104,59 +104,41 @@ Claude Code / Codex / Gemini 公式チャンネルが最安で元価格の 38% /
 
 ## CodeBox を選ぶ理由
 
-最新の AI コーディングは Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw などの CLI ツールに依存していますが、各ツールの設定形式はバラバラです。API プロバイダを切り替えるたびに JSON、TOML、`.env` ファイルを手動で編集する必要があり、複数ツール間で MCP や Skills を統一的に管理する手段もありません。
+CodeBox は、単なる「プロバイダ切り替えツール」ではなく、AI コーディング
+CLI 全体を整理するためのデスクトップ制御面へ進化しています。現行版では、
+情報設計が次のように整理されています。
 
-**CodeBox** は、5 つの CLI ツールを 1 つのデスクトップアプリで一元管理できます。設定ファイルを手作業で編集する代わりに、ワンクリックでプロバイダをインポートし、瞬時に切り替えられるビジュアルインターフェースを提供します。50 以上の組み込みプリセット、統一 MCP・Skills 管理、システムトレイからの即時切り替え機能を搭載。すべてはアトミック書き込みによる信頼性の高い SQLite データベースに支えられており、設定の破損を防ぎます。
+- 左側の製品レールで Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw を切り替える
+- 上部のコンテキスト Tabs は製品ごとに内容が変わり、最後に有効だったビューを保持する
+- 設定センターは専用の左側縦ナビゲーションを持ち、製品設定と混在しない
+- プロバイダ追加・編集は Drawer ワークベンチで行い、元のページ文脈を保ちながら編集できる
+- OpenClaw の Workspace は左側エクスプローラ、右側エディタ、上部ファイル Tabs で構成される
+- Runtime コンソールに Proxy、Takeover、Failover、Usage、Diagnostics を集約する
 
-- **1 つのアプリで 5 つの CLI ツール** -- Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw を単一インターフェースで管理
-- **手動編集は不要** -- AWS Bedrock、NVIDIA NIM、コミュニティリレーなど 50 以上のプロバイダプリセットを内蔵。選んで切り替えるだけ
-- **統一 MCP・Skills 管理** -- 1 つのパネルで 4 つのアプリの MCP サーバーと Skills を双方向同期で管理
-- **システムトレイでクイック切り替え** -- トレイメニューから即座にプロバイダを切り替え。アプリを開く必要なし
-- **クラウド同期** -- Dropbox、OneDrive、iCloud、または WebDAV サーバー経由でデバイス間のプロバイダデータを同期
-- **クロスプラットフォーム** -- Tauri 2 で構築された Windows、macOS、Linux 対応のネイティブデスクトップアプリ
-- **便利ツール内蔵** -- 初回起動時のログイン確認、署名バイパス、プラグイン拡張の同期など、さまざまなユーティリティを搭載
+これにより、複数 CLI の設定断片化、ディレクトリ不整合、視点の迷子、ワークスペース資産の扱いにくさを、ひとつの製品体験として整理できます。
 
 ## スクリーンショット
 
-|                  メイン画面                   |                  プロバイダ追加                  |
-| :-------------------------------------------: | :----------------------------------------------: |
-| ![メイン画面](assets/screenshots/main-ja.png) | ![プロバイダ追加](assets/screenshots/add-ja.png) |
+| 製品シェル                                          | 設定センター                                           |
+| --------------------------------------------------- | ------------------------------------------------------ |
+| ![製品シェル](assets/screenshots/product-shell.svg) | ![設定センター](assets/screenshots/control-center.svg) |
 
-## 特長
+| Workspace エディタ                                             | プロバイダワークベンチ                                               |
+| -------------------------------------------------------------- | -------------------------------------------------------------------- |
+| ![Workspace エディタ](assets/screenshots/workspace-editor.svg) | ![プロバイダワークベンチ](assets/screenshots/provider-workbench.svg) |
+
+## コア機能
 
 [完全な更新履歴](CHANGELOG.md) | [リリースノート](docs/release-notes/v3.12.1-ja.md)
 
-### プロバイダ管理
-
-- **5 つの CLI ツール、50 以上のプリセット** -- Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw。キーをコピーしてワンクリックでインポート
-- **ユニバーサルプロバイダ** -- 1 つの設定を複数アプリに同期（OpenCode、OpenClaw）
-- ワンクリック切り替え、システムトレイクイックアクセス、ドラッグ＆ドロップ並び替え、インポート/エクスポート
-
-### プロキシ & フェイルオーバー
-
-- **ローカルプロキシのホットスイッチ** -- フォーマット変換、自動フェイルオーバー、サーキットブレーカー、プロバイダヘルスモニタリング、リクエストレクティファイア
-- **アプリレベルのテイクオーバー** -- Claude、Codex、Gemini を個別にプロキシ経由でルーティング、プロバイダ単位で設定可能
-
-### MCP、Prompts & Skills
-
-- **統一 MCP パネル** -- 4 つのアプリの MCP サーバーを管理、双方向同期、Deep Link インポート対応
-- **Prompts** -- Markdown エディタ、クロスアプリ同期（CLAUDE.md / AGENTS.md / GEMINI.md）、バックフィル保護
-- **Skills** -- GitHub リポジトリまたは ZIP ファイルからワンクリックインストール、カスタムリポジトリ管理、シンボリックリンクとファイルコピーに対応
-
-### 使用量 & コストトラッキング
-
-- **使用量ダッシュボード** -- プロバイダ横断で支出・リクエスト数・トークン使用量を追跡、トレンドチャート、詳細リクエストログ、カスタムモデル価格設定
-
-### Session Manager & ワークスペース
-
-- すべてのアプリの会話履歴を閲覧・検索・復元
-- **ワークスペースエディタ**（OpenClaw）-- エージェントファイル（AGENTS.md、SOUL.md など）を Markdown プレビュー付きで編集
-
-### システム & プラットフォーム
-
-- **クラウド同期** -- カスタム設定ディレクトリ（Dropbox、OneDrive、iCloud、NAS）および WebDAV サーバー同期
-- **Deep Link** (`codebox://`) -- URL 経由でプロバイダ、MCP サーバー、Prompts、Skills をワンクリックインポート
-- ダーク / ライト / システムテーマ、自動起動、自動アップデーター、アトミック書き込み、自動バックアップ、多言語対応（中/英/日）
+- **統一製品シェル**：左側製品レールと上部製品 Tabs により、製品ごとに異なる設定面を明示する。
+- **プロバイダワークベンチ**：追加と編集を Drawer に集約し、アプリ専用とユニバーサルの両方を扱える。
+- **OpenClaw 専用ビュー**：Providers、Workspace、環境変数、ツール権限、Agents 設定、Session 管理を製品能力に応じて表示する。
+- **Workspace ファイル体験**：ファイルエクスプローラ、Daily Memory 検索、ファイル Tabs、右側エディタで集中編集できる。
+- **Runtime コンソール**：Proxy、Takeover、Failover、Usage、Diagnostics を同一フローで操作できる。
+- **設定センター**：Appearance、General、Data and Sync、Directories、Advanced、About を左側縦ナビで整理する。
+- **Deep Link インポート**：`codebox://` でプロバイダ、MCP、Prompts、Skills を取り込み、対象製品が固定されない場合は複数選択で保存できる。
+- **統一設定ディレクトリ**：全プラットフォームで `~/.sdkwork/codebox` を基準にし、Windows では `%USERPROFILE%\\.sdkwork\\codebox` を使用する。
 
 ## よくある質問
 
@@ -216,102 +198,53 @@ CodeBox は「最小限の介入」という設計原則に従っています。
 
 ## ドキュメント
 
-各機能の詳しい使い方については、**[ユーザーマニュアル](docs/user-manual/ja/README.md)** をご覧ください。プロバイダ管理、MCP/Prompts/Skills、プロキシとフェイルオーバーなど、すべての機能を網羅しています。
+各機能の詳しい使い方と設計情報は、次のドキュメントを参照してください。
+
+- [ユーザーマニュアル](docs/user-manual/ja/README.md)
+- [アーキテクチャ標準](ARCHITECT.md)
+- [リリースガイド](docs/releasing.md)
+- [更新履歴](CHANGELOG.md)
 
 ## クイックスタート
 
-### 基本的な使い方
-
-1. **プロバイダ追加**: 「Add Provider」をクリック → プリセットを選ぶかカスタム設定を作成
-2. **プロバイダ切り替え**:
-   - メイン UI: プロバイダを選択 → 「Enable」をクリック
-   - システムトレイ: プロバイダ名をクリック（即時反映）
-3. **反映**: ターミナルまたは対応する CLI ツールを再起動して適用（Claude Code は再起動不要）
-4. **公式設定に戻す**: 「Official Login」プリセットを追加し、CLI ツールを再起動してログイン/OAuth フローを実行
-
-### MCP、Prompts、Skills & Sessions
-
-- **MCP**: 「MCP」ボタンをクリック → テンプレートまたはカスタム設定でサーバーを追加 → アプリごとの同期をトグルで切り替え
-- **Prompts**: 「Prompts」をクリック → Markdown エディタでプリセットを作成 → 有効化してライブファイルに同期
-- **Skills**: 「Skills」をクリック → GitHub リポジトリを閲覧 → ワンクリックですべてのアプリにインストール
-- **Sessions**: 「Sessions」をクリック → すべてのアプリの会話履歴を閲覧・検索・復元
-
-> **補足**: 初回起動時に、既存の CLI ツール設定を手動でインポートしてデフォルトプロバイダとして使用できます。
+1. [GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) から自分の OS 向けパッケージを取得する。
+2. 起動後、左側の製品レールで管理したい CLI 製品を選ぶ。
+3. `Providers` でプロバイダを追加またはインポートする。製品固定のない `codebox://` リンクは複数製品に保存できる。
+4. `Runtime` で Proxy、Takeover、Failover、Usage、Diagnostics を設定する。
+5. OpenClaw を使う場合は `Workspace` で `AGENTS.md`、`SOUL.md`、`TOOLS.md` などを直接管理する。
+6. `Settings` で外観、同期、ディレクトリ、高度な設定を調整する。
 
 ## ダウンロード & インストール
 
 ### システム要件
 
-- **Windows**: Windows 10 以上
-- **macOS**: macOS 10.15 (Catalina) 以上
-- **Linux**: Ubuntu 22.04+ / Debian 11+ / Fedora 34+ など主要ディストリビューション
+- Windows 10 以上
+- macOS 10.15 以上
+- Ubuntu 22.04+ / Debian 11+ / Fedora 34+ などの主要 Linux ディストリビューション
 
-### Windows ユーザー
+### 配布形式
 
-[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) ページから最新版の `CodeBox-v{version}-Windows.msi` インストーラー、またはポータブル版 `CodeBox-v{version}-Windows-Portable.zip` をダウンロード。
+- Windows: `MSI` とポータブル `ZIP`
+- macOS: `ZIP`
+- Linux: `AppImage`、`.deb`、`.rpm`
 
-### macOS ユーザー
+共通ダウンロード先:
 
-[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) から `CodeBox-v{version}-macOS.zip` をダウンロードして展開。
-
-> **注意**: 開発者アカウント未登録のため、初回起動時に「開発元を確認できません」と表示される場合があります。一度閉じてから「システム設定」→「プライバシーとセキュリティ」→「このまま開く」をクリックしてください。以降は通常通り起動できます。
-
-### Arch Linux ユーザー
-
-**paru でインストール（推奨）**
-
-```bash
-paru -S codebox-bin
+```text
+https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest
 ```
 
-### Linux ユーザー
-
-[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) から最新版の Linux ビルドをダウンロード：
-
-- `CodeBox-v{version}-Linux.deb`（Debian/Ubuntu）
-- `CodeBox-v{version}-Linux.rpm`（Fedora/RHEL/openSUSE）
-- `CodeBox-v{version}-Linux.AppImage`（汎用）
+> macOS で初回起動時に警告が出る場合は、「システム設定 → プライバシーとセキュリティ」から「このまま開く」を選択してください。
 
 <details>
 <summary><strong>アーキテクチャ概要</strong></summary>
 
 ### 設計原則
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Frontend (React + TS)                    │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐    │
-│  │ Components  │  │    Hooks     │  │  TanStack Query  │    │
-│  │   (UI)      │──│ (Bus. Logic) │──│   (Cache/Sync)   │    │
-│  └─────────────┘  └──────────────┘  └──────────────────┘    │
-└────────────────────────┬────────────────────────────────────┘
-                         │ Tauri IPC
-┌────────────────────────▼────────────────────────────────────┐
-│                  Backend (Tauri + Rust)                     │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐    │
-│  │  Commands   │  │   Services   │  │  Models/Config   │    │
-│  │ (API Layer) │──│ (Bus. Layer) │──│     (Data)       │    │
-│  └─────────────┘  └──────────────┘  └──────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**コア設計パターン**
-
-- **SSOT** (Single Source of Truth): 同期対象のアプリデータはすべて `<app-config-dir>/codebox.db`（SQLite）に集約
-- **二層ストレージ**: 同期データは SQLite、デバイスデータは JSON
-- **双方向同期**: 切り替え時はライブファイルへ書き込み、編集時はアクティブプロバイダから逆同期
-- **アトミック書き込み**: 一時ファイル + rename パターンで設定破損を防止
-- **並行安全**: Mutex で保護された DB 接続でレースコンディションを防止
-- **レイヤードアーキテクチャ**: Commands → Services → DAO → Database を明確に分離
-
-**主要コンポーネント**
-
-- **ProviderService**: プロバイダの CRUD、切り替え、バックフィル、ソート
-- **McpService**: MCP サーバー管理、インポート/エクスポート、ライブファイル同期
-- **ProxyService**: ローカル Proxy モードのホットスイッチとフォーマット変換
-- **SessionManager**: Claude Code の会話履歴閲覧
-- **ConfigService**: 設定のインポート/エクスポート、バックアップローテーション
-- **SpeedtestService**: API エンドポイントの遅延計測
+- ルート `src/` はアプリシェル、起動、トップレベル構成だけを担当する。
+- 再利用可能な機能は `packages/sdkwork-codebox-*` に分離して保守する。
+- 依存方向は `types -> i18n / commons -> core -> business packages -> app shell` に従う。
+- ネイティブ境界は `src-tauri/` に集約し、ファイルシステム、ディレクトリ解決、バックアップ、Deep Link、更新を扱う。
 
 </details>
 
@@ -320,91 +253,29 @@ paru -S codebox-bin
 
 ### 開発環境
 
-- Node.js 18+
-- pnpm 8+
-- Rust 1.85+
-- Tauri CLI 2.8+
+- Node.js 20+
+- `pnpm`
+- Rust toolchain
+- Tauri 2 のビルド前提条件
 
 ### 開発コマンド
 
 ```bash
-# 依存関係をインストール
 pnpm install
-
-# ホットリロード付き開発モード
 pnpm dev
-
-# 型チェック
+pnpm dev:renderer
 pnpm typecheck
-
-# コード整形
-pnpm format
-
-# フォーマット検証
-pnpm format:check
-
-# フロントエンド単体テスト
+pnpm typecheck:packages
 pnpm test:unit
-
-# ウォッチモード（開発に推奨）
-pnpm test:unit:watch
-
-# アプリをビルド
+pnpm build:packages
 pnpm build
-
-# デバッグビルド
-pnpm tauri build --debug
-```
-
-### Rust バックエンド開発
-
-```bash
-cd src-tauri
-
-# Rust コード整形
-cargo fmt
-
-# clippy チェック
-cargo clippy
-
-# バックエンドテスト
-cargo test
-
-# 特定テストのみ実行
-cargo test test_name
-
-# test-hooks フィーチャー付きでテスト
-cargo test --features test-hooks
-```
-
-### テストガイド
-
-**フロントエンドテスト**:
-
-- テストフレームワークに **vitest** を使用
-- **MSW (Mock Service Worker)** で Tauri API 呼び出しをモック
-- コンポーネントテストに **@testing-library/react** を採用
-
-**テスト実行**:
-
-```bash
-# 全テストを実行
-pnpm test:unit
-
-# ウォッチモード（自動再実行）
-pnpm test:unit:watch
-
-# カバレッジレポート付き
-pnpm test:unit --coverage
 ```
 
 ### 技術スタック
 
-**フロントエンド**: React 18 · TypeScript · Vite · TailwindCSS 3.4 · TanStack Query v5 · react-i18next · react-hook-form · zod · shadcn/ui · @dnd-kit
-
-**バックエンド**: Tauri 2.8 · Rust · serde · tokio · thiserror · tauri-plugin-updater/process/dialog/store/log
-
-**テスト**: vitest · MSW · @testing-library/react
+- フロントエンド: React 18、TypeScript、Vite、TailwindCSS、TanStack Query、react-hook-form、zod、framer-motion
+- デスクトップホスト: Tauri 2、Rust
+- テスト: Vitest、Testing Library、MSW
 
 </details>
 
@@ -412,39 +283,20 @@ pnpm test:unit --coverage
 <summary><strong>プロジェクト構成</strong></summary>
 
 ```
-├── src/                        # フロントエンド (React + TypeScript)
-│   ├── components/
-│   │   ├── providers/          # プロバイダ管理
-│   │   ├── mcp/                # MCP パネル
-│   │   ├── prompts/            # Prompts 管理
-│   │   ├── skills/             # Skills 管理
-│   │   ├── sessions/           # Session Manager
-│   │   ├── proxy/              # Proxy モードパネル
-│   │   ├── openclaw/           # OpenClaw 設定パネル
-│   │   ├── settings/           # 設定 (Terminal/Backup/About)
-│   │   ├── deeplink/           # Deep Link インポート
-│   │   ├── env/                # 環境変数管理
-│   │   ├── universal/          # クロスアプリ設定
-│   │   ├── usage/              # 使用量統計
-│   │   └── ui/                 # shadcn/ui コンポーネントライブラリ
-│   ├── hooks/                  # カスタムフック（ビジネスロジック）
-│   ├── lib/
-│   │   ├── api/                # Tauri API ラッパー（型安全）
-│   │   └── query/              # TanStack Query 設定
-│   ├── locales/                # 翻訳 (zh/en/ja)
-│   ├── config/                 # プリセット (providers/mcp)
-│   └── types/                  # TypeScript 型定義
-├── src-tauri/                  # バックエンド (Rust)
-│   └── src/
-│       ├── commands/           # Tauri コマンド層（ドメイン別）
-│       ├── services/           # ビジネスロジック層
-│       ├── database/           # SQLite DAO 層
-│       ├── proxy/              # Proxy モジュール
-│       ├── session_manager/    # セッション管理
-│       ├── deeplink/           # Deep Link 処理
-│       └── mcp/                # MCP 同期モジュール
-├── tests/                      # フロントエンドテスト
-└── assets/                     # スクリーンショット & パートナーリソース
+├── src/                                 # アプリシェル、ナビゲーション、トップレベル構成
+├── src-tauri/                           # Rust ネイティブホスト
+├── packages/sdkwork-codebox-types       # 共通型
+├── packages/sdkwork-codebox-i18n        # 国際化
+├── packages/sdkwork-codebox-commons     # 共通 UI / hooks / utils
+├── packages/sdkwork-codebox-core        # API、クエリ、プラットフォームサービス
+├── packages/sdkwork-codebox-provider    # プロバイダ管理
+├── packages/sdkwork-codebox-settings    # 設定センター
+├── packages/sdkwork-codebox-proxy       # Proxy / Failover / Takeover
+├── packages/sdkwork-codebox-usage       # 使用量とログ
+├── packages/sdkwork-codebox-workspace   # Workspace / Sessions
+├── packages/sdkwork-codebox-integration # MCP / Prompts / Skills / Deep Link
+├── tests/                               # 単体・統合テスト
+└── assets/                              # スクリーンショットとパートナー資産
 ```
 
 </details>

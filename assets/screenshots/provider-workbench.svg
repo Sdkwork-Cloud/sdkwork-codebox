@@ -1,0 +1,119 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="drawer-bg" x1="180" y1="62" x2="1450" y2="938" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09131E"/>
+      <stop offset="0.52" stop-color="#0C1623"/>
+      <stop offset="1" stop-color="#070F18"/>
+    </linearGradient>
+    <linearGradient id="drawer-panel" x1="844" y1="72" x2="1510" y2="926" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101D2D"/>
+      <stop offset="1" stop-color="#0C1827"/>
+    </linearGradient>
+    <linearGradient id="drawer-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2A8DFF"/>
+      <stop offset="1" stop-color="#3EE3D3"/>
+    </linearGradient>
+    <filter id="drawer-shadow" x="12" y="16" width="1576" height="968" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0118 0 0 0 0 0.0314 0 0 0 0 0.0667 0 0 0 0.58 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_4_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_4_1" result="shape"/>
+    </filter>
+    <style>
+      .title { fill: #F5FAFF; font: 700 30px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.02em; }
+      .h2 { fill: #F7FBFF; font: 600 23px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .label { fill: #F7FBFF; font: 600 16px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .body { fill: #9FB2C9; font: 500 14px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .caps { fill: #6F86A4; font: 700 12px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.22em; }
+      .small { fill: #D9E7F8; font: 600 13px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .metric { fill: #F5FAFF; font: 700 22px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#EEF4FA"/>
+  <circle cx="1366" cy="162" r="182" fill="#2D84FF" fill-opacity="0.12"/>
+  <circle cx="280" cy="860" r="250" fill="#35D7CB" fill-opacity="0.08"/>
+
+  <g filter="url(#drawer-shadow)">
+    <rect x="52" y="52" width="1496" height="896" rx="40" fill="url(#drawer-bg)"/>
+    <rect x="52.5" y="52.5" width="1495" height="895" rx="39.5" stroke="#1B2A3F"/>
+  </g>
+
+  <rect x="82" y="82" width="1416" height="836" rx="30" fill="#09111B"/>
+  <rect x="82" y="82" width="796" height="836" rx="30" fill="#0A1420" fill-opacity="0.74"/>
+  <rect x="878" y="82" width="620" height="836" rx="30" fill="url(#drawer-panel)" stroke="#17263A"/>
+
+  <text x="122" y="132" class="caps">BACKGROUND CONTEXT</text>
+  <rect x="122" y="156" width="716" height="82" rx="24" fill="#0E1C2C" stroke="#1A2C43"/>
+  <text x="152" y="192" class="small">Providers</text>
+  <text x="152" y="218" class="body">The drawer preserves provider list context while editing or creating a provider.</text>
+  <rect x="122" y="270" width="716" height="128" rx="28" fill="#0D1A29" stroke="#16273C"/>
+  <rect x="148" y="298" width="186" height="72" rx="22" fill="#112236"/>
+  <text x="178" y="342" class="small">OpenRouter Stable</text>
+  <rect x="350" y="298" width="186" height="72" rx="22" fill="#112236"/>
+  <text x="392" y="342" class="small">Anthropic Direct</text>
+  <rect x="552" y="298" width="186" height="72" rx="22" fill="#112236"/>
+  <text x="594" y="342" class="small">Backup Relay</text>
+
+  <rect x="918" y="112" width="540" height="108" rx="28" fill="#0E1C2C" stroke="#1A2C43"/>
+  <text x="950" y="154" class="caps">OPERATION DRAWER</text>
+  <text x="950" y="190" class="title">Add Provider</text>
+  <text x="1148" y="190" class="body">A wide workbench drawer keeps the form in context and maximizes usable content width.</text>
+
+  <rect x="918" y="240" width="540" height="62" rx="22" fill="#0D1A29" stroke="#1A2B42"/>
+  <rect x="930" y="251" width="166" height="40" rx="16" fill="url(#drawer-accent)" fill-opacity="0.16" stroke="#2D84FF" stroke-opacity="0.6"/>
+  <text x="968" y="276" class="small">App Specific</text>
+  <rect x="1108" y="251" width="134" height="40" rx="16" fill="#122235"/>
+  <text x="1148" y="276" class="small">Universal</text>
+  <rect x="1256" y="251" width="170" height="40" rx="16" fill="#122235"/>
+  <text x="1300" y="276" class="small">Claude Code</text>
+
+  <rect x="918" y="324" width="540" height="56" rx="18" fill="#0F1E2F" stroke="#1C314A"/>
+  <rect x="930" y="333" width="86" height="38" rx="14" fill="url(#drawer-accent)" fill-opacity="0.16" stroke="#2D84FF" stroke-opacity="0.55"/>
+  <text x="960" y="357" class="small">Basics</text>
+  <rect x="1028" y="333" width="88" height="38" rx="14" fill="#122235"/>
+  <text x="1058" y="357" class="small">Models</text>
+  <rect x="1128" y="333" width="90" height="38" rx="14" fill="#122235"/>
+  <text x="1160" y="357" class="small">Headers</text>
+  <rect x="1230" y="333" width="104" height="38" rx="14" fill="#122235"/>
+  <text x="1260" y="357" class="small">Advanced</text>
+
+  <rect x="918" y="402" width="258" height="112" rx="24" fill="#112236" stroke="#1D314A"/>
+  <text x="946" y="438" class="caps">PROVIDER NAME</text>
+  <text x="946" y="476" class="label">OpenRouter Stable</text>
+  <text x="946" y="498" class="body">Human-friendly name used in the product list.</text>
+
+  <rect x="1200" y="402" width="258" height="112" rx="24" fill="#112236" stroke="#1D314A"/>
+  <text x="1228" y="438" class="caps">WEBSITE</text>
+  <text x="1228" y="476" class="label">https://openrouter.ai</text>
+  <text x="1228" y="498" class="body">Optional reference link for docs and support.</text>
+
+  <rect x="918" y="532" width="540" height="112" rx="24" fill="#112236" stroke="#1D314A"/>
+  <text x="946" y="568" class="caps">BASE URL</text>
+  <text x="946" y="606" class="label">https://openrouter.ai/api/v1</text>
+  <text x="946" y="628" class="body">Endpoint candidates and base URL parsing feed the provider workbench automatically.</text>
+
+  <rect x="918" y="662" width="258" height="118" rx="24" fill="#112236" stroke="#1D314A"/>
+  <text x="946" y="698" class="caps">API KEY</text>
+  <text x="946" y="736" class="label">sk-or-v1-************</text>
+  <text x="946" y="758" class="body">Secrets remain hidden in the workbench.</text>
+
+  <rect x="1200" y="662" width="258" height="118" rx="24" fill="#112236" stroke="#1D314A"/>
+  <text x="1228" y="698" class="caps">NOTES</text>
+  <text x="1228" y="736" class="label">Primary relay for coding sessions</text>
+  <text x="1228" y="758" class="body">Internal metadata stays editable without leaving the drawer.</text>
+
+  <rect x="918" y="798" width="540" height="72" rx="24" fill="#0F1E2F" stroke="#1C314A"/>
+  <text x="946" y="842" class="body">The drawer footer stays fixed, while the form body scrolls independently on smaller screens.</text>
+
+  <rect x="918" y="884" width="540" height="22" rx="11" fill="#0B1624"/>
+  <rect x="1196" y="878" width="104" height="34" rx="17" fill="#122235"/>
+  <text x="1232" y="899" class="small">Cancel</text>
+  <rect x="1314" y="878" width="144" height="34" rx="17" fill="url(#drawer-accent)"/>
+  <text x="1358" y="899" class="small" fill="#07111C">Add Provider</text>
+
+  <text x="950" y="940" class="body">Documentation preview: current provider workbench with drawer-based flow, app-specific versus universal tabs, config sub-tabs and a full-width form layout.</text>
+</svg>

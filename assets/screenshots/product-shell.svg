@@ -1,0 +1,192 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="product-shell-bg" x1="140" y1="60" x2="1480" y2="960" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1623"/>
+      <stop offset="0.55" stop-color="#0D1828"/>
+      <stop offset="1" stop-color="#09111D"/>
+    </linearGradient>
+    <linearGradient id="product-shell-panel" x1="270" y1="126" x2="1410" y2="910" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101D2D"/>
+      <stop offset="1" stop-color="#0C1827"/>
+    </linearGradient>
+    <linearGradient id="product-shell-active" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2B8DFF"/>
+      <stop offset="1" stop-color="#32D2C8"/>
+    </linearGradient>
+    <linearGradient id="product-shell-chip" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#14253A"/>
+      <stop offset="1" stop-color="#102032"/>
+    </linearGradient>
+    <filter id="product-shell-shadow" x="12" y="16" width="1576" height="968" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0196 0 0 0 0 0.0549 0 0 0 0 0.1059 0 0 0 0.44 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+    <filter id="product-shell-soft-shadow" x="228" y="214" width="1184" height="690" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0196 0 0 0 0 0.0549 0 0 0 0 0.1059 0 0 0 0.3 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+    <style>
+      .title { fill: #F5FAFF; font: 700 30px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.02em; }
+      .h2 { fill: #F7FBFF; font: 600 22px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .label { fill: #F7FBFF; font: 600 16px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .body { fill: #9FB2C9; font: 500 14px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .caps { fill: #6F86A4; font: 700 12px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.22em; }
+      .metric { fill: #F5FAFF; font: 700 28px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .small { fill: #D9E7F8; font: 600 13px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .tiny { fill: #8AA0BC; font: 600 11px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.08em; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#EEF4FA"/>
+  <circle cx="1380" cy="148" r="178" fill="#2D84FF" fill-opacity="0.12"/>
+  <circle cx="1220" cy="82" r="132" fill="#32D2C8" fill-opacity="0.10"/>
+  <circle cx="180" cy="910" r="220" fill="#2D84FF" fill-opacity="0.08"/>
+
+  <g filter="url(#product-shell-shadow)">
+    <rect x="52" y="52" width="1496" height="896" rx="40" fill="url(#product-shell-bg)"/>
+    <rect x="52.5" y="52.5" width="1495" height="895" rx="39.5" stroke="#1B2A3F"/>
+  </g>
+
+  <rect x="82" y="82" width="220" height="836" rx="30" fill="#0B1420" fill-opacity="0.92" stroke="#162436"/>
+  <rect x="330" y="82" width="1188" height="836" rx="30" fill="url(#product-shell-panel)" stroke="#17263A"/>
+
+  <rect x="104" y="106" width="176" height="70" rx="22" fill="#112238" stroke="#203651"/>
+  <circle cx="140" cy="141" r="16" fill="url(#product-shell-active)"/>
+  <text x="168" y="137" class="small">CodeBox</text>
+  <text x="168" y="157" class="tiny">MULTI-CLI CONTROL</text>
+
+  <text x="108" y="218" class="caps">PRODUCTS</text>
+
+  <rect x="104" y="238" width="176" height="74" rx="22" fill="#102132" stroke="#1E324A"/>
+  <circle cx="136" cy="275" r="18" fill="#13263A"/>
+  <circle cx="136" cy="275" r="9" fill="#8FA7C6"/>
+  <text x="166" y="270" class="label">Claude Code</text>
+  <text x="166" y="291" class="body">Providers and sessions</text>
+
+  <rect x="104" y="326" width="176" height="74" rx="22" fill="#102132" stroke="#1E324A"/>
+  <circle cx="136" cy="363" r="18" fill="#13263A"/>
+  <circle cx="136" cy="363" r="9" fill="#79C9FF"/>
+  <text x="166" y="358" class="label">Codex</text>
+  <text x="166" y="379" class="body">OpenAI product surface</text>
+
+  <rect x="104" y="414" width="176" height="74" rx="22" fill="#102132" stroke="#1E324A"/>
+  <circle cx="136" cy="451" r="18" fill="#13263A"/>
+  <circle cx="136" cy="451" r="9" fill="#80E8CC"/>
+  <text x="166" y="446" class="label">Gemini CLI</text>
+  <text x="166" y="467" class="body">Google runtime wiring</text>
+
+  <rect x="104" y="502" width="176" height="74" rx="22" fill="#102132" stroke="#1E324A"/>
+  <circle cx="136" cy="539" r="18" fill="#13263A"/>
+  <circle cx="136" cy="539" r="9" fill="#FEBE6B"/>
+  <text x="166" y="534" class="label">OpenCode</text>
+  <text x="166" y="555" class="body">Universal and MCP flows</text>
+
+  <rect x="98" y="590" width="188" height="82" rx="24" fill="#12253B" stroke="#2F8FFF" stroke-opacity="0.72"/>
+  <rect x="108" y="600" width="168" height="62" rx="18" fill="url(#product-shell-active)" fill-opacity="0.12"/>
+  <circle cx="136" cy="631" r="18" fill="#16314A"/>
+  <circle cx="136" cy="631" r="10" fill="url(#product-shell-active)"/>
+  <text x="166" y="626" class="label">OpenClaw</text>
+  <text x="166" y="647" class="body">Workspace, env, tools, agents</text>
+
+  <rect x="104" y="792" width="176" height="56" rx="18" fill="#112238" stroke="#213650"/>
+  <text x="130" y="827" class="small">Control Center</text>
+  <rect x="104" y="858" width="176" height="42" rx="16" fill="#0F1D2D" stroke="#1C2E46"/>
+  <text x="130" y="884" class="small">Update ready</text>
+
+  <rect x="360" y="104" width="1128" height="104" rx="28" fill="#0E1C2C" stroke="#1A2C43"/>
+  <text x="392" y="146" class="caps">PRODUCT SURFACE</text>
+  <text x="392" y="180" class="title">OpenClaw</text>
+  <text x="540" y="180" class="body">Providers, workspace files, environment and agent defaults in one shell.</text>
+
+  <rect x="1188" y="126" width="122" height="42" rx="16" fill="#102133" stroke="#203550"/>
+  <text x="1224" y="152" class="small">Runtime</text>
+  <rect x="1328" y="126" width="128" height="42" rx="16" fill="url(#product-shell-active)"/>
+  <text x="1362" y="152" class="small" fill="#07111C">Add Provider</text>
+
+  <rect x="360" y="226" width="1128" height="70" rx="24" fill="#0D1A29" stroke="#1A2B42"/>
+  <rect x="374" y="239" width="132" height="44" rx="16" fill="url(#product-shell-active)" fill-opacity="0.16" stroke="#2D84FF" stroke-opacity="0.55"/>
+  <text x="412" y="266" class="small">Providers</text>
+  <rect x="520" y="239" width="138" height="44" rx="16" fill="#122235"/>
+  <text x="560" y="266" class="small">Workspace</text>
+  <rect x="672" y="239" width="164" height="44" rx="16" fill="#122235"/>
+  <text x="714" y="266" class="small">Environment</text>
+  <rect x="850" y="239" width="110" height="44" rx="16" fill="#122235"/>
+  <text x="886" y="266" class="small">Tools</text>
+  <rect x="974" y="239" width="118" height="44" rx="16" fill="#122235"/>
+  <text x="1010" y="266" class="small">Agents</text>
+  <rect x="1106" y="239" width="126" height="44" rx="16" fill="#122235"/>
+  <text x="1143" y="266" class="small">Sessions</text>
+
+  <g filter="url(#product-shell-soft-shadow)">
+    <rect x="360" y="324" width="790" height="544" rx="32" fill="#0E1B2B" stroke="#17273B"/>
+    <rect x="1180" y="324" width="308" height="544" rx="32" fill="#0D1928" stroke="#17273B"/>
+  </g>
+
+  <text x="392" y="370" class="caps">ACTIVE PROVIDERS</text>
+  <text x="392" y="404" class="h2">Three providers ready for OpenClaw</text>
+
+  <rect x="392" y="434" width="342" height="188" rx="28" fill="#112236" stroke="#245C99"/>
+  <rect x="414" y="456" width="116" height="32" rx="14" fill="url(#product-shell-chip)"/>
+  <text x="446" y="477" class="small">Primary</text>
+  <text x="414" y="530" class="label">OpenRouter Stable</text>
+  <text x="414" y="556" class="body">baseUrl: https://openrouter.ai/api/v1</text>
+  <rect x="414" y="580" width="96" height="28" rx="14" fill="#16314A"/>
+  <text x="438" y="599" class="tiny">Claude 3.7</text>
+  <rect x="522" y="580" width="92" height="28" rx="14" fill="#16314A"/>
+  <text x="548" y="599" class="tiny">GPT-4.1</text>
+  <rect x="626" y="580" width="86" height="28" rx="14" fill="#16314A"/>
+  <text x="650" y="599" class="tiny">Tool OK</text>
+
+  <rect x="748" y="434" width="342" height="188" rx="28" fill="#0F1E2F" stroke="#1D314A"/>
+  <rect x="770" y="456" width="94" height="32" rx="14" fill="#13263A"/>
+  <text x="802" y="477" class="small">Standby</text>
+  <text x="770" y="530" class="label">Anthropic Direct</text>
+  <text x="770" y="556" class="body">Official login recovery and clean fallback profile.</text>
+  <rect x="770" y="580" width="116" height="28" rx="14" fill="#14273D"/>
+  <text x="796" y="599" class="tiny">Hot switch</text>
+  <rect x="898" y="580" width="114" height="28" rx="14" fill="#14273D"/>
+  <text x="928" y="599" class="tiny">Backup ready</text>
+
+  <rect x="392" y="642" width="698" height="194" rx="28" fill="#0F1E2F" stroke="#1D314A"/>
+  <text x="420" y="684" class="caps">CONFIG HEALTH</text>
+  <rect x="420" y="708" width="198" height="96" rx="24" fill="#12253A"/>
+  <text x="446" y="744" class="metric">6</text>
+  <text x="446" y="774" class="body">Workspace files detected</text>
+  <rect x="638" y="708" width="198" height="96" rx="24" fill="#12253A"/>
+  <text x="664" y="744" class="metric">4</text>
+  <text x="664" y="774" class="body">Agent defaults synced</text>
+  <rect x="856" y="708" width="206" height="96" rx="24" fill="#12253A"/>
+  <text x="882" y="744" class="metric">2</text>
+  <text x="882" y="774" class="body">Env warnings resolved</text>
+
+  <text x="1210" y="370" class="caps">STATUS RAIL</text>
+  <text x="1210" y="404" class="h2">Workspace pulse</text>
+
+  <rect x="1210" y="434" width="248" height="102" rx="24" fill="#112236" stroke="#1C314A"/>
+  <text x="1236" y="468" class="tiny">DEFAULT MODEL</text>
+  <text x="1236" y="500" class="label">claude-sonnet-4</text>
+  <text x="1236" y="522" class="body">Recommended for agents and tool chains.</text>
+
+  <rect x="1210" y="554" width="248" height="112" rx="24" fill="#112236" stroke="#1C314A"/>
+  <text x="1236" y="588" class="tiny">WORKSPACE</text>
+  <text x="1236" y="620" class="label">AGENTS.md, SOUL.md, TOOLS.md</text>
+  <text x="1236" y="642" class="body">Explorer and editor tabs keep file context open.</text>
+
+  <rect x="1210" y="684" width="248" height="154" rx="24" fill="#112236" stroke="#1C314A"/>
+  <text x="1236" y="718" class="tiny">INTERACTION NOTES</text>
+  <text x="1236" y="752" class="body">Per-product tabs persist the last valid view.</text>
+  <text x="1236" y="782" class="body">When a tab is unavailable for a product, the shell</text>
+  <text x="1236" y="808" class="body">falls back to the first supported tab automatically.</text>
+
+  <text x="392" y="890" class="tiny">Documentation preview: current product shell with left product rail, top product tabs, provider cards, and OpenClaw-specific configuration context.</text>
+</svg>

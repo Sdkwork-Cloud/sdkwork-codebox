@@ -1,0 +1,153 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="control-bg" x1="170" y1="70" x2="1440" y2="930" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1623"/>
+      <stop offset="0.5" stop-color="#0D1828"/>
+      <stop offset="1" stop-color="#09111C"/>
+    </linearGradient>
+    <linearGradient id="control-panel" x1="318" y1="112" x2="1450" y2="912" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101D2D"/>
+      <stop offset="1" stop-color="#0C1827"/>
+    </linearGradient>
+    <linearGradient id="control-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2A8DFF"/>
+      <stop offset="1" stop-color="#3EE3D3"/>
+    </linearGradient>
+    <filter id="control-shadow" x="12" y="16" width="1576" height="968" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0196 0 0 0 0 0.0549 0 0 0 0 0.1059 0 0 0 0.44 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_1" result="shape"/>
+    </filter>
+    <style>
+      .title { fill: #F5FAFF; font: 700 30px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.02em; }
+      .h2 { fill: #F7FBFF; font: 600 24px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .label { fill: #F7FBFF; font: 600 16px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .body { fill: #9FB2C9; font: 500 14px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .caps { fill: #6F86A4; font: 700 12px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; letter-spacing: 0.22em; }
+      .small { fill: #D9E7F8; font: 600 13px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+      .metric { fill: #F5FAFF; font: 700 22px 'Avenir Next', 'Segoe UI', 'PingFang SC', sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#EEF4FA"/>
+  <circle cx="1330" cy="146" r="176" fill="#2D84FF" fill-opacity="0.12"/>
+  <circle cx="1260" cy="860" r="210" fill="#35D7CB" fill-opacity="0.08"/>
+  <circle cx="240" cy="112" r="120" fill="#35D7CB" fill-opacity="0.06"/>
+
+  <g filter="url(#control-shadow)">
+    <rect x="52" y="52" width="1496" height="896" rx="40" fill="url(#control-bg)"/>
+    <rect x="52.5" y="52.5" width="1495" height="895" rx="39.5" stroke="#1B2A3F"/>
+  </g>
+
+  <rect x="82" y="82" width="220" height="836" rx="30" fill="#0B1420" fill-opacity="0.92" stroke="#162436"/>
+  <rect x="330" y="82" width="1188" height="836" rx="30" fill="url(#control-panel)" stroke="#17263A"/>
+
+  <rect x="104" y="106" width="176" height="70" rx="22" fill="#112238" stroke="#203651"/>
+  <circle cx="140" cy="141" r="16" fill="url(#control-accent)"/>
+  <text x="168" y="137" class="small">CodeBox</text>
+  <text x="168" y="157" class="small">CONTROL CENTER</text>
+
+  <text x="108" y="218" class="caps">PRODUCTS</text>
+  <rect x="104" y="238" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="273" class="small">Claude Code</text>
+  <rect x="104" y="306" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="341" class="small">Codex</text>
+  <rect x="104" y="374" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="409" class="small">Gemini CLI</text>
+  <rect x="104" y="442" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="477" class="small">OpenCode</text>
+  <rect x="104" y="510" width="176" height="56" rx="18" fill="#102132" stroke="#1E324A"/>
+  <text x="132" y="545" class="small">OpenClaw</text>
+
+  <rect x="104" y="744" width="176" height="48" rx="18" fill="#13243A" stroke="#2A8DFF" stroke-opacity="0.7"/>
+  <text x="132" y="774" class="small">Update available</text>
+  <rect x="98" y="804" width="188" height="82" rx="24" fill="#12253B" stroke="#2F8FFF" stroke-opacity="0.72"/>
+  <rect x="108" y="814" width="168" height="62" rx="18" fill="url(#control-accent)" fill-opacity="0.12"/>
+  <text x="136" y="851" class="label">Settings</text>
+  <text x="136" y="871" class="body">Appearance, sync, directories and about</text>
+
+  <rect x="360" y="104" width="1128" height="110" rx="28" fill="#0E1C2C" stroke="#1A2C43"/>
+  <text x="392" y="146" class="caps">SETTINGS CENTER</text>
+  <text x="392" y="182" class="title">Control Center</text>
+  <text x="596" y="182" class="body">A dedicated left-side tab rail keeps system settings separate from product views.</text>
+
+  <rect x="360" y="238" width="280" height="630" rx="30" fill="#0E1B2B" stroke="#17273B"/>
+  <text x="390" y="282" class="caps">SYSTEM TABS</text>
+
+  <rect x="384" y="304" width="232" height="78" rx="22" fill="#132742" stroke="#2A8DFF" stroke-opacity="0.75"/>
+  <text x="420" y="334" class="small">Appearance</text>
+  <text x="420" y="358" class="body">Theme mode, accent palette, density, motion</text>
+
+  <rect x="384" y="396" width="232" height="78" rx="22" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="426" class="small">General</text>
+  <text x="420" y="450" class="body">Language, startup behavior, visible products</text>
+
+  <rect x="384" y="488" width="232" height="78" rx="22" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="518" class="small">Data and Sync</text>
+  <text x="420" y="542" class="body">Import/export, backup, WebDAV sync</text>
+
+  <rect x="384" y="580" width="232" height="78" rx="22" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="610" class="small">Directories</text>
+  <text x="420" y="634" class="body">Local config root and product overrides</text>
+
+  <rect x="384" y="672" width="232" height="78" rx="22" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="702" class="small">Advanced</text>
+  <text x="420" y="726" class="body">Terminal, skill sync method, desktop internals</text>
+
+  <rect x="384" y="764" width="232" height="78" rx="22" fill="#112236" stroke="#1E324A"/>
+  <text x="420" y="794" class="small">About</text>
+  <text x="420" y="818" class="body">Version, runtime environment, restart actions</text>
+
+  <rect x="668" y="238" width="820" height="630" rx="30" fill="#0E1B2B" stroke="#17273B"/>
+  <text x="704" y="282" class="caps">ACTIVE TAB</text>
+  <text x="704" y="316" class="h2">Appearance</text>
+
+  <rect x="704" y="342" width="362" height="210" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="734" y="380" class="caps">THEME MODE</text>
+  <text x="734" y="414" class="label">Dark, light, or follow system</text>
+  <rect x="734" y="438" width="94" height="72" rx="22" fill="#101A28" stroke="#223652"/>
+  <text x="764" y="478" class="small">Dark</text>
+  <rect x="844" y="438" width="94" height="72" rx="22" fill="#F4F8FF" stroke="#C9D8EE"/>
+  <text x="874" y="478" class="small" fill="#172436">Light</text>
+  <rect x="954" y="438" width="82" height="72" rx="22" fill="url(#control-accent)" fill-opacity="0.14" stroke="#2A8DFF" stroke-opacity="0.75"/>
+  <text x="970" y="478" class="small">System</text>
+
+  <rect x="1088" y="342" width="364" height="210" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="1118" y="380" class="caps">ACCENT PALETTE</text>
+  <text x="1118" y="414" class="label">Reference-aligned theme colors</text>
+  <rect x="1118" y="438" width="86" height="72" rx="22" fill="#2A8DFF"/>
+  <rect x="1218" y="438" width="86" height="72" rx="22" fill="#34D3C9"/>
+  <rect x="1318" y="438" width="86" height="72" rx="22" fill="#F47B65"/>
+  <text x="1118" y="536" class="body">Accent themes are exposed as a first-class system choice.</text>
+
+  <rect x="704" y="576" width="748" height="118" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="734" y="614" class="caps">INTERFACE DENSITY</text>
+  <rect x="734" y="630" width="170" height="40" rx="16" fill="url(#control-accent)" fill-opacity="0.15" stroke="#2A8DFF" stroke-opacity="0.72"/>
+  <text x="784" y="656" class="small">Comfortable</text>
+  <rect x="920" y="630" width="142" height="40" rx="16" fill="#14273D"/>
+  <text x="966" y="656" class="small">Compact</text>
+  <rect x="1078" y="630" width="164" height="40" rx="16" fill="#14273D"/>
+  <text x="1126" y="656" class="small">Reduced motion</text>
+  <text x="1262" y="656" class="body">Settings save instantly and keep the current panel context.</text>
+
+  <rect x="704" y="718" width="242" height="118" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="734" y="754" class="caps">VISIBLE PRODUCTS</text>
+  <text x="734" y="788" class="metric">5</text>
+  <text x="734" y="814" class="body">Toggle which products appear in the left rail.</text>
+
+  <rect x="968" y="718" width="242" height="118" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="998" y="754" class="caps">LOCAL ROOT</text>
+  <text x="998" y="788" class="metric">~/.sdkwork/codebox</text>
+  <text x="998" y="814" class="body">Unified config root across Windows, Linux and macOS.</text>
+
+  <rect x="1232" y="718" width="220" height="118" rx="28" fill="#112236" stroke="#1D314A"/>
+  <text x="1262" y="754" class="caps">UPDATES</text>
+  <text x="1262" y="788" class="metric">1 ready</text>
+  <text x="1262" y="814" class="body">Update entry sits above Settings in the sidebar.</text>
+
+  <text x="704" y="892" class="body">Documentation preview: settings center with dedicated left vertical tabs, wide content surfaces, instant-save controls and system-level information architecture.</text>
+</svg>
