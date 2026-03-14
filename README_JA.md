@@ -4,12 +4,10 @@
 
 ### Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw のオールインワン管理ツール
 
-[![Version](https://img.shields.io/badge/version-3.12.1-blue.svg)](https://github.com/farion1231/codebox/releases)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/farion1231/codebox/releases)
+[![Version](https://img.shields.io/github/v/release/Sdkwork-Cloud/sdkwork-codebox?display_name=tag)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 [![Built with Tauri](https://img.shields.io/badge/built%20with-Tauri%202-orange.svg)](https://tauri.app/)
-[![Downloads](https://img.shields.io/endpoint?url=https://api.pinstudios.net/api/badges/downloads/farion1231/codebox/total)](https://github.com/farion1231/codebox/releases/latest)
-
-<a href="https://trendshift.io/repositories/15372" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15372" alt="farion1231%2Fcodebox | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+[![Downloads](https://img.shields.io/github/downloads/Sdkwork-Cloud/sdkwork-codebox/total?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 
 [English](README.md) | [中文](README_ZH.md) | 日本語 | [Changelog](CHANGELOG.md)
 
@@ -250,26 +248,11 @@ CodeBox は「最小限の介入」という設計原則に従っています。
 
 ### Windows ユーザー
 
-[Releases](../../releases) ページから最新版の `CodeBox-v{version}-Windows.msi` インストーラー、またはポータブル版 `CodeBox-v{version}-Windows-Portable.zip` をダウンロード。
+[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) ページから最新版の `CodeBox-v{version}-Windows.msi` インストーラー、またはポータブル版 `CodeBox-v{version}-Windows-Portable.zip` をダウンロード。
 
 ### macOS ユーザー
 
-**方法 1: Homebrew でインストール（推奨）**
-
-```bash
-brew tap farion1231/codebox
-brew install --cask codebox
-```
-
-アップデート:
-
-```bash
-brew upgrade --cask codebox
-```
-
-**方法 2: 手動ダウンロード**
-
-[Releases](../../releases) から `CodeBox-v{version}-macOS.zip` をダウンロードして展開。
+[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) から `CodeBox-v{version}-macOS.zip` をダウンロードして展開。
 
 > **注意**: 開発者アカウント未登録のため、初回起動時に「開発元を確認できません」と表示される場合があります。一度閉じてから「システム設定」→「プライバシーとセキュリティ」→「このまま開く」をクリックしてください。以降は通常通り起動できます。
 
@@ -283,19 +266,11 @@ paru -S codebox-bin
 
 ### Linux ユーザー
 
-[Releases](../../releases) から最新版の Linux ビルドをダウンロード：
+[GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) から最新版の Linux ビルドをダウンロード：
 
 - `CodeBox-v{version}-Linux.deb`（Debian/Ubuntu）
 - `CodeBox-v{version}-Linux.rpm`（Fedora/RHEL/openSUSE）
 - `CodeBox-v{version}-Linux.AppImage`（汎用）
-- `CodeBox-v{version}-Linux.flatpak`（Flatpak）
-
-Flatpak のインストールと起動：
-
-```bash
-flatpak install --user ./CodeBox-v{version}-Linux.flatpak
-flatpak run com.codebox.desktop
-```
 
 <details>
 <summary><strong>アーキテクチャ概要</strong></summary>
@@ -488,7 +463,7 @@ PR を送る前に以下をご確認ください：
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=farion1231/codebox&type=Date)](https://www.star-history.com/#farion1231/codebox&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Sdkwork-Cloud/sdkwork-codebox&type=Date)](https://www.star-history.com/#Sdkwork-Cloud/sdkwork-codebox&Date)
 
 ## ライセンス
 

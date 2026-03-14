@@ -2,6 +2,14 @@
   "name": "codebox",
   "version": "3.12.1",
   "description": "All-in-One Assistant for Claude Code, Codex & Gemini CLI",
+  "homepage": "https://github.com/Sdkwork-Cloud/sdkwork-codebox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sdkwork-Cloud/sdkwork-codebox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sdkwork-Cloud/sdkwork-codebox/issues"
+  },
   "type": "module",
   "scripts": {
     "dev": "pnpm tauri dev",

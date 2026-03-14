@@ -4,12 +4,10 @@
 
 ### Claude Code、Codex、Gemini CLI、OpenCode 和 OpenClaw 的全方位管理工具
 
-[![Version](https://img.shields.io/badge/version-3.12.1-blue.svg)](https://github.com/farion1231/codebox/releases)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/farion1231/codebox/releases)
+[![Version](https://img.shields.io/github/v/release/Sdkwork-Cloud/sdkwork-codebox?display_name=tag)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 [![Built with Tauri](https://img.shields.io/badge/built%20with-Tauri%202-orange.svg)](https://tauri.app/)
-[![Downloads](https://img.shields.io/endpoint?url=https://api.pinstudios.net/api/badges/downloads/farion1231/codebox/total)](https://github.com/farion1231/codebox/releases/latest)
-
-<a href="https://trendshift.io/repositories/15372" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15372" alt="farion1231%2Fcodebox | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+[![Downloads](https://img.shields.io/github/downloads/Sdkwork-Cloud/sdkwork-codebox/total?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 
 [English](README.md) | 中文 | [日本語](README_JA.md) | [更新日志](CHANGELOG.md)
 
@@ -253,26 +251,11 @@ CodeBox 使用“通用配置片段”功能，在不同的供应商之间传递
 
 ### Windows 用户
 
-从 [Releases](../../releases) 页面下载最新版本的 `CodeBox-v{版本号}-Windows.msi` 安装包或 `CodeBox-v{版本号}-Windows-Portable.zip` 绿色版。
+从 [GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) 页面下载最新版本的 `CodeBox-v{版本号}-Windows.msi` 安装包或 `CodeBox-v{版本号}-Windows-Portable.zip` 绿色版。
 
 ### macOS 用户
 
-**方式一：通过 Homebrew 安装（推荐）**
-
-```bash
-brew tap farion1231/codebox
-brew install --cask codebox
-```
-
-更新：
-
-```bash
-brew upgrade --cask codebox
-```
-
-**方式二：手动下载**
-
-从 [Releases](../../releases) 页面下载 `CodeBox-v{版本号}-macOS.zip` 解压使用。
+从 [GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) 页面下载 `CodeBox-v{版本号}-macOS.zip` 解压使用。
 
 > **注意**：由于作者没有苹果开发者账号，首次打开可能出现"未知开发者"警告，请先关闭，然后前往"系统设置" → "隐私与安全性" → 点击"仍要打开"，之后便可以正常打开。
 
@@ -286,19 +269,11 @@ paru -S codebox-bin
 
 ### Linux 用户
 
-从 [Releases](../../releases) 页面下载最新版本的 Linux 安装包：
+从 [GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) 页面下载最新版本的 Linux 安装包：
 
 - `CodeBox-v{版本号}-Linux.deb`（Debian/Ubuntu）
 - `CodeBox-v{版本号}-Linux.rpm`（Fedora/RHEL/openSUSE）
 - `CodeBox-v{版本号}-Linux.AppImage`（通用）
-- `CodeBox-v{版本号}-Linux.flatpak`（Flatpak）
-
-Flatpak 安装与运行：
-
-```bash
-flatpak install --user ./CodeBox-v{版本号}-Linux.flatpak
-flatpak run com.codebox.desktop
-```
 
 <details>
 <summary><strong>架构总览</strong></summary>
@@ -491,7 +466,7 @@ pnpm test:unit --coverage
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=farion1231/codebox&type=Date)](https://www.star-history.com/#farion1231/codebox&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Sdkwork-Cloud/sdkwork-codebox&type=Date)](https://www.star-history.com/#Sdkwork-Cloud/sdkwork-codebox&Date)
 
 ## License
 

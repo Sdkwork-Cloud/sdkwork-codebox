@@ -7,7 +7,9 @@
 Cross-platform desktop control center for Claude Code, Codex, Gemini CLI, OpenCode, and OpenClaw.
 
 [![Repository](https://img.shields.io/badge/repo-sdkwork--codebox-181717?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox)
+[![Latest Release](https://img.shields.io/github/v/release/Sdkwork-Cloud/sdkwork-codebox?display_name=tag)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Sdkwork-Cloud/sdkwork-codebox)
+[![Downloads](https://img.shields.io/github/downloads/Sdkwork-Cloud/sdkwork-codebox/total?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
 [![Built with Tauri](https://img.shields.io/badge/built%20with-Tauri%202-orange.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -75,6 +77,20 @@ CodeBox focuses on two layers at the same time:
 | Main Interface                                    | Add Provider                                   |
 | ------------------------------------------------- | ---------------------------------------------- |
 | ![Main Interface](assets/screenshots/main-en.png) | ![Add Provider](assets/screenshots/add-en.png) |
+
+## Downloads
+
+Prebuilt desktop packages are published on GitHub Releases:
+
+- Windows: MSI installer and portable ZIP
+- macOS: ZIP bundle and updater tarball
+- Linux x86_64 / arm64: AppImage, `.deb`, and `.rpm`
+
+Latest downloads:
+
+```text
+https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest
+```
 
 ## Repository Architecture
 
@@ -197,6 +213,7 @@ pnpm build:packages
 
 - [Architecture Standard](ARCHITECT.md)
 - [Repository Guidelines](AGENTS.md)
+- [Release Guide](docs/releasing.md)
 - [User Manual](docs/user-manual/en/README.md)
 - [Release Notes](docs/release-notes)
 - [Changelog](CHANGELOG.md)
