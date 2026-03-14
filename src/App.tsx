@@ -221,7 +221,8 @@ function App() {
       const shouldPreserveReturnTarget =
         (currentContext.activeDomain === "products" &&
           nextDomain === "extensions") ||
-        (currentContext.activeDomain === nextDomain && nextDomain !== "products");
+        (currentContext.activeDomain === nextDomain &&
+          nextDomain !== "products");
 
       if (isSameContext) {
         return;
@@ -297,8 +298,7 @@ function App() {
     applyViewChange(currentContext.activeApp, fallbackView);
   }, [applyViewChange, resolveFallbackBackView]);
 
-  const canGoBack =
-    navigationHistory.length > 0 || activeDomain !== "products";
+  const canGoBack = navigationHistory.length > 0 || activeDomain !== "products";
 
   const returnTarget = useMemo<NavigationContext | null>(() => {
     const lastContext = navigationHistory.at(-1);
@@ -592,6 +592,14 @@ function App() {
     }
   };
 
+  const handleNavigateToProviderImport = useCallback(
+    (app: AppId) => {
+      setNavigationHistory([]);
+      applyViewChange(app, "providers");
+    },
+    [applyViewChange],
+  );
+
   return (
     <div
       className="app-shell relative flex h-screen flex-col overflow-hidden text-foreground selection:bg-primary/30"
@@ -631,7 +639,9 @@ function App() {
         <AppSidebar
           activeApp={activeApp}
           activeDomain={activeDomain}
-          controlCenterEntryView={viewState["control-center"] as ControlCenterView}
+          controlCenterEntryView={
+            viewState["control-center"] as ControlCenterView
+          }
           isCurrentAppTakeoverActive={isCurrentAppTakeoverActive}
           isProxyRunning={isProxyRunning}
           onOpenControlCenter={handleOpenControlCenter}
@@ -745,7 +755,11 @@ function App() {
         onCancel={() => setConfirmAction(null)}
       />
 
-      <DeepLinkImportDialog />
+      <DeepLinkImportDialog
+        activeApp={activeApp}
+        visibleApps={visibleApps}
+        onNavigateToProviders={handleNavigateToProviderImport}
+      />
     </div>
   );
 }

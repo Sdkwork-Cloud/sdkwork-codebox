@@ -1,6 +1,12 @@
 import { Suspense, type ComponentType } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { resetProviderState } from "../msw/state";
 import { emitTauriEvent } from "../msw/tauriMocks";
@@ -34,8 +40,12 @@ vi.mock("@/shell/AppHeader", () => ({
         open-runtime
       </button>
       {canGoBack ? <button onClick={() => onBack?.()}>go-back</button> : null}
-      <button onClick={() => setCurrentView("providers")}>view-providers</button>
-      <button onClick={() => setCurrentView("workspace")}>view-workspace</button>
+      <button onClick={() => setCurrentView("providers")}>
+        view-providers
+      </button>
+      <button onClick={() => setCurrentView("workspace")}>
+        view-workspace
+      </button>
       <button onClick={() => setCurrentView("sessions")}>view-sessions</button>
       <button onClick={() => setCurrentView("prompts")}>view-prompts</button>
       <button onClick={() => setCurrentView("agents")}>view-agents</button>
@@ -624,9 +634,7 @@ describe("App integration with MSW", () => {
     expect(screen.getAllByTestId("active-domain").at(-1)).toHaveTextContent(
       "products",
     );
-    expect(screen.getByTestId("content-active-app")).toHaveTextContent(
-      "codex",
-    );
+    expect(screen.getByTestId("content-active-app")).toHaveTextContent("codex");
   }, 20000);
 
   it("returns to the previous extensions view before leaving the extensions domain", async () => {
@@ -769,9 +777,7 @@ describe("App integration with MSW", () => {
     expect(screen.getAllByTestId("active-domain").at(-1)).toHaveTextContent(
       "products",
     );
-    expect(screen.getByTestId("content-active-app")).toHaveTextContent(
-      "codex",
-    );
+    expect(screen.getByTestId("content-active-app")).toHaveTextContent("codex");
   }, 20000);
 
   it("returns to the previous control-center view before leaving settings", async () => {
@@ -866,8 +872,39 @@ describe("App integration with MSW", () => {
     expect(screen.getAllByTestId("active-domain").at(-1)).toHaveTextContent(
       "products",
     );
-    expect(screen.getByTestId("content-active-app")).toHaveTextContent(
-      "codex",
+    expect(screen.getByTestId("content-active-app")).toHaveTextContent("codex");
+  }, 20000);
+
+  it("opens the providers page for the target product when a provider deep link arrives", async () => {
+    const { default: App } = await import("@/App");
+    renderApp(App);
+
+    await waitFor(() =>
+      expect(screen.getByTestId("content-active-app")).toHaveTextContent(
+        "claude",
+      ),
+    );
+
+    await act(async () => {
+      emitTauriEvent("deeplink-import", {
+        version: "v1",
+        resource: "provider",
+        app: "codex",
+        name: "DeepLink Codex",
+        endpoint: "https://api.example.com",
+        apiKey: "sk-test",
+      });
+      await Promise.resolve();
+    });
+
+    await waitFor(() =>
+      expect(screen.getByTestId("content-active-app")).toHaveTextContent(
+        "codex",
+      ),
+    );
+    expect(screen.getByTestId("current-view")).toHaveTextContent("providers");
+    expect(screen.getAllByTestId("active-domain").at(-1)).toHaveTextContent(
+      "products",
     );
   }, 20000);
 });

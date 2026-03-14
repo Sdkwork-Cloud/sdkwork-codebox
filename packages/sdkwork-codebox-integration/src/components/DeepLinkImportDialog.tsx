@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { DeepLinkImportRequest, deeplinkApi } from "@/lib/api/deeplink";
+import { providersApi, type AppId } from "@/lib/api";
 import {
   Dialog,
   DialogContent,
@@ -13,22 +14,108 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
+import type { VisibleApps } from "@/types";
 import { PromptConfirmation } from "./deeplink/PromptConfirmation";
 import { McpConfirmation } from "./deeplink/McpConfirmation";
 import { SkillConfirmation } from "./deeplink/SkillConfirmation";
 import { ProviderIcon } from "@/components/ProviderIcon";
+import { cn } from "@/lib/utils";
 
 interface DeeplinkError {
   url: string;
   error: string;
 }
 
-export function DeepLinkImportDialog() {
+interface DeepLinkImportDialogProps {
+  activeApp: AppId;
+  visibleApps: VisibleApps;
+  onNavigateToProviders: (app: AppId) => void;
+}
+
+const PROVIDER_TARGET_APPS: AppId[] = [
+  "claude",
+  "codex",
+  "gemini",
+  "opencode",
+  "openclaw",
+];
+
+const PROVIDER_TARGET_META: Record<
+  AppId,
+  { icon: string; label: string; eyebrow: string }
+> = {
+  claude: {
+    icon: "claude",
+    label: "Claude",
+    eyebrow: "Anthropic",
+  },
+  codex: {
+    icon: "openai",
+    label: "Codex",
+    eyebrow: "OpenAI",
+  },
+  gemini: {
+    icon: "gemini",
+    label: "Gemini",
+    eyebrow: "Google",
+  },
+  opencode: {
+    icon: "opencode",
+    label: "OpenCode",
+    eyebrow: "Router",
+  },
+  openclaw: {
+    icon: "openclaw",
+    label: "OpenClaw",
+    eyebrow: "Workspace",
+  },
+};
+
+const isAppId = (value: string): value is AppId =>
+  PROVIDER_TARGET_APPS.includes(value as AppId);
+
+const parseTargetApps = (apps?: string | null): AppId[] =>
+  (apps ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(isAppId);
+
+const getInitialProviderTargets = (
+  request: DeepLinkImportRequest,
+): AppId[] =>
+  request.app ? [request.app] : parseTargetApps(request.apps);
+
+const resolveFocusApp = (
+  request: DeepLinkImportRequest,
+  activeApp: AppId,
+  visibleApps: VisibleApps,
+): AppId => {
+  const candidates = [
+    request.app,
+    ...getInitialProviderTargets(request),
+    activeApp,
+    ...PROVIDER_TARGET_APPS,
+  ].filter(Boolean) as AppId[];
+
+  return (
+    candidates.find((app) => visibleApps[app]) ??
+    PROVIDER_TARGET_APPS.find((app) => visibleApps[app]) ??
+    activeApp
+  );
+};
+
+export function DeepLinkImportDialog({
+  activeApp,
+  visibleApps,
+  onNavigateToProviders,
+}: DeepLinkImportDialogProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [request, setRequest] = useState<DeepLinkImportRequest | null>(null);
   const [isImporting, setIsImporting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedApps, setSelectedApps] = useState<AppId[]>([]);
+  const [focusedApp, setFocusedApp] = useState<AppId>(activeApp);
 
   // 容错判断：MCP 导入结果可能缺少 type 字段
   const isMcpImportResult = (
@@ -49,6 +136,21 @@ export function DeepLinkImportDialog() {
   };
 
   useEffect(() => {
+    const applyProviderRequest = (nextRequest: DeepLinkImportRequest) => {
+      if (nextRequest.resource !== "provider") {
+        return;
+      }
+
+      const nextFocusedApp = resolveFocusApp(
+        nextRequest,
+        activeApp,
+        visibleApps,
+      );
+      setSelectedApps(getInitialProviderTargets(nextRequest));
+      setFocusedApp(nextFocusedApp);
+      onNavigateToProviders(nextFocusedApp);
+    };
+
     // Listen for deep link import events
     const unlistenImport = listen<DeepLinkImportRequest>(
       "deeplink-import",
@@ -60,6 +162,7 @@ export function DeepLinkImportDialog() {
               event.payload,
             );
             setRequest(mergedRequest);
+            applyProviderRequest(mergedRequest);
           } catch (error) {
             console.error("Failed to merge config:", error);
             toast.error(t("deeplink.configMergeError"), {
@@ -68,9 +171,11 @@ export function DeepLinkImportDialog() {
             });
             // Fall back to original request
             setRequest(event.payload);
+            applyProviderRequest(event.payload);
           }
         } else {
           setRequest(event.payload);
+          applyProviderRequest(event.payload);
         }
 
         setIsOpen(true);
@@ -89,7 +194,13 @@ export function DeepLinkImportDialog() {
       unlistenImport.then((fn) => fn());
       unlistenError.then((fn) => fn());
     };
-  }, [t]);
+  }, [activeApp, onNavigateToProviders, t, visibleApps]);
+
+  const lockedProviderApp =
+    request?.resource === "provider" ? request.app : undefined;
+  const effectiveProviderTargets = lockedProviderApp
+    ? [lockedProviderApp]
+    : selectedApps;
 
   const handleImport = async () => {
     if (!request) return;
@@ -97,6 +208,109 @@ export function DeepLinkImportDialog() {
     setIsImporting(true);
 
     try {
+      if (request.resource === "provider") {
+        const targets = effectiveProviderTargets;
+
+        if (targets.length === 0) {
+          toast.error(
+            t("deeplink.targetAppsRequired", {
+              defaultValue: "请至少选择一个产品",
+            }),
+          );
+          return;
+        }
+
+        const importedApps: AppId[] = [];
+        const failedApps: Array<{ app: AppId; error: string }> = [];
+
+        for (const app of targets) {
+          try {
+            const providerRequest: DeepLinkImportRequest = {
+              ...request,
+              app,
+              apps: undefined,
+            };
+            await deeplinkApi.importFromDeeplink(providerRequest);
+            importedApps.push(app);
+          } catch (error) {
+            failedApps.push({
+              app,
+              error: error instanceof Error ? error.message : String(error),
+            });
+          }
+        }
+
+        for (const app of importedApps) {
+          await queryClient.invalidateQueries({
+            queryKey: ["providers", app],
+          });
+        }
+        if (importedApps.length > 0) {
+          await queryClient.invalidateQueries({ queryKey: ["providers"] });
+          try {
+            await providersApi.updateTrayMenu();
+          } catch (error) {
+            console.error(
+              "[DeepLinkImportDialog] Failed to update tray menu",
+              error,
+            );
+          }
+        }
+
+        if (failedApps.length === 0) {
+          const successKey =
+            importedApps.length > 1
+              ? "deeplink.importMultiSuccess"
+              : "deeplink.importSuccess";
+          const successDescription =
+            importedApps.length > 1
+              ? t("deeplink.importMultiSuccessDescription", {
+                  defaultValue: "已导入到 {{count}} 个产品",
+                  count: importedApps.length,
+                })
+              : t("deeplink.importSuccessDescription", {
+                  name: request.name,
+                });
+
+          toast.success(t(successKey), {
+            description: successDescription,
+            closeButton: true,
+          });
+          setIsOpen(false);
+          return;
+        }
+
+        if (importedApps.length > 0) {
+          toast.warning(
+            t("deeplink.providerImportPartialSuccess", {
+              defaultValue: "部分导入成功",
+            }),
+            {
+              description: t(
+                "deeplink.providerImportPartialSuccessDescription",
+                {
+                  defaultValue: "成功 {{success}} 个，失败 {{failed}} 个",
+                  success: importedApps.length,
+                  failed: failedApps.length,
+                },
+              ),
+            },
+          );
+          setIsOpen(false);
+          return;
+        }
+
+        toast.error(t("deeplink.importError"), {
+          description: failedApps
+            .map(
+              (item) =>
+                `${PROVIDER_TARGET_META[item.app].label}: ${item.error}`,
+            )
+            .join(" | "),
+        });
+        return;
+      }
+
       const result = await deeplinkApi.importFromDeeplink(request);
       const refreshMcp = async (summary: {
         importedCount: number;
@@ -206,6 +420,19 @@ export function DeepLinkImportDialog() {
     setIsOpen(false);
   };
 
+  const handleToggleTargetApp = (app: AppId) => {
+    if (lockedProviderApp) {
+      return;
+    }
+
+    setFocusedApp(app);
+    setSelectedApps((prev) =>
+      prev.includes(app)
+        ? prev.filter((value) => value !== app)
+        : [...prev, app],
+    );
+  };
+
   // Mask API key for display (show first 4 chars + ***)
   const maskedApiKey =
     request?.apiKey && request.apiKey.length > 4
@@ -219,6 +446,10 @@ export function DeepLinkImportDialog() {
     : request?.configUrl
       ? "url"
       : null;
+  const previewApp = request?.app ?? focusedApp;
+  const selectableProviderApps = lockedProviderApp
+    ? [lockedProviderApp]
+    : PROVIDER_TARGET_APPS;
 
   // Parse config file content for display
   interface ParsedConfig {
@@ -247,14 +478,14 @@ export function DeepLinkImportDialog() {
       const decoded = b64ToUtf8(request.config);
       const parsed = JSON.parse(decoded) as Record<string, unknown>;
 
-      if (request.app === "claude") {
+      if (previewApp === "claude") {
         // Claude 格式: { env: { ANTHROPIC_AUTH_TOKEN: ..., ... } }
         return {
           type: "claude",
           env: (parsed.env as Record<string, string>) || {},
           raw: parsed,
         };
-      } else if (request.app === "codex") {
+      } else if (previewApp === "codex") {
         // Codex 格式: { auth: { OPENAI_API_KEY: ... }, config: "TOML string" }
         return {
           type: "codex",
@@ -262,7 +493,7 @@ export function DeepLinkImportDialog() {
           tomlConfig: (parsed.config as string) || "",
           raw: parsed,
         };
-      } else if (request.app === "gemini") {
+      } else if (previewApp === "gemini") {
         // Gemini 格式: 扁平结构 { GEMINI_API_KEY: ..., GEMINI_BASE_URL: ... }
         return {
           type: "gemini",
@@ -275,7 +506,7 @@ export function DeepLinkImportDialog() {
       console.error("Failed to parse config:", e);
       return null;
     }
-  }, [request?.config, request?.app]);
+  }, [previewApp, request?.config]);
 
   // Helper to mask sensitive values
   const maskValue = (key: string, value: string): string => {
@@ -319,7 +550,7 @@ export function DeepLinkImportDialog() {
 
   return (
     <Dialog open={isOpen && !!request} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[500px]" zIndex="top">
+      <DialogContent className="sm:max-w-[640px]" zIndex="top">
         {request && (
           <>
             {/* 标题显式左对齐，避免默认居中样式影响 */}
@@ -343,6 +574,104 @@ export function DeepLinkImportDialog() {
               {/* Legacy Provider View */}
               {(request.resource === "provider" || !request.resource) && (
                 <>
+                  <div className="rounded-[24px] border border-border/70 bg-muted/30 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-sm font-semibold text-foreground">
+                          {t("deeplink.targetApps", {
+                            defaultValue: "目标产品",
+                          })}
+                        </div>
+                        <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                          {lockedProviderApp
+                            ? t("deeplink.targetAppsLocked", {
+                                defaultValue:
+                                  "此链接已指定目标产品，保存时将直接写入该产品。",
+                              })
+                            : t("deeplink.targetAppsDescription", {
+                                defaultValue:
+                                  "选择一个或多个产品，使用同一份链接配置批量导入供应商。",
+                              })}
+                        </p>
+                      </div>
+                      <span className="rounded-full border border-border/70 bg-background/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        {lockedProviderApp
+                          ? t("deeplink.targetAppsFixed", {
+                              defaultValue: "已指定",
+                            })
+                          : effectiveProviderTargets.length > 0
+                            ? t("deeplink.targetAppsSelected", {
+                                defaultValue: "已选 {{count}} 个",
+                                count: effectiveProviderTargets.length,
+                              })
+                            : t("deeplink.targetAppsSelectHint", {
+                                defaultValue: "请选择",
+                              })}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                      {selectableProviderApps.map((app) => {
+                        const meta = PROVIDER_TARGET_META[app];
+                        const isSelected =
+                          effectiveProviderTargets.includes(app);
+
+                        return (
+                          <button
+                            key={app}
+                            type="button"
+                            aria-pressed={isSelected}
+                            onClick={() => handleToggleTargetApp(app)}
+                            className={cn(
+                              "group flex items-center gap-3 rounded-[20px] border px-3.5 py-3 text-left transition-all duration-200",
+                              isSelected
+                                ? "border-primary/30 bg-primary/10 shadow-[0_16px_38px_-30px_hsl(var(--shadow-color)/0.72)]"
+                                : "border-border/70 bg-background/80 hover:border-border hover:bg-background",
+                              lockedProviderApp && "cursor-default",
+                            )}
+                          >
+                            <span
+                              className={cn(
+                                "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border",
+                                isSelected
+                                  ? "border-primary/25 bg-background text-primary"
+                                  : "border-border/70 bg-muted/40 text-muted-foreground",
+                              )}
+                            >
+                              <ProviderIcon
+                                icon={meta.icon}
+                                name={t(`apps.${app}`, {
+                                  defaultValue: meta.label,
+                                })}
+                                size={20}
+                              />
+                            </span>
+
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                                {meta.eyebrow}
+                              </span>
+                              <span className="mt-1 block truncate text-sm font-semibold text-foreground">
+                                {t(`apps.${app}`, {
+                                  defaultValue: meta.label,
+                                })}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {!lockedProviderApp &&
+                      effectiveProviderTargets.length === 0 && (
+                        <p className="mt-3 text-xs text-amber-700 dark:text-amber-300">
+                          {t("deeplink.targetAppsRequired", {
+                            defaultValue: "请至少选择一个产品",
+                          })}
+                        </p>
+                      )}
+                  </div>
+
                   {/* Provider Icon - enlarge and center near the top */}
                   {request.icon && (
                     <div className="flex justify-center pt-2 pb-1">
@@ -354,16 +683,6 @@ export function DeepLinkImportDialog() {
                       />
                     </div>
                   )}
-
-                  {/* App Type */}
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <div className="font-medium text-sm text-muted-foreground">
-                      {t("deeplink.app")}
-                    </div>
-                    <div className="col-span-2 text-sm font-medium capitalize">
-                      {request.app}
-                    </div>
-                  </div>
 
                   {/* Provider Name */}
                   <div className="grid grid-cols-3 items-center gap-4">
@@ -421,7 +740,7 @@ export function DeepLinkImportDialog() {
                   </div>
 
                   {/* Model Fields - 根据应用类型显示不同的模型字段 */}
-                  {request.app === "claude" ? (
+                  {previewApp === "claude" ? (
                     <>
                       {/* Claude 四种模型字段 */}
                       {request.haikuModel && (
@@ -718,7 +1037,14 @@ export function DeepLinkImportDialog() {
               >
                 {t("common.cancel")}
               </Button>
-              <Button onClick={handleImport} disabled={isImporting}>
+              <Button
+                onClick={handleImport}
+                disabled={
+                  isImporting ||
+                  (request.resource === "provider" &&
+                    effectiveProviderTargets.length === 0)
+                }
+              >
                 {isImporting ? t("deeplink.importing") : t("deeplink.import")}
               </Button>
             </DialogFooter>

@@ -73,19 +73,14 @@ fn parse_provider_deeplink(
     version: String,
     resource: String,
 ) -> Result<DeepLinkImportRequest, AppError> {
-    let app = params
-        .get("app")
-        .ok_or_else(|| AppError::InvalidInput("Missing 'app' parameter".to_string()))?
-        .clone();
+    let app = params.get("app").cloned();
+    if let Some(app_value) = app.as_deref() {
+        validate_provider_app(app_value)?;
+    }
 
-    // Validate app type
-    if !matches!(
-        app.as_str(),
-        "claude" | "codex" | "gemini" | "opencode" | "openclaw"
-    ) {
-        return Err(AppError::InvalidInput(format!(
-            "Invalid app type: must be 'claude', 'codex', 'gemini', 'opencode', or 'openclaw', got '{app}'"
-        )));
+    let apps = params.get("apps").cloned();
+    if let Some(apps_value) = apps.as_deref() {
+        validate_provider_apps(apps_value)?;
     }
 
     let name = params
@@ -95,7 +90,10 @@ fn parse_provider_deeplink(
 
     // Make these optional for config file auto-fill (v3.8+)
     let homepage = params.get("homepage").cloned();
-    let endpoint = params.get("endpoint").cloned();
+    let endpoint = params
+        .get("endpoint")
+        .cloned()
+        .or_else(|| params.get("baseUrl").cloned());
     let api_key = params.get("apiKey").cloned();
 
     // Validate URLs only if provided
@@ -145,7 +143,7 @@ fn parse_provider_deeplink(
     Ok(DeepLinkImportRequest {
         version,
         resource,
-        app: Some(app),
+        app,
         name: Some(name),
         enabled,
         homepage,
@@ -159,7 +157,7 @@ fn parse_provider_deeplink(
         opus_model,
         content: None,
         description: None,
-        apps: None,
+        apps,
         repo: None,
         directory: None,
         branch: None,
@@ -174,6 +172,39 @@ fn parse_provider_deeplink(
         usage_user_id,
         usage_auto_interval,
     })
+}
+
+fn validate_provider_app(app: &str) -> Result<(), AppError> {
+    if matches!(
+        app,
+        "claude" | "codex" | "gemini" | "opencode" | "openclaw"
+    ) {
+        return Ok(());
+    }
+
+    Err(AppError::InvalidInput(format!(
+        "Invalid app type: must be 'claude', 'codex', 'gemini', 'opencode', or 'openclaw', got '{app}'"
+    )))
+}
+
+fn validate_provider_apps(apps: &str) -> Result<(), AppError> {
+    let targets: Vec<&str> = apps
+        .split(',')
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .collect();
+
+    if targets.is_empty() {
+        return Err(AppError::InvalidInput(
+            "Invalid 'apps' parameter: must contain at least one app".to_string(),
+        ));
+    }
+
+    for app in targets {
+        validate_provider_app(app)?;
+    }
+
+    Ok(())
 }
 
 /// Parse prompt deep link parameters

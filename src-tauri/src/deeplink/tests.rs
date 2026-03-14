@@ -44,6 +44,49 @@ fn test_parse_deeplink_with_notes() {
 }
 
 #[test]
+fn test_parse_provider_deeplink_without_app_for_manual_target_selection() {
+    let url = "codebox://v1/import?resource=provider&name=Shared%20Provider&endpoint=https%3A%2F%2Fapi.example.com&apiKey=sk-shared";
+
+    let request = parse_deeplink_url(url).unwrap();
+
+    assert_eq!(request.resource, "provider");
+    assert_eq!(request.app, None);
+    assert_eq!(request.apps, None);
+    assert_eq!(request.name, Some("Shared Provider".to_string()));
+    assert_eq!(
+        request.endpoint,
+        Some("https://api.example.com".to_string())
+    );
+    assert_eq!(request.api_key, Some("sk-shared".to_string()));
+}
+
+#[test]
+fn test_parse_provider_deeplink_with_apps_list() {
+    let url = "codebox://v1/import?resource=provider&apps=claude,codex,openclaw&name=Multi%20Provider&endpoint=https%3A%2F%2Fapi.example.com&apiKey=sk-multi";
+
+    let request = parse_deeplink_url(url).unwrap();
+
+    assert_eq!(request.app, None);
+    assert_eq!(request.apps, Some("claude,codex,openclaw".to_string()));
+    assert_eq!(request.name, Some("Multi Provider".to_string()));
+}
+
+#[test]
+fn test_parse_provider_deeplink_with_base_url_alias() {
+    let url = "codebox://v1/import?resource=provider&app=codex&name=Alias%20Provider&baseUrl=https%3A%2F%2Fapi.example.com%2Fv1&apiKey=sk-alias";
+
+    let request = parse_deeplink_url(url).unwrap();
+
+    assert_eq!(request.app, Some("codex".to_string()));
+    assert_eq!(request.name, Some("Alias Provider".to_string()));
+    assert_eq!(
+        request.endpoint,
+        Some("https://api.example.com/v1".to_string())
+    );
+    assert_eq!(request.api_key, Some("sk-alias".to_string()));
+}
+
+#[test]
 fn test_parse_invalid_scheme() {
     let url = "https://v1/import?resource=provider&app=claude&name=Test";
 
