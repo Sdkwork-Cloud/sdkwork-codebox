@@ -59,6 +59,52 @@ use tauri::tray::{TrayIconBuilder, TrayIconEvent};
 use tauri::RunEvent;
 use tauri::{Emitter, Manager};
 
+fn run_non_fatal_startup_step<F>(step_name: &str, setup: F) -> bool
+where
+    F: FnOnce() -> Result<(), String>,
+{
+    match setup() {
+        Ok(()) => true,
+        Err(error) => {
+            eprintln!("Startup step `{step_name}` failed: {error}");
+            false
+        }
+    }
+}
+
+pub fn debug_console_enabled_from_env_value(value: Option<&str>) -> bool {
+    matches!(
+        value.map(str::trim).map(str::to_ascii_lowercase).as_deref(),
+        Some("1" | "true" | "yes" | "on")
+    )
+}
+
+pub fn debug_console_enabled() -> bool {
+    debug_console_enabled_from_env_value(std::env::var("CODEBOX_DEBUG_CONSOLE").ok().as_deref())
+}
+
+pub const fn should_hide_windows_console(
+    debug_assertions: bool,
+    debug_console_feature: bool,
+) -> bool {
+    !debug_assertions && !debug_console_feature
+}
+
+pub const fn should_auto_open_devtools(
+    is_windows: bool,
+    debug_assertions: bool,
+) -> bool {
+    is_windows && !debug_assertions
+}
+
+#[cfg(target_os = "windows")]
+fn open_devtools_for_window(window: &tauri::WebviewWindow) {
+    window.open_devtools();
+}
+
+#[cfg(not(target_os = "windows"))]
+fn open_devtools_for_window(_window: &tauri::WebviewWindow) {}
+
 fn redact_url_for_log(url_str: &str) -> String {
     match url::Url::parse(url_str) {
         Ok(url) => {
@@ -87,6 +133,56 @@ fn redact_url_for_log(url_str: &str) -> String {
                 None => base.to_string(),
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{
+        debug_console_enabled_from_env_value, run_non_fatal_startup_step,
+        should_auto_open_devtools, should_hide_windows_console,
+    };
+
+    #[test]
+    fn startup_step_failure_does_not_abort_app_bootstrap() {
+        let succeeded = run_non_fatal_startup_step("log", || {
+            Err("permission denied".to_string())
+        });
+
+        assert!(!succeeded);
+    }
+
+    #[test]
+    fn startup_step_success_reports_true() {
+        let succeeded = run_non_fatal_startup_step("log", || Ok(()));
+
+        assert!(succeeded);
+    }
+
+    #[test]
+    fn debug_console_flag_is_enabled_for_truthy_values() {
+        assert!(debug_console_enabled_from_env_value(Some("1")));
+        assert!(debug_console_enabled_from_env_value(Some("true")));
+        assert!(debug_console_enabled_from_env_value(Some("yes")));
+        assert!(debug_console_enabled_from_env_value(Some("on")));
+        assert!(!debug_console_enabled_from_env_value(Some("0")));
+        assert!(!debug_console_enabled_from_env_value(Some("false")));
+        assert!(!debug_console_enabled_from_env_value(None));
+    }
+
+    #[test]
+    fn release_console_is_suppressed_only_when_debug_flag_is_disabled() {
+        assert!(should_hide_windows_console(false, false));
+        assert!(!should_hide_windows_console(false, true));
+        assert!(!should_hide_windows_console(true, false));
+        assert!(!should_hide_windows_console(true, true));
+    }
+
+    #[test]
+    fn auto_open_devtools_is_enabled_only_for_windows_release_mode() {
+        assert!(should_auto_open_devtools(true, false));
+        assert!(!should_auto_open_devtools(true, true));
+        assert!(!should_auto_open_devtools(false, false));
     }
 }
 
@@ -129,6 +225,12 @@ fn handle_deeplink_url(
                     let _ = window.unminimize();
                     let _ = window.show();
                     let _ = window.set_focus();
+                    if should_auto_open_devtools(
+                        cfg!(target_os = "windows"),
+                        cfg!(debug_assertions),
+                    ) {
+                        open_devtools_for_window(&window);
+                    }
                     log::info!("✓ Window shown and focused");
                 }
             }
@@ -273,6 +375,22 @@ pub fn run() {
                 use tauri_plugin_log::{RotationStrategy, Target, TargetKind, TimezoneStrategy};
 
                 let log_dir = panic_hook::get_log_dir();
+                if let Err(error) = std::fs::create_dir_all(&log_dir) {
+                    eprintln!(
+                        "Startup step `log` failed to create log dir `{}`: {error}",
+                        log_dir.display()
+                    );
+                }
+
+                let log_file_path = log_dir.join("codebox.log");
+                if let Err(error) = std::fs::remove_file(&log_file_path) {
+                    if error.kind() != std::io::ErrorKind::NotFound {
+                        eprintln!(
+                            "Startup step `log` failed to reset log file `{}`: {error}",
+                            log_file_path.display()
+                        );
+                    }
+                }
 
                 // 确保日志目录存在
                 if let Err(e) = std::fs::create_dir_all(&log_dir) {
@@ -280,10 +398,8 @@ pub fn run() {
                 }
 
                 // 启动时删除旧日志文件，实现单文件覆盖效果
-                let log_file_path = log_dir.join("codebox.log");
-                let _ = std::fs::remove_file(&log_file_path);
-
-                app.handle().plugin(
+                run_non_fatal_startup_step("log", || {
+                    app.handle().plugin(
                     tauri_plugin_log::Builder::default()
                         // 初始化为 Trace，允许后续通过 log::set_max_level() 动态调整级别
                         .level(log::LevelFilter::Trace)
@@ -302,7 +418,11 @@ pub fn run() {
                         .max_file_size(1024 * 1024 * 1024)
                         .timezone_strategy(TimezoneStrategy::UseLocal)
                         .build(),
-                )?;
+                )
+                .map_err(|error| format!("failed to initialize log plugin: {error}"))?;
+
+                    Ok(())
+                });
             }
 
             // 初始化数据库
@@ -854,6 +974,14 @@ pub fn run() {
                     // 正常启动模式：显示窗口
                     let _ = window.show();
                     log::info!("正常启动模式：主窗口已显示");
+                }
+            }
+
+            if should_auto_open_devtools(cfg!(target_os = "windows"), cfg!(debug_assertions))
+                && !(settings.show_in_tray && settings.silent_startup)
+            {
+                if let Some(window) = app.get_webview_window("main") {
+                    open_devtools_for_window(&window);
                 }
             }
 

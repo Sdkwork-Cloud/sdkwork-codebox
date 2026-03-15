@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { isWindows, isLinux } from "@/lib/platform";
 import { isTextEditableTarget } from "@/utils/domUtils";
+import { isWindows, isLinux } from "../../lib/platform";
 
 interface FullScreenPanelProps {
   isOpen: boolean;

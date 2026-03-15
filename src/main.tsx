@@ -5,13 +5,18 @@ import "./index.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { UpdateProvider } from "@/contexts/UpdateContext";
 import { ThemeProvider } from "@/components/theme-provider";
-import { queryClient } from "@/lib/query";
+import { queryClient, useSettingsQuery } from "@/lib/query";
 import { Toaster } from "@/components/ui/sonner";
 import i18n from "@/i18n";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { message } from "@tauri-apps/plugin-dialog";
 import { exit } from "@tauri-apps/plugin-process";
+import { installDebugDiagnostics } from "@/debugDiagnostics";
+
+installDebugDiagnostics({
+  enabled: import.meta.env.VITE_DEBUG_DIAGNOSTICS === "true",
+});
 
 // 根据平台添加 body class，便于平台特定样式
 try {
@@ -104,14 +109,26 @@ async function bootstrap() {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="codebox-theme">
-          <UpdateProvider>
-            <App />
-            <Toaster />
-          </UpdateProvider>
-        </ThemeProvider>
+        <AppProviders />
       </QueryClientProvider>
     </React.StrictMode>,
+  );
+}
+
+function AppProviders() {
+  const { data: settings } = useSettingsQuery();
+
+  return (
+    <ThemeProvider
+      defaultTheme="system"
+      storageKey="codebox-theme"
+      preferences={settings}
+    >
+      <UpdateProvider>
+        <App />
+        <Toaster />
+      </UpdateProvider>
+    </ThemeProvider>
   );
 }
 

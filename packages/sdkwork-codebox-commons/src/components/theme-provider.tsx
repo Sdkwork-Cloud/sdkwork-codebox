@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { useSettingsQuery } from "@/lib/query";
 import type {
   MotionPreference,
   ThemeMode as Theme,
@@ -101,6 +100,14 @@ interface ThemeProviderProps {
   children: React.ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
+  preferences?: ThemeProviderPreferences | null;
+}
+
+export interface ThemeProviderPreferences {
+  themeMode?: Theme | null;
+  themePalette?: AccentTheme | null;
+  uiDensity?: UiDensity | null;
+  motionPreference?: MotionPreference | null;
 }
 
 interface ThemeContextValue {
@@ -209,9 +216,8 @@ export function ThemeProvider({
   children,
   defaultTheme = DEFAULT_THEME,
   storageKey = "codebox-theme",
+  preferences,
 }: ThemeProviderProps) {
-  const { data: settings } = useSettingsQuery();
-
   const [theme, setThemeState] = useState<Theme>(() =>
     readLegacyTheme(storageKey, defaultTheme),
   );
@@ -229,21 +235,21 @@ export function ThemeProvider({
     useState<boolean>(prefersReducedMotion);
 
   useEffect(() => {
-    if (!settings) {
+    if (!preferences) {
       return;
     }
 
-    setThemeState(normalizeTheme(settings.themeMode));
+    setThemeState(normalizeTheme(preferences.themeMode));
     setAccentThemeState(
       normalizeAccentTheme(
-        settings.themePalette ?? readLegacyAccentTheme(storageKey),
+        preferences.themePalette ?? readLegacyAccentTheme(storageKey),
       ),
     );
-    setUiDensityState(normalizeUiDensity(settings.uiDensity));
+    setUiDensityState(normalizeUiDensity(preferences.uiDensity));
     setMotionPreferenceState(
-      normalizeMotionPreference(settings.motionPreference),
+      normalizeMotionPreference(preferences.motionPreference),
     );
-  }, [settings, storageKey]);
+  }, [preferences, storageKey]);
 
   useEffect(() => {
     if (typeof window === "undefined") {

@@ -14,10 +14,12 @@
   "scripts": {
     "dev": "pnpm tauri dev",
     "build": "pnpm tauri build",
+    "build:debug-console": "powershell -ExecutionPolicy Bypass -File scripts/build-debug-console.ps1",
     "build:packages": "pnpm -r --filter './packages/*' build",
     "tauri": "tauri",
     "dev:renderer": "vite",
     "build:renderer": "vite build",
+    "run:debug-console": "powershell -ExecutionPolicy Bypass -File scripts/run-debug-console.ps1",
     "typecheck": "tsc --noEmit",
     "typecheck:packages": "pnpm -r --filter './packages/*' typecheck",
     "lint": "pnpm format:check",

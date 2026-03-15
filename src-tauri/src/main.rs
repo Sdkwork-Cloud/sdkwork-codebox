@@ -1,5 +1,9 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+// Keep the normal release app window-only, but allow an opt-in console build
+// for white-screen debugging on Windows.
+#![cfg_attr(
+    all(not(debug_assertions), not(feature = "debug-console")),
+    windows_subsystem = "windows"
+)]
 
 fn main() {
     // 在 Linux 上设置 WebKit 环境变量以解决 DMA-BUF 渲染问题
