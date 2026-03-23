@@ -1,0 +1,4 @@
+interface:
+  display_name: "Desktop Settings App SDK Real Logic"
+  short_description: "Guide desktop settings remote flows onto generated app SDKs."
+  default_prompt: "Use $desktop-settings-app-sdk-real-logic to keep desktop settings local-first while routing remote business capabilities through spring-ai-plus-app-api and generated app SDKs."
