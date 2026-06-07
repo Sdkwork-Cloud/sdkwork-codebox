@@ -8,9 +8,9 @@
 
 ## Standard Remote Path
 
-Use this path for any business capability backed by `spring-ai-plus-app-api`:
+Use this path for any remote business capability backed by desktop settings product SDK ownership:
 
-`src shell / package module -> shared app-sdk boundary in sdkwork-codebox-core or sdkwork-codebox-integration -> @sdkwork/app-sdk -> spring-ai-plus-app-api`
+`src shell / package module -> shared product SDK boundary in sdkwork-codebox-core or sdkwork-codebox-integration -> typed product app client port or generated product app SDK facade`
 
 If the shared boundary is incomplete, complete it first instead of spreading direct HTTP across packages.
 
@@ -36,8 +36,8 @@ Local-only capability should stay local even while adjacent business modules mov
 
 If a feature package needs a method that the generated app SDK does not expose:
 
-1. Fix the contract in `spring-ai-plus-app-api` and required backend modules.
-2. Regenerate the shared app SDK from the repository-standard generator flow.
+1. Fix the product-owned API/OpenAPI/generator contract or declare the correct dependency SDK.
+2. Regenerate the product app SDK from the repository-standard generator flow when the generated family exists.
 3. Reconnect the package through the shared boundary.
 4. Delete the temporary bypass.
 
