@@ -1,11 +1,16 @@
 import path from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import { codeInspectorPlugin } from "code-inspector-plugin";
 import { getPackageChunk } from "./build/viteChunking";
 import { createWorkspaceAliases } from "./workspace.aliases";
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, __dirname, "");
+  return {
+  define: {
+    "process.env.SDKWORK_ACCESS_TOKEN": JSON.stringify(env.SDKWORK_ACCESS_TOKEN ?? ""),
+  },
   root: "src",
   plugins: [
     command === "serve" &&
@@ -35,4 +40,5 @@ export default defineConfig(({ command }) => ({
   },
   clearScreen: false,
   envPrefix: ["VITE_", "TAURI_"],
-}));
+};
+});
