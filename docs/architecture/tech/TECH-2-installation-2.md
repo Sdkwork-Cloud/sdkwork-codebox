@@ -1,0 +1,231 @@
+> Migrated from `docs/user-manual/ja/1-getting-started/1.2-installation.md` on 2026-06-24.
+> Owner: SDKWork maintainers
+
+## 前提条件
+
+### Node.js のインストール
+
+CodeBox が管理する CLI ツール（Claude Code、Codex、Gemini CLI）には Node.js 環境が必要です。
+
+**推奨バージョン**：Node.js 18 LTS 以上
+
+#### Windows
+
+1. [Node.js 公式サイト](https://nodejs.org/) にアクセス
+
+2. LTS バージョンのインストーラーをダウンロード
+
+3. インストーラーを実行し、指示に従ってインストール
+
+4. インストールの確認：
+
+ ```bash
+ node --version
+ npm --version
+ ```
+
+#### macOS
+
+```bash
+# Homebrew でインストール
+brew install node
+
+# または nvm を使用（推奨）
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install --lts
+```
+
+#### Linux
+
+```bash
+# Ubuntu/Debian
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# または nvm を使用
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install --lts
+```
+
+### CLI ツールのインストール
+
+#### Claude Code
+
+**方法 1：Homebrew（macOS 推奨）**
+
+```bash
+brew install claude-code
+```
+
+**方法 2：npm**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+#### Codex
+
+**方法 1：Homebrew（macOS 推奨）**
+
+```bash
+brew install codex
+```
+
+**方法 2：npm**
+
+```bash
+npm install -g @openai/codex
+```
+
+#### Gemini CLI
+
+**方法 1：Homebrew（macOS 推奨）**
+
+```bash
+brew install gemini-cli
+```
+
+**方法 2：npm**
+
+```bash
+npm install -g @google/gemini-cli
+```
+
+---
+
+## Windows
+
+### インストーラー方式
+
+1. [Releases ページ](https://github.com/farion1231/codebox/releases) にアクセス
+2. `CodeBox-v{バージョン}-Windows.msi` をダウンロード
+3. インストーラーをダブルクリックして実行
+4. 指示に従ってインストール
+
+### ポータブル版（インストール不要）
+
+1. `CodeBox-v{バージョン}-Windows-Portable.zip` をダウンロード
+2. 任意のディレクトリに展開
+3. `CodeBox.exe` を実行
+
+## macOS
+
+### 方法 1：Homebrew（推奨）
+
+```bash
+# tap を追加
+brew tap farion1231/codebox
+
+# インストール
+brew install --cask codebox
+```
+
+最新バージョンに更新：
+
+```bash
+brew upgrade --cask codebox
+```
+
+### 方法 2：手動ダウンロード
+
+1. `CodeBox-v{バージョン}-macOS.zip` をダウンロード
+2. 展開して `CodeBox.app` を取得
+3. 「アプリケーション」フォルダにドラッグ
+
+### 初回起動時の警告
+
+開発者が Apple 開発者アカウントを持っていないため、初回起動時に「不明な開発者」の警告が表示される場合があります：
+
+**推奨される解決方法**：
+ターミナルで以下のコマンドを実行してください：
+```bash
+sudo xattr -dr com.apple.quarantine /Applications/CC\ Switch.app/
+```
+
+**別の解決方法（システム設定から）**：
+1. 警告ダイアログを閉じる
+2. 「システム設定」→「プライバシーとセキュリティ」を開く
+3. CodeBox に関する表示を見つけ、「このまま開く」をクリック
+4. 再度アプリを開くと正常に使用可能
+
+## Linux
+
+### ArchLinux
+
+AUR ヘルパーを使用してインストール：
+
+```bash
+# paru を使用
+paru -S codebox-bin
+
+# または yay を使用
+yay -S codebox-bin
+```
+
+### Debian / Ubuntu
+
+1. `CodeBox-v{バージョン}-Linux.deb` をダウンロード
+2. インストール：
+
+```bash
+sudo dpkg -i CodeBox-v{バージョン}-Linux.deb
+
+# 依存関係に問題がある場合
+sudo apt-get install -f
+```
+
+### AppImage（汎用）
+
+1. `CodeBox-v{バージョン}-Linux.AppImage` をダウンロード
+2. 実行権限を追加：
+
+```bash
+chmod +x CodeBox-v{バージョン}-Linux.AppImage
+```
+
+3. 実行：
+
+```bash
+./CodeBox-v{バージョン}-Linux.AppImage
+```
+
+## インストールの確認
+
+インストール完了後、CodeBox を起動します：
+
+1. アプリウィンドウが正常に表示される
+2. システムトレイに CodeBox のアイコンが表示される
+3. Claude / Codex / Gemini の 3 つのアプリを切り替えられる
+
+## 自動更新
+
+CodeBox には自動更新機能が内蔵されています：
+
+- 起動時に自動で更新を確認
+- 新しいバージョンがある場合、画面に更新通知を表示
+- クリックするとダウンロードしてインストール
+
+「設定 → バージョン情報」から手動で更新を確認することもできます。
+
+## アンインストール
+
+### Windows
+
+- 「設定 → アプリ」からアンインストール
+- またはインストールディレクトリのアンインストーラーを実行
+
+### macOS
+
+- `CodeBox.app` をゴミ箱に移動
+- オプション：CodeBox のデータディレクトリを削除します。全プラットフォームの既定値は `~/.sdkwork/codebox/` で、Windows では `%USERPROFILE%\\.sdkwork\\codebox\\` に展開されます
+
+### Linux
+
+```bash
+# Debian/Ubuntu
+sudo apt remove codebox
+
+# ArchLinux
+paru -R codebox-bin
+```
+

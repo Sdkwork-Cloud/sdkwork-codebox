@@ -1,0 +1,231 @@
+> Migrated from `docs/user-manual/en/1-getting-started/1.2-installation.md` on 2026-06-24.
+> Owner: SDKWork maintainers
+
+## Prerequisites
+
+### Install Node.js
+
+The CLI tools managed by CodeBox (Claude Code, Codex, Gemini CLI) require a Node.js environment.
+
+**Recommended version**: Node.js 18 LTS or higher
+
+#### Windows
+
+1. Visit the [Node.js official website](https://nodejs.org/)
+
+2. Download the LTS version installer
+
+3. Run the installer and follow the prompts
+
+4. Verify installation:
+
+ ```bash
+ node --version
+ npm --version
+ ```
+
+#### macOS
+
+```bash
+# Install with Homebrew
+brew install node
+
+# Or use nvm (recommended)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install --lts
+```
+
+#### Linux
+
+```bash
+# Ubuntu/Debian
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Or use nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install --lts
+```
+
+### Install CLI Tools
+
+#### Claude Code
+
+**Option 1: Homebrew (recommended for macOS)**
+
+```bash
+brew install claude-code
+```
+
+**Option 2: npm**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+#### Codex
+
+**Option 1: Homebrew (recommended for macOS)**
+
+```bash
+brew install codex
+```
+
+**Option 2: npm**
+
+```bash
+npm install -g @openai/codex
+```
+
+#### Gemini CLI
+
+**Option 1: Homebrew (recommended for macOS)**
+
+```bash
+brew install gemini-cli
+```
+
+**Option 2: npm**
+
+```bash
+npm install -g @google/gemini-cli
+```
+
+---
+
+## Windows
+
+### Installer
+
+1. Visit the [Releases page](https://github.com/farion1231/codebox/releases)
+2. Download `CodeBox-v{version}-Windows.msi`
+3. Double-click to run the installer
+4. Follow the prompts to complete installation
+
+### Portable Version (No Installation Required)
+
+1. Download `CodeBox-v{version}-Windows-Portable.zip`
+2. Extract to any directory
+3. Run `CodeBox.exe`
+
+## macOS
+
+### Option 1: Homebrew (Recommended)
+
+```bash
+# Add tap
+brew tap farion1231/codebox
+
+# Install
+brew install --cask codebox
+```
+
+Update to the latest version:
+
+```bash
+brew upgrade --cask codebox
+```
+
+### Option 2: Manual Download
+
+1. Download `CodeBox-v{version}-macOS.zip`
+2. Extract to get `CodeBox.app`
+3. Drag it to the Applications folder
+
+### First Launch Warning
+
+Since the developer does not have an Apple Developer account, a "developer cannot be verified" warning may appear on first launch:
+
+**Recommended solution**:
+Open Terminal and run the following command:
+```bash
+sudo xattr -dr com.apple.quarantine /Applications/CC\ Switch.app/
+```
+
+**Alternative solution (via System Settings)**:
+1. Close the warning dialog
+2. Open "System Settings" > "Privacy & Security"
+3. Find the CodeBox prompt and click "Open Anyway"
+4. Reopen the app to use it normally
+
+## Linux
+
+### ArchLinux
+
+Install using an AUR helper:
+
+```bash
+# Using paru
+paru -S codebox-bin
+
+# Or using yay
+yay -S codebox-bin
+```
+
+### Debian / Ubuntu
+
+1. Download `CodeBox-v{version}-Linux.deb`
+2. Install:
+
+```bash
+sudo dpkg -i CodeBox-v{version}-Linux.deb
+
+# If there are dependency issues
+sudo apt-get install -f
+```
+
+### AppImage (Universal)
+
+1. Download `CodeBox-v{version}-Linux.AppImage`
+2. Add execute permission:
+
+```bash
+chmod +x CodeBox-v{version}-Linux.AppImage
+```
+
+3. Run:
+
+```bash
+./CodeBox-v{version}-Linux.AppImage
+```
+
+## Verify Installation
+
+After installation, launch CodeBox:
+
+1. The app window displays correctly
+2. A CodeBox icon appears in the system tray
+3. You can switch between Claude / Codex / Gemini apps
+
+## Auto Update
+
+CodeBox includes built-in auto-update functionality:
+
+- Automatically checks for updates on startup
+- Displays an update prompt in the UI when a new version is available
+- Click to download and install
+
+You can also manually check for updates in "Settings > About".
+
+## Uninstall
+
+### Windows
+
+- Uninstall via "Settings > Apps"
+- Or run the uninstaller in the installation directory
+
+### macOS
+
+- Move `CodeBox.app` to Trash
+- Optional: Delete the CodeBox data directory, which defaults to `~/.sdkwork/codebox/` on all platforms. On Windows this resolves to `%USERPROFILE%\\.sdkwork\\codebox\\`
+
+### Linux
+
+```bash
+# Debian/Ubuntu
+sudo apt remove codebox
+
+# ArchLinux
+paru -R codebox-bin
+```
+
