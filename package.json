@@ -26,7 +26,8 @@
     "format": "prettier --write \"{src,packages,tests}/**/*.{js,jsx,ts,tsx,css,json}\"",
     "format:check": "prettier --check \"{src,packages,tests}/**/*.{js,jsx,ts,tsx,css,json}\"",
     "test:unit": "vitest run",
-    "test:unit:watch": "vitest watch"
+    "test:unit:watch": "vitest watch",
+    "check:app-composition": "node ../sdkwork-specs/tools/verify-repo.mjs --root ."
   },
   "keywords": [],
   "author": "Jason Young",
@@ -105,5 +106,5 @@
     "tailwind-merge": "^3.3.1",
     "zod": "^4.1.12"
   },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
+  "packageManager": "pnpm@10.33.0"
 }

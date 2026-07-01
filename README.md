@@ -1,4 +1,5 @@
 # sdkwork-codebox
+repository-kind: application
 
 <div align="center">
 
