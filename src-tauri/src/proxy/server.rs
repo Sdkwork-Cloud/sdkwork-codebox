@@ -207,7 +207,12 @@ impl ProxyServer {
 
     fn build_router(&self) -> Router {
         let cors = CorsLayer::new()
-            .allow_origin(Any)
+            .allow_origin(tower_http::cors::AllowOrigin::predicate(|origin, _| {
+                origin
+                    .to_str()
+                    .ok()
+                    .is_some_and(sdkwork_web_core::is_development_private_network_origin)
+            }))
             .allow_methods(Any)
             .allow_headers(Any);
 
