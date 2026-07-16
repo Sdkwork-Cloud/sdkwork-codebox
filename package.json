@@ -12,7 +12,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "pnpm tauri dev",
+    "stop": "node ../sdkwork-specs/tools/stop-sdkwork-workspace-processes.mjs --workspace .",    "dev": "pnpm tauri dev",
     "build": "pnpm tauri build",
     "build:debug-console": "powershell -ExecutionPolicy Bypass -File scripts/build-debug-console.ps1",
     "build:packages": "pnpm -r --filter './packages/*' build",
