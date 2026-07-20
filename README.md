@@ -204,7 +204,7 @@ pnpm dev
 Renderer only:
 
 ```bash
-pnpm dev:renderer
+pnpm dev:browser:local
 ```
 
 ### Verify

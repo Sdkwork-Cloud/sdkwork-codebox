@@ -6,7 +6,7 @@
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3000",
-    "beforeDevCommand": "pnpm run dev:renderer",
+    "beforeDevCommand": "pnpm run dev:browser:local",
     "beforeBuildCommand": "pnpm run build:renderer"
   },
   "app": {
@@ -56,7 +56,9 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["codebox"]
+        "schemes": [
+          "codebox"
+        ]
       }
     },
     "updater": {

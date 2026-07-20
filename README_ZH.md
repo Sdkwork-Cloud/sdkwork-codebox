@@ -276,7 +276,7 @@ https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest
 ```bash
 pnpm install
 pnpm dev
-pnpm dev:renderer
+pnpm dev:browser:local
 pnpm typecheck
 pnpm typecheck:packages
 pnpm test:unit

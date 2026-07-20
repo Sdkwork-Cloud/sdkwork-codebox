@@ -37,7 +37,7 @@ Choose the narrowest command that covers the affected surface:
 | Task | Command |
 | --- | --- |
 | Run the Tauri desktop application | `pnpm dev` |
-| Run the Vite renderer only | `pnpm dev:renderer` |
+| Run the Vite renderer only | `pnpm dev:browser:local` |
 | Build the desktop application | `pnpm build` |
 | Build workspace packages | `pnpm build:packages` |
 | Check root TypeScript | `pnpm typecheck` |

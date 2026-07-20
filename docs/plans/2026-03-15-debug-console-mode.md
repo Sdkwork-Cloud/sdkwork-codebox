@@ -199,7 +199,7 @@ Expected: a distinct console-enabled binary is produced successfully.
 
 **Step 3: Reproduce launch with debug output**
 
-Run: `pnpm run run:debug-console`
+Run: `pnpm run dev:test-runner:debug`
 Expected: backend logs stay visible in the console, and frontend uncaught errors print there instead of silently yielding a blank window.
 
 **Step 4: Smoke-check default behavior**
