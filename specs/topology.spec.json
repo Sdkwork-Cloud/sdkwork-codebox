@@ -2,7 +2,8 @@
   "schemaVersion": 5,
   "kind": "sdkwork.app.topology",
   "appId": "sdkwork-codebox",
-  "archetype": "client-only",
+  "applicationCode": "codebox",
+  "archetype": "application-http-gateway",
   "profileRoot": "etc/topology",
   "profilePattern": "{deploymentProfile}.{environment}.env",
   "vocabulary": {
@@ -25,33 +26,70 @@
     "deploymentProfile": "SDKWORK_CODEBOX_DEPLOYMENT_PROFILE",
     "environment": "SDKWORK_CODEBOX_ENVIRONMENT",
     "profileId": "SDKWORK_CODEBOX_PROFILE_ID",
-    "clientDeploymentProfile": "VITE_SDKWORK_CODEBOX_DEPLOYMENT_PROFILE"
+    "clientDeploymentProfile": "VITE_SDKWORK_CODEBOX_DEPLOYMENT_PROFILE",
+    "standaloneGatewayBind": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND"
   },
   "surfaces": {
+    "application.public-ingress": {
+      "connectivityPlane": "application",
+      "protocols": ["http"],
+      "bindEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND",
+      "httpUrlEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_HTTP_URL"
+    },
+    "platform.api-gateway": {
+      "connectivityPlane": "platform",
+      "protocols": ["http"],
+      "httpUrlEnv": "SDKWORK_CODEBOX_PLATFORM_API_GATEWAY_HTTP_URL"
+    },
     "desktop.client": {
       "connectivityPlane": "application",
-      "protocols": ["native"]
+      "protocols": ["native"],
+      "optional": true
+    }
+  },
+  "components": {
+    "standaloneGateway": {
+      "crate": "sdkwork-api-codebox-standalone-gateway",
+      "binary": "sdkwork-api-codebox-standalone-gateway"
     }
   },
   "orchestration": {
     "profiles": {
       "standalone.development": {
-        "processes": [{
-          "id": "desktop-client",
-          "script": "_sdkwork:client:desktop",
-          "required": true,
-          "role": "client"
-        }],
-        "healthSurfaces": []
+        "processes": [
+          {
+            "id": "standalone-gateway",
+            "role": "api-standalone-gateway",
+            "command": "cargo",
+            "args": [
+              "run",
+              "--manifest-path",
+              "crates/sdkwork-api-codebox-standalone-gateway/Cargo.toml"
+            ],
+            "bindEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND",
+            "required": true
+          },
+          {
+            "id": "desktop-client",
+            "script": "_sdkwork:client:desktop",
+            "runtimeTargets": ["desktop"],
+            "clientArchitectures": ["tauri"],
+            "required": true,
+            "role": "client"
+          }
+        ],
+        "healthSurfaces": ["application.public-ingress"]
       },
       "cloud.development": {
         "processes": [{
           "id": "desktop-client",
           "script": "_sdkwork:client:desktop",
+          "runtimeTargets": ["desktop"],
+          "clientArchitectures": ["tauri"],
           "required": true,
           "role": "client"
         }],
-        "healthSurfaces": []
+        "healthSurfaces": ["application.public-ingress", "platform.api-gateway"]
       },
       "standalone.production": { "processes": [], "healthSurfaces": [] },
       "cloud.production": { "processes": [], "healthSurfaces": [] }
