@@ -258,7 +258,7 @@ export const iconMetadata: Record<string, IconMetadata> = {
     name: "openclaw",
     displayName: "OpenClaw",
     category: "ai-provider",
-    keywords: ["openclaw", "lobster", "claw"],
+    keywords: ["openclaw", "lobster", "cloud"],
     defaultColor: "#ff4f40",
   },
   packycode: {
