@@ -16,7 +16,6 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 use tokio::sync::{oneshot, RwLock};
 use tokio::task::JoinHandle;
-use tower_http::cors::{Any, CorsLayer};
 
 /// 代理服务器状态（共享）
 #[derive(Clone)]
@@ -33,6 +32,17 @@ pub struct ProxyState {
     pub app_handle: Option<tauri::AppHandle>,
     /// 故障转移切换管理器
     pub failover_manager: Arc<FailoverSwitchManager>,
+}
+
+/// 官方统一 CORS layer：dev 语义（loopback/私网判定）+ canonical 键
+/// `SDKWORK_CORS_ALLOWED_ORIGINS` 配置的精确 origins，经
+/// `sdkwork_web_axum::cors_layer_from_policy` 构建。
+fn cors_layer() -> sdkwork_web_axum::CanonicalCorsLayer {
+    let policy = sdkwork_web_bootstrap::security_policy_for_environment(
+        &sdkwork_web_core::WebEnvironment::Dev,
+        sdkwork_web_bootstrap::cors_allowed_origins_from_process_env(),
+    );
+    sdkwork_web_axum::cors_layer_from_policy(policy.cors)
 }
 
 /// 代理HTTP服务器
@@ -206,15 +216,7 @@ impl ProxyServer {
     }
 
     fn build_router(&self) -> Router {
-        let cors = CorsLayer::new()
-            .allow_origin(tower_http::cors::AllowOrigin::predicate(|origin, _| {
-                origin
-                    .to_str()
-                    .ok()
-                    .is_some_and(sdkwork_web_core::is_development_private_network_origin)
-            }))
-            .allow_methods(Any)
-            .allow_headers(Any);
+        let cors = cors_layer();
 
         Router::new()
             // 健康检查
