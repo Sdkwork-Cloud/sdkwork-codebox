@@ -7,10 +7,10 @@ repository-kind: application
 
 Cross-platform desktop control center for Claude Code, Codex, Gemini CLI, OpenCode, and OpenClaw.
 
-[![Repository](https://img.shields.io/badge/repo-sdkwork--codebox-181717?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox)
-[![Latest Release](https://img.shields.io/github/v/release/Sdkwork-Cloud/sdkwork-codebox?display_name=tag)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Sdkwork-Cloud/sdkwork-codebox)
-[![Downloads](https://img.shields.io/github/downloads/Sdkwork-Cloud/sdkwork-codebox/total?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
+[![Repository](https://img.shields.io/badge/repo-sdkwork--codebox-181717?logo=github)](https://github.com/sdkwork-ai/sdkwork-codebox)
+[![Latest Release](https://img.shields.io/github/v/release/sdkwork-ai/sdkwork-codebox?display_name=tag)](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/sdkwork-ai/sdkwork-codebox)
+[![Downloads](https://img.shields.io/github/downloads/sdkwork-ai/sdkwork-codebox/total?logo=github)](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest)
 [![Built with Tauri](https://img.shields.io/badge/built%20with-Tauri%202-orange.svg)](https://tauri.app/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -102,7 +102,7 @@ Prebuilt desktop packages are published on GitHub Releases:
 Latest downloads:
 
 ```text
-https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest
+https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest
 ```
 
 ## Repository Architecture
@@ -236,7 +236,7 @@ pnpm build:packages
 Primary repository:
 
 ```text
-https://github.com/Sdkwork-Cloud/sdkwork-codebox
+https://github.com/sdkwork-ai/sdkwork-codebox
 ```
 
 ## License

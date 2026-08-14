@@ -58,5 +58,5 @@ Open the `Release` workflow in GitHub Actions and provide:
 - `latest.json` is regenerated after all matrix builds finish and then uploaded
   to the same release for the Tauri updater.
 - The updater endpoint is configured to use:
-  `https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest/download/latest.json`
+  `https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest/download/latest.json`
 

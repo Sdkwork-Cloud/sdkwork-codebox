@@ -4,10 +4,10 @@
 
 ### Claude Code、Codex、Gemini CLI、OpenCode 和 OpenClaw 的全方位管理工具
 
-[![Version](https://img.shields.io/github/v/release/Sdkwork-Cloud/sdkwork-codebox?display_name=tag)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
+[![Version](https://img.shields.io/github/v/release/sdkwork-ai/sdkwork-codebox?display_name=tag)](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest)
 [![Built with Tauri](https://img.shields.io/badge/built%20with-Tauri%202-orange.svg)](https://tauri.app/)
-[![Downloads](https://img.shields.io/github/downloads/Sdkwork-Cloud/sdkwork-codebox/total?logo=github)](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/sdkwork-ai/sdkwork-codebox/total?logo=github)](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest)
 
 [English](README.md) | 中文 | [日本語](README_JA.md) | [更新日志](CHANGELOG.md)
 
@@ -207,7 +207,7 @@ CodeBox 使用“通用配置片段”功能，在不同的供应商之间传递
 
 ## 快速开始
 
-1. 从 [GitHub Releases](https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest) 下载对应平台安装包。
+1. 从 [GitHub Releases](https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest) 下载对应平台安装包。
 2. 打开应用后，在左侧产品列表中选择要管理的 CLI 产品。
 3. 在 `Providers` 视图中新增或导入供应商；如需跨产品导入，可使用 `codebox://` Deep Link。
 4. 在 `Runtime` 中配置 Proxy、Takeover、Failover、Usage、Diagnostics。
@@ -231,7 +231,7 @@ CodeBox 使用“通用配置片段”功能，在不同的供应商之间传递
 统一下载地址：
 
 ```text
-https://github.com/Sdkwork-Cloud/sdkwork-codebox/releases/latest
+https://github.com/sdkwork-ai/sdkwork-codebox/releases/latest
 ```
 
 > macOS 首次打开如果出现“未知开发者”提示，请前往“系统设置 → 隐私与安全性”选择“仍要打开”。
@@ -304,7 +304,7 @@ pnpm build
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Sdkwork-Cloud/sdkwork-codebox&type=Date)](https://www.star-history.com/#Sdkwork-Cloud/sdkwork-codebox&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=sdkwork-ai/sdkwork-codebox&type=Date)](https://www.star-history.com/#sdkwork-ai/sdkwork-codebox&Date)
 
 ## License
 
