@@ -47,9 +47,9 @@ bytes = "1.5"
 axum = "0.7"
 tower = "0.4"
 tower-http = { version = "0.5", features = ["cors"] }
-sdkwork-web-core = { path = "../../sdkwork-web-framework/crates/sdkwork-web-core" }
-sdkwork-web-axum = { path = "../../sdkwork-web-framework/crates/sdkwork-web-axum" }
-sdkwork-web-bootstrap = { path = "../../sdkwork-web-framework/crates/sdkwork-web-bootstrap" }
+sdkwork_web_core.workspace = true
+sdkwork_web_axum.workspace = true
+sdkwork_web_bootstrap.workspace = true
 hyper = { version = "1.0", features = ["full"] }
 regex = "1.10"
 rquickjs = { version = "0.8", features = ["array-buffer", "classes"] }
