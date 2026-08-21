@@ -7,9 +7,26 @@
   "profileRoot": "etc/topology",
   "profilePattern": "{deploymentProfile}.{environment}.env",
   "vocabulary": {
-    "environment": { "allowed": ["development", "production"] },
-    "connectivityPlane": { "allowed": ["application", "platform"] },
-    "deploymentProfile": { "allowed": ["standalone", "cloud"] }
+    "environment": {
+      "allowed": [
+        "development",
+        "test",
+        "staging",
+        "production"
+      ]
+    },
+    "connectivityPlane": {
+      "allowed": [
+        "application",
+        "platform"
+      ]
+    },
+    "deploymentProfile": {
+      "allowed": [
+        "standalone",
+        "cloud"
+      ]
+    }
   },
   "defaults": {
     "developmentProfileId": "standalone.development",
@@ -20,7 +37,11 @@
     "standalone.development": "etc/topology/standalone.development.env",
     "standalone.production": "etc/topology/standalone.production.env",
     "cloud.development": "etc/topology/cloud.development.env",
-    "cloud.production": "etc/topology/cloud.production.env"
+    "cloud.production": "etc/topology/cloud.production.env",
+    "standalone.test": "etc/topology/standalone.test.env",
+    "standalone.staging": "etc/topology/standalone.staging.env",
+    "cloud.test": "etc/topology/cloud.test.env",
+    "cloud.staging": "etc/topology/cloud.staging.env"
   },
   "envKeys": {
     "deploymentProfile": "SDKWORK_CODEBOX_DEPLOYMENT_PROFILE",
@@ -32,18 +53,24 @@
   "surfaces": {
     "application.public-ingress": {
       "connectivityPlane": "application",
-      "protocols": ["http"],
+      "protocols": [
+        "http"
+      ],
       "bindEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND",
       "httpUrlEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_HTTP_URL"
     },
     "platform.api-gateway": {
       "connectivityPlane": "platform",
-      "protocols": ["http"],
+      "protocols": [
+        "http"
+      ],
       "httpUrlEnv": "SDKWORK_CODEBOX_PLATFORM_API_GATEWAY_HTTP_URL"
     },
     "desktop.client": {
       "connectivityPlane": "application",
-      "protocols": ["native"],
+      "protocols": [
+        "native"
+      ],
       "optional": true
     }
   },
@@ -72,28 +99,111 @@
           {
             "id": "desktop-client",
             "script": "_sdkwork:client:desktop",
-            "runtimeTargets": ["desktop"],
-            "clientArchitectures": ["tauri"],
+            "runtimeTargets": [
+              "desktop"
+            ],
+            "clientArchitectures": [
+              "tauri"
+            ],
             "required": true,
             "role": "client"
           }
         ],
-        "healthSurfaces": ["application.public-ingress"]
+        "healthSurfaces": [
+          "application.public-ingress"
+        ]
       },
       "cloud.development": {
-        "processes": [{
-          "id": "desktop-client",
-          "script": "_sdkwork:client:desktop",
-          "runtimeTargets": ["desktop"],
-          "clientArchitectures": ["tauri"],
-          "required": true,
-          "role": "client"
-        }],
-        "healthSurfaces": ["application.public-ingress", "platform.api-gateway"]
+        "processes": [
+          {
+            "id": "desktop-client",
+            "script": "_sdkwork:client:desktop",
+            "runtimeTargets": [
+              "desktop"
+            ],
+            "clientArchitectures": [
+              "tauri"
+            ],
+            "required": true,
+            "role": "client"
+          }
+        ],
+        "healthSurfaces": [
+          "application.public-ingress",
+          "platform.api-gateway"
+        ]
       },
-      "standalone.production": { "processes": [], "healthSurfaces": [] },
-      "cloud.production": { "processes": [], "healthSurfaces": [] }
+      "standalone.production": {
+        "processes": [],
+        "healthSurfaces": []
+      },
+      "cloud.production": {
+        "processes": [],
+        "healthSurfaces": []
+      },
+      "standalone.test": {
+        "processes": [
+          {
+            "id": "standalone-gateway",
+            "role": "api-standalone-gateway",
+            "command": "cargo",
+            "args": [
+              "run",
+              "--manifest-path",
+              "crates/sdkwork-api-codebox-standalone-gateway/Cargo.toml"
+            ],
+            "bindEnv": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND",
+            "required": true
+          },
+          {
+            "id": "desktop-client",
+            "script": "_sdkwork:client:desktop",
+            "runtimeTargets": [
+              "desktop"
+            ],
+            "clientArchitectures": [
+              "tauri"
+            ],
+            "required": true,
+            "role": "client"
+          }
+        ],
+        "healthSurfaces": [
+          "application.public-ingress"
+        ]
+      },
+      "standalone.staging": {
+        "processes": [],
+        "healthSurfaces": []
+      },
+      "cloud.test": {
+        "processes": [
+          {
+            "id": "desktop-client",
+            "script": "_sdkwork:client:desktop",
+            "runtimeTargets": [
+              "desktop"
+            ],
+            "clientArchitectures": [
+              "tauri"
+            ],
+            "required": true,
+            "role": "client"
+          }
+        ],
+        "healthSurfaces": [
+          "application.public-ingress",
+          "platform.api-gateway"
+        ]
+      },
+      "cloud.staging": {
+        "processes": [],
+        "healthSurfaces": []
+      }
     }
   },
-  "packaging": { "targets": [], "cloudConfigFiles": [] }
+  "packaging": {
+    "targets": [],
+    "cloudConfigFiles": []
+  }
 }

@@ -1,0 +1,5 @@
+specVersion = 1
+kind = "sdkwork.webserver.server"
+id = "codebox"
+enabled = false
+description = "sdkwork-codebox webserver placeholder (align-application-deploy-layout)"
