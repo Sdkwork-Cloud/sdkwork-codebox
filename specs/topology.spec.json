@@ -205,5 +205,50 @@
   "packaging": {
     "targets": [],
     "cloudConfigFiles": []
+  },
+  "cloudPublicHosts": {
+    "application.public-ingress": {
+      "httpHost": "codebox.sdkwork.com",
+      "environments": {
+        "development": {
+          "httpHosts": [
+            "codebox-dev.sdkwork.com",
+            "codebox-dev.birdcoder.com",
+            "codebox-dev.dtupay.com",
+            "codebox-dev.sdkwork.cn",
+            "codebox-dev.birdcoder.cn",
+            "codebox-dev.dtupay.cn"
+          ]
+        },
+        "test": {
+          "httpHosts": [
+            "codebox-test.sdkwork.com",
+            "codebox-test.birdcoder.com",
+            "codebox-test.dtupay.com",
+            "codebox-test.sdkwork.cn",
+            "codebox-test.birdcoder.cn",
+            "codebox-test.dtupay.cn"
+          ]
+        },
+        "staging": {
+          "httpHosts": [
+            "codebox-staging.sdkwork.com",
+            "codebox-staging.birdcoder.com",
+            "codebox-staging.dtupay.com",
+            "codebox-staging.sdkwork.cn",
+            "codebox-staging.birdcoder.cn",
+            "codebox-staging.dtupay.cn"
+          ]
+        }
+      },
+      "httpHosts": [
+        "codebox.sdkwork.com",
+        "codebox.birdcoder.com",
+        "codebox.dtupay.com",
+        "codebox.sdkwork.cn",
+        "codebox.birdcoder.cn",
+        "codebox.dtupay.cn"
+      ]
+    }
   }
 }
