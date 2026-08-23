@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Layers3, RefreshCw } from "lucide-react";
+import { uuid } from "@sdkwork/utils/id";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -389,7 +390,7 @@ requires_openai_auth = true`,
         }
       : createUniversalProviderFromPreset(
           selectedPreset || universalProviderPresets[0],
-          crypto.randomUUID(),
+          uuid(),
           baseUrl.trim(),
           apiKey.trim(),
           name.trim(),

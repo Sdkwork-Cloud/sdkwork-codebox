@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash2, Save, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
+import { uuid } from "@sdkwork/utils/id";
 import { useOpenClawTools, useSaveOpenClawTools } from "@/hooks/useOpenClaw";
 import { extractErrorMessage } from "@/utils/errorUtils";
 import { Button } from "@/components/ui/button";
@@ -42,13 +43,13 @@ const ToolsPanel: React.FC = () => {
       setConfig(toolsData);
       setAllowList(
         (toolsData.allow ?? []).map((value) => ({
-          id: crypto.randomUUID(),
+          id: uuid(),
           value,
         })),
       );
       setDenyList(
         (toolsData.deny ?? []).map((value) => ({
-          id: crypto.randomUUID(),
+          id: uuid(),
           value,
         })),
       );
@@ -217,7 +218,7 @@ const ToolsPanel: React.FC = () => {
             onClick={() =>
               setAllowList((prev) => [
                 ...prev,
-                { id: crypto.randomUUID(), value: "" },
+                { id: uuid(), value: "" },
               ])
             }
           >
@@ -256,7 +257,7 @@ const ToolsPanel: React.FC = () => {
             onClick={() =>
               setDenyList((prev) => [
                 ...prev,
-                { id: crypto.randomUUID(), value: "" },
+                { id: uuid(), value: "" },
               ])
             }
           >

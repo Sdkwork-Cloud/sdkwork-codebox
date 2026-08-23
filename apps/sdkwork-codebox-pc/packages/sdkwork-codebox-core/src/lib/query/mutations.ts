@@ -7,7 +7,7 @@ import type { SwitchResult } from "@/lib/api/providers";
 import { openclawKeys } from "@/lib/query/openclawKeys";
 import type { Provider, SessionMeta, Settings } from "@/types";
 import { extractErrorMessage } from "@/utils/errorUtils";
-import { generateUUID } from "@/utils/uuid";
+import { uuid } from "@sdkwork/utils/id";
 
 export const useAddProviderMutation = (appId: AppId) => {
   const queryClient = useQueryClient();
@@ -25,7 +25,7 @@ export const useAddProviderMutation = (appId: AppId) => {
           providerInput.category === "omo-slim"
         ) {
           const prefix = providerInput.category === "omo" ? "omo" : "omo-slim";
-          id = `${prefix}-${generateUUID()}`;
+          id = `${prefix}-${uuid()}`;
         } else {
           if (!providerInput.providerKey) {
             throw new Error(`Provider key is required for ${appId}`);
@@ -33,7 +33,7 @@ export const useAddProviderMutation = (appId: AppId) => {
           id = providerInput.providerKey;
         }
       } else {
-        id = generateUUID();
+        id = uuid();
       }
 
       const { providerKey: _providerKey, ...rest } = providerInput;

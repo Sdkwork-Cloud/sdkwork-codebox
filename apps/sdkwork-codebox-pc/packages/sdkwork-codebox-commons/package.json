@@ -16,7 +16,8 @@
     }
   },
   "dependencies": {
-    "@sdkwork/codebox-types": "workspace:*"
+    "@sdkwork/codebox-types": "workspace:*",
+    "@sdkwork/utils": "workspace:*"
   },
   "scripts": {
     "dev": "vite build --watch",

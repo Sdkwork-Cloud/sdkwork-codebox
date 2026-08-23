@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useState, useRef, useCallback } from "react";
+import { uuid } from "@sdkwork/utils/id";
 import { FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -76,7 +77,7 @@ export function OpenClawFormFields({
   const getModelKeys = useCallback(() => {
     // Grow keys array if models were added externally
     while (modelKeysRef.current.length < models.length) {
-      modelKeysRef.current.push(crypto.randomUUID());
+      modelKeysRef.current.push(uuid());
     }
     // Shrink if models were removed externally
     if (modelKeysRef.current.length > models.length) {
@@ -93,7 +94,7 @@ export function OpenClawFormFields({
 
   // Add a new model entry
   const handleAddModel = () => {
-    modelKeysRef.current.push(crypto.randomUUID());
+    modelKeysRef.current.push(uuid());
     onModelsChange([
       ...models,
       {

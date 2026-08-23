@@ -18,7 +18,8 @@
   "dependencies": {
     "@sdkwork/codebox-commons": "workspace:*",
     "@sdkwork/codebox-core": "workspace:*",
-    "@sdkwork/codebox-types": "workspace:*"
+    "@sdkwork/codebox-types": "workspace:*",
+    "@sdkwork/utils": "workspace:*"
   },
   "scripts": {
     "dev": "vite build --watch",
