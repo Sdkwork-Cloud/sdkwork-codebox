@@ -217,7 +217,15 @@
             "codebox-dev.dtupay.com",
             "codebox-dev.sdkwork.cn",
             "codebox-dev.birdcoder.cn",
-            "codebox-dev.dtupay.cn"
+            "codebox-dev.dtupay.cn",
+            "codebox-dev.skubc.com",
+            "codebox-dev.skubc.cn",
+            "codebox-dev.zowalk.com",
+            "codebox-dev.zowalk.cn",
+            "codebox-dev.offer86.com",
+            "codebox-dev.offer86.cn",
+            "codebox-dev.86offer.com",
+            "codebox-dev.86offer.cn"
           ]
         },
         "test": {
@@ -227,7 +235,15 @@
             "codebox-test.dtupay.com",
             "codebox-test.sdkwork.cn",
             "codebox-test.birdcoder.cn",
-            "codebox-test.dtupay.cn"
+            "codebox-test.dtupay.cn",
+            "codebox-test.skubc.com",
+            "codebox-test.skubc.cn",
+            "codebox-test.zowalk.com",
+            "codebox-test.zowalk.cn",
+            "codebox-test.offer86.com",
+            "codebox-test.offer86.cn",
+            "codebox-test.86offer.com",
+            "codebox-test.86offer.cn"
           ]
         },
         "staging": {
@@ -237,7 +253,15 @@
             "codebox-staging.dtupay.com",
             "codebox-staging.sdkwork.cn",
             "codebox-staging.birdcoder.cn",
-            "codebox-staging.dtupay.cn"
+            "codebox-staging.dtupay.cn",
+            "codebox-staging.skubc.com",
+            "codebox-staging.skubc.cn",
+            "codebox-staging.zowalk.com",
+            "codebox-staging.zowalk.cn",
+            "codebox-staging.offer86.com",
+            "codebox-staging.offer86.cn",
+            "codebox-staging.86offer.com",
+            "codebox-staging.86offer.cn"
           ]
         }
       },
@@ -247,7 +271,15 @@
         "codebox.dtupay.com",
         "codebox.sdkwork.cn",
         "codebox.birdcoder.cn",
-        "codebox.dtupay.cn"
+        "codebox.dtupay.cn",
+        "codebox.skubc.com",
+        "codebox.skubc.cn",
+        "codebox.zowalk.com",
+        "codebox.zowalk.cn",
+        "codebox.offer86.com",
+        "codebox.offer86.cn",
+        "codebox.86offer.com",
+        "codebox.86offer.cn"
       ]
     }
   }
