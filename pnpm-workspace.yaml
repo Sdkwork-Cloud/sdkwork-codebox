@@ -3,6 +3,7 @@ packages:
   - "apps/sdkwork-codebox-pc/packages/*"
   - "../sdkwork-app-topology"
 
+  - "..\E;C:\Program Files\Git\sdkwork-space\sdkwork-utils\packages\sdkwork-utils-typescript\package.json"
 catalog:
   "@monaco-editor/react": ^4.7.0
   "@playwright/test": ^1.52.0
@@ -115,3 +116,4 @@ catalog:
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
+
