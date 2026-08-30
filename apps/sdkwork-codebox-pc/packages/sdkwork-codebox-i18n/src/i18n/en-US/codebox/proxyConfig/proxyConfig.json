@@ -1,0 +1,18 @@
+{
+  "proxyConfig": {
+    "proxyEnabled": "Proxy Enabled",
+    "appTakeover": "Proxy Enabled",
+    "perAppConfig": "Per-App Config",
+    "circuitBreaker": "Circuit Breaker",
+    "circuitBreakerSettings": "Circuit Breaker Settings",
+    "failureThreshold": "Failure Threshold",
+    "successThreshold": "Success Threshold",
+    "recoveryTimeout": "Recovery Timeout",
+    "errorRateThreshold": "Error Rate Threshold",
+    "minRequests": "Min Requests",
+    "timeoutConfig": "Timeout Config",
+    "streamingFirstByte": "Streaming First Byte Timeout",
+    "streamingIdle": "Streaming Idle Timeout",
+    "nonStreaming": "Non-Streaming Timeout"
+  }
+}

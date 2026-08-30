@@ -1,0 +1,17 @@
+{
+  "claudeConfig": {
+    "configLabel": "Claude Code settings.json (JSON) *",
+    "writeCommonConfig": "共通設定を書き込む",
+    "editCommonConfig": "共通設定を編集",
+    "editCommonConfigTitle": "共通設定スニペットを編集",
+    "commonConfigHint": "「共通設定を書き込む」がオンのとき settings.json にマージされます",
+    "fullSettingsHint": "Claude Code の settings.json 全文",
+    "extractFromCurrent": "編集内容から抽出",
+    "extractNoCommonConfig": "編集内容から抽出できる共通設定がありません",
+    "extractFailed": "抽出に失敗しました: {{error}}",
+    "saveFailed": "保存に失敗しました: {{error}}",
+    "hideAttribution": "AI署名を非表示",
+    "alwaysThinking": "拡張思考",
+    "enableTeammates": "Teammates モード"
+  }
+}

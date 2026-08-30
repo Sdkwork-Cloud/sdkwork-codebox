@@ -1,0 +1,9 @@
+{
+  "presetSelector": {
+    "title": "Select Configuration Type",
+    "custom": "Custom",
+    "customDescription": "Manually configure provider, requires complete configuration",
+    "officialDescription": "Official login, no API Key required",
+    "presetDescription": "Use preset configuration, only API Key required"
+  }
+}

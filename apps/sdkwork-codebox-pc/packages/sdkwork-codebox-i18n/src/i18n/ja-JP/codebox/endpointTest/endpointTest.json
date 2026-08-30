@@ -1,0 +1,28 @@
+{
+  "endpointTest": {
+    "title": "API エンドポイント管理",
+    "endpoints": "エンドポイント",
+    "autoSelect": "自動選択",
+    "testSpeed": "テスト",
+    "testing": "テスト中",
+    "addEndpointPlaceholder": "https://api.example.com",
+    "done": "完了",
+    "noEndpoints": "エンドポイントがありません",
+    "failed": "失敗",
+    "enterValidUrl": "有効な URL を入力してください",
+    "invalidUrlFormat": "URL 形式が正しくありません",
+    "onlyHttps": "HTTP/HTTPS のみサポートします",
+    "urlExists": "この URL はすでに存在します",
+    "saveFailed": "保存に失敗しました。もう一度お試しください",
+    "loadEndpointsFailed": "カスタムエンドポイントの読み込みに失敗:",
+    "addEndpointFailed": "カスタムエンドポイントの追加に失敗:",
+    "removeEndpointFailed": "カスタムエンドポイントの削除に失敗:",
+    "removeFailed": "削除に失敗しました: {{error}}",
+    "updateLastUsedFailed": "エンドポイントの最終使用時間の更新に失敗しました",
+    "pleaseAddEndpoint": "まずエンドポイントを追加してください",
+    "testUnavailable": "速度テストを実行できません",
+    "noResult": "結果がありません",
+    "testFailed": "速度テストに失敗しました: {{error}}",
+    "empty": "エンドポイントがありません"
+  }
+}

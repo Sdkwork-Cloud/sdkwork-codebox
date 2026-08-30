@@ -1,0 +1,16 @@
+{
+  "failover": {
+    "enabled": "{{app}} failover enabled",
+    "disabled": "{{app}} failover disabled",
+    "toggleFailed": "Operation failed: {{detail}}",
+    "inQueue": "In queue",
+    "addQueue": "Add",
+    "priority": {
+      "tooltip": "Failover priority {{priority}}"
+    },
+    "tooltip": {
+      "enabled": "{{app}} failover enabled\nRequests follow queue priority (P1→P2→...)",
+      "disabled": "Enable {{app}} failover\nSwitches to queue P1 immediately, then falls back on failures"
+    }
+  }
+}

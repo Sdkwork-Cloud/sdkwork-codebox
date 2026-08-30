@@ -1,0 +1,19 @@
+{
+  "streamCheck": {
+    "configSaved": "Health check config saved",
+    "configSaveFailed": "Save failed",
+    "testModels": "Test Models",
+    "claudeModel": "Claude Model",
+    "codexModel": "Codex Model",
+    "geminiModel": "Gemini Model",
+    "checkParams": "Check Parameters",
+    "timeout": "Timeout (seconds)",
+    "maxRetries": "Max Retries",
+    "degradedThreshold": "Degraded Threshold (ms)",
+    "testPrompt": "Test Prompt",
+    "operational": "{{providerName}} is operational ({{responseTimeMs}}ms)",
+    "degraded": "{{providerName}} is slow ({{responseTimeMs}}ms)",
+    "failed": "{{providerName}} check failed: {{message}}",
+    "error": "{{providerName}} check error: {{error}}"
+  }
+}

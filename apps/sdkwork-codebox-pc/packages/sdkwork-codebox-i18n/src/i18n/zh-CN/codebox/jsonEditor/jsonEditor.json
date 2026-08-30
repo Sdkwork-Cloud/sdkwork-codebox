@@ -1,0 +1,6 @@
+{
+  "jsonEditor": {
+    "mustBeObject": "配置必须是JSON对象，不能是数组或其他类型",
+    "invalidJson": "JSON格式错误"
+  }
+}

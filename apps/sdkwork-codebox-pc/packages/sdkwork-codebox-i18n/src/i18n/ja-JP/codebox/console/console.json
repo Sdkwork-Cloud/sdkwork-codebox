@@ -1,0 +1,21 @@
+{
+  "console": {
+    "providerSwitchReceived": "プロバイダー切り替えイベントを受信:",
+    "setupListenerFailed": "プロバイダー切り替えリスナーの設定に失敗:",
+    "updateProviderFailed": "プロバイダー更新に失敗:",
+    "autoImportFailed": "デフォルト設定の自動インポートに失敗:",
+    "openLinkFailed": "リンクを開けませんでした:",
+    "getVersionFailed": "バージョン情報の取得に失敗:",
+    "loadSettingsFailed": "設定の読み込みに失敗:",
+    "getConfigPathFailed": "設定パスの取得に失敗:",
+    "getConfigDirFailed": "設定ディレクトリの取得に失敗:",
+    "detectPortableFailed": "ポータブルモードの検出に失敗:",
+    "saveSettingsFailed": "設定の保存に失敗:",
+    "updateFailed": "更新に失敗:",
+    "checkUpdateFailed": "更新確認に失敗:",
+    "openConfigFolderFailed": "設定フォルダを開けませんでした:",
+    "selectConfigDirFailed": "設定ディレクトリの選択に失敗:",
+    "getDefaultConfigDirFailed": "デフォルト設定ディレクトリの取得に失敗:",
+    "openReleaseNotesFailed": "リリースノートを開けませんでした:"
+  }
+}

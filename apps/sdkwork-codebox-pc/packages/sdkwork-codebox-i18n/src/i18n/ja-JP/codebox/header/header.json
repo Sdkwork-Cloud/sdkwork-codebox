@@ -1,0 +1,12 @@
+{
+  "header": {
+    "viewOnGithub": "GitHub で見る",
+    "toggleDarkMode": "ダークモードに切り替え",
+    "toggleLightMode": "ライトモードに切り替え",
+    "addProvider": "プロバイダーを追加",
+    "switchToChinese": "中国語に切り替え",
+    "switchToEnglish": "英語に切り替え",
+    "enterEditMode": "編集モードに入る",
+    "exitEditMode": "編集モードを終了"
+  }
+}

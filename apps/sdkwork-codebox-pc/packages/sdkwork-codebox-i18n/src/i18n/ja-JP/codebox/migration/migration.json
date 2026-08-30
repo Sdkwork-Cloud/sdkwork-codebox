@@ -1,0 +1,8 @@
+{
+  "migration": {
+    "success": "設定の移行が完了しました",
+    "skillsSuccess": "スキルを {{count}} 件、自動的に統合管理へインポートしました",
+    "skillsFailed": "スキルの自動インポートに失敗しました",
+    "skillsFailedDescription": "Skills 画面で「既存をインポート」をクリックして手動でインポートしてください（または再起動して再試行）。"
+  }
+}

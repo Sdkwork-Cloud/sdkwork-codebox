@@ -1,0 +1,9 @@
+{
+  "health": {
+    "operational": "Operational",
+    "degraded": "Degraded",
+    "failed": "Failed",
+    "circuitOpen": "Circuit Open",
+    "consecutiveFailures": "{{count}} consecutive failures"
+  }
+}

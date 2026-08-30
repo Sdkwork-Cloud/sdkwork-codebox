@@ -1,0 +1,9 @@
+{
+  "presetSelector": {
+    "title": "設定タイプを選択",
+    "custom": "カスタム",
+    "customDescription": "手動で設定。完全な構成が必要",
+    "officialDescription": "公式ログイン。API Key 不要",
+    "presetDescription": "プリセットを使用。API Key だけ入力すれば OK"
+  }
+}

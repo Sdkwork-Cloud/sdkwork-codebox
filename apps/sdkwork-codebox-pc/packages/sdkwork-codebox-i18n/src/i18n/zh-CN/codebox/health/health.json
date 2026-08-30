@@ -1,0 +1,9 @@
+{
+  "health": {
+    "operational": "正常",
+    "degraded": "降级",
+    "failed": "失败",
+    "circuitOpen": "熔断",
+    "consecutiveFailures": "连续失败 {{count}} 次"
+  }
+}

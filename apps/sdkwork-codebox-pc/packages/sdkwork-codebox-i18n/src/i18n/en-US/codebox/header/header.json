@@ -1,0 +1,12 @@
+{
+  "header": {
+    "viewOnGithub": "View on GitHub",
+    "toggleDarkMode": "Switch to Dark Mode",
+    "toggleLightMode": "Switch to Light Mode",
+    "addProvider": "Add Provider",
+    "switchToChinese": "Switch to Chinese",
+    "switchToEnglish": "Switch to English",
+    "enterEditMode": "Enter Edit Mode",
+    "exitEditMode": "Exit Edit Mode"
+  }
+}

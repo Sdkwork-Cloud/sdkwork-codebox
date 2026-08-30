@@ -1,0 +1,11 @@
+{
+  "providerIcon": {
+    "label": "Icon",
+    "colorLabel": "Icon Color",
+    "selectIcon": "Select Icon",
+    "preview": "Preview",
+    "clickToChange": "Click to change icon",
+    "clickToSelect": "Click to select icon",
+    "color": "Icon Color"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "providerAdvanced": {
+    "testConfig": "モデルテスト設定",
+    "useCustomConfig": "個別設定を使用",
+    "testConfigDesc": "このプロバイダーに個別のモデルテストパラメータを設定します。無効の場合はグローバル設定を使用します。",
+    "testModel": "テストモデル",
+    "testModelPlaceholder": "空白の場合はグローバル設定を使用",
+    "timeoutSecs": "タイムアウト（秒）",
+    "testPrompt": "テストプロンプト",
+    "degradedThreshold": "低下閾値（ミリ秒）",
+    "maxRetries": "最大リトライ回数",
+    "proxyConfig": "プロキシ設定",
+    "useCustomProxy": "個別プロキシを使用",
+    "proxyConfigDesc": "このプロバイダーに個別のネットワークプロキシを設定します。無効の場合はシステムプロキシまたはグローバル設定を使用します。",
+    "proxyUsername": "ユーザー名（任意）",
+    "proxyPassword": "パスワード（任意）",
+    "pricingConfig": "課金設定",
+    "useCustomPricing": "個別設定を使用",
+    "pricingConfigDesc": "このプロバイダーに個別の課金パラメータを設定します。無効の場合はグローバル設定を使用します。",
+    "costMultiplier": "コスト倍率",
+    "costMultiplierPlaceholder": "空白の場合はグローバル設定を使用（1）",
+    "costMultiplierHint": "実際のコスト = 基本コスト × 倍率、1.5 などの小数をサポート",
+    "pricingModelSourceLabel": "課金モード",
+    "pricingModelSourceInherit": "グローバル設定を継承",
+    "pricingModelSourceRequest": "リクエストモデル",
+    "pricingModelSourceResponse": "レスポンスモデル",
+    "pricingModelSourceHint": "リクエストモデルまたはレスポンスモデルで価格を照合するかを選択"
+  }
+}

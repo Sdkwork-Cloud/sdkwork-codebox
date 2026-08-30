@@ -1,0 +1,19 @@
+{
+  "streamCheck": {
+    "configSaved": "健康检查配置已保存",
+    "configSaveFailed": "保存失败",
+    "testModels": "测试模型",
+    "claudeModel": "Claude 模型",
+    "codexModel": "Codex 模型",
+    "geminiModel": "Gemini 模型",
+    "checkParams": "检查参数",
+    "timeout": "超时时间（秒）",
+    "maxRetries": "最大重试次数",
+    "degradedThreshold": "降级阈值（毫秒）",
+    "testPrompt": "检查提示词",
+    "operational": "{{providerName}} 运行正常 ({{responseTimeMs}}ms)",
+    "degraded": "{{providerName}} 响应较慢 ({{responseTimeMs}}ms)",
+    "failed": "{{providerName}} 检查失败: {{message}}",
+    "error": "{{providerName}} 检查出错: {{error}}"
+  }
+}

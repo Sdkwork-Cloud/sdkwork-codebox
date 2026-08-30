@@ -1,0 +1,21 @@
+{
+  "console": {
+    "providerSwitchReceived": "Received provider switch event:",
+    "setupListenerFailed": "Failed to setup provider switch listener:",
+    "updateProviderFailed": "Update provider failed:",
+    "autoImportFailed": "Auto import default configuration failed:",
+    "openLinkFailed": "Failed to open link:",
+    "getVersionFailed": "Failed to get version info:",
+    "loadSettingsFailed": "Failed to load settings:",
+    "getConfigPathFailed": "Failed to get config path:",
+    "getConfigDirFailed": "Failed to get config directory:",
+    "detectPortableFailed": "Failed to detect portable mode:",
+    "saveSettingsFailed": "Failed to save settings:",
+    "updateFailed": "Update failed:",
+    "checkUpdateFailed": "Check for updates failed:",
+    "openConfigFolderFailed": "Failed to open config folder:",
+    "selectConfigDirFailed": "Failed to select config directory:",
+    "getDefaultConfigDirFailed": "Failed to get default config directory:",
+    "openReleaseNotesFailed": "Failed to open release notes:"
+  }
+}

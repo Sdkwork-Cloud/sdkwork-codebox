@@ -1,0 +1,103 @@
+{
+  "shell": {
+    "domain": {
+      "products": "产品",
+      "productsDescription": "管理供应商、会话与工作区上下文。",
+      "productsHint": "Providers / Sessions / Workspace",
+      "runtime": "Runtime",
+      "runtimeDescription": "控制代理入口、接管、故障转移、用量与诊断链路。",
+      "runtimeHint": "Proxy / Takeover / Failover / Usage / Diagnostics",
+      "extensions": "Extensions",
+      "extensionsDescription": "统一整理 Prompts、Skills 与 MCP 能力。",
+      "extensionsHint": "Prompts / Skills / MCP / Agents / Universal",
+      "controlCenter": "控制中心",
+      "controlCenterDescription": "维护外观、目录、同步与桌面级系统设置。",
+      "controlCenterHint": "Appearance / General / Data / Directories / About"
+    },
+    "runtime": {
+      "proxy": "Proxy",
+      "proxyDescription": "集中维护代理服务入口、监听地址与基础运行参数。",
+      "proxyHint": "代理入口与基础运行参数。",
+      "takeover": "Takeover",
+      "takeoverDescription": "逐个产品控制流量接管开关，让代理按你的运行策略接管请求。",
+      "takeoverHint": "逐产品控制代理接管。",
+      "failover": "Failover",
+      "failoverDescription": "按队列和优先级维护自动故障转移与熔断恢复策略。",
+      "failoverHint": "故障转移队列与自动切换策略。",
+      "usage": "Usage",
+      "usageDescription": "查看 Provider、模型和日志维度的运行用量。",
+      "usageHint": "运行用量与日志指标。",
+      "diagnostics": "诊断",
+      "diagnosticsDescription": "集中验证模型测试、日志级别和本地运行诊断。",
+      "diagnosticsHint": "模型检测与日志配置。",
+      "console": {
+        "overviewTitle": "代理、接管与故障转移",
+        "overviewDescription": "这里集中放置运行链路控制项。保留原有行为，只将入口迁移到 Runtime 域。",
+        "overviewHelper": "运行链路控制保持原有能力，只是重新编排到了更清晰的 Runtime 结构里。",
+        "takeoverTitle": "接管控制",
+        "takeoverDescription": "聚焦当前代理服务下的产品接管开关，确保不同产品按照你的运行策略接入代理。",
+        "takeoverHelper": "当前视图已聚焦接管区域。展开 Proxy 面板即可按产品启用或关闭接管。",
+        "failoverTitle": "故障转移",
+        "failoverDescription": "聚焦自动故障转移队列、优先级和熔断恢复策略，确保代理链路具备稳定的降级能力。",
+        "failoverHelper": "当前视图已聚焦故障转移区域。你可以直接检查队列、优先级和自动切换配置。",
+        "usageTitle": "运行用量",
+        "usageDescription": "从日志、Provider 和模型三个维度审视当前工作区的真实消耗。",
+        "diagnosticsModelTitle": "模型检测",
+        "diagnosticsModelDescription": "维护流式检查模型、超时策略和测试提示词。",
+        "diagnosticsLogTitle": "日志级别",
+        "diagnosticsLogDescription": "配置本地日志输出级别，便于排查连接和运行异常。",
+        "proxyCardTitle": "Proxy Runtime",
+        "proxyCardOnline": "服务已启动",
+        "proxyCardStandby": "当前处于待机状态",
+        "takeoverCardTitle": "Takeover",
+        "takeoverCardActive": "{{app}} 已接管当前产品流量",
+        "takeoverCardIdle": "{{app}} 当前未接管流量",
+        "activeTargetTitle": "Active Target",
+        "activeTargetEmpty": "尚未锁定活动目标"
+      }
+    },
+    "products": {
+      "providersHint": "切换、排序与维护当前产品的供应商。",
+      "sessionsHint": "查看会话历史与恢复上下文。",
+      "workspaceHint": "维护工作区文件与记忆资产。",
+      "openclawEnvHint": "环境变量与密钥。",
+      "openclawToolsHint": "工具权限与执行范围。",
+      "openclawAgentsHint": "默认模型与运行参数。"
+    },
+    "extensions": {
+      "promptsHint": "高频提示词与模板。",
+      "skillsHint": "安装、导入与发现技能。",
+      "mcpHint": "MCP 服务与连接配置。",
+      "agentsHint": "代理式工作流与自动化入口。",
+      "universalHint": "跨产品共享的统一供应商中心。"
+    },
+    "controlCenter": {
+      "appearanceDescription": "调整主题模式、色板、密度与动效偏好。",
+      "generalDescription": "管理语言、窗口行为、产品可见性与桌面集成。",
+      "dataSyncDescription": "管理导入导出、备份策略与 WebDAV 同步。",
+      "directoriesDescription": "维护应用配置目录和产品配置目录覆盖。",
+      "advancedDescription": "管理终端、技能同步等高级桌面偏好。",
+      "aboutDescription": "查看版本、环境与桌面运行信息。"
+    },
+    "sidebar": {
+      "brandEyebrow": "Desktop Console",
+      "runtimeTakeover": "代理运行中，当前产品已接管",
+      "runtimeOnline": "代理运行中，等待产品接管",
+      "runtimeStandby": "代理待机，当前工作区可直接编辑",
+      "statusOnline": "Online",
+      "statusStandby": "Standby",
+      "currentProduct": "当前产品",
+      "products": "Products",
+      "domainNav": "工作域",
+      "controlCenter": "控制中心",
+      "controlCenterHint": "主题、目录、同步与应用级设置",
+      "aboutHint": "版本、环境信息与更新状态"
+    },
+    "header": {
+      "activeProvider": "当前目标",
+      "takeoverActive": "Takeover active",
+      "proxyOnline": "Proxy online",
+      "proxyStandby": "Proxy standby"
+    }
+  }
+}

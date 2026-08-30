@@ -1,0 +1,43 @@
+{
+  "workspace": {
+    "title": "ワークスペースファイル",
+    "manage": "ワークスペース",
+    "files": {
+      "agents": "エージェントの操作指示とルール",
+      "soul": "エージェントの人格とコミュニケーションスタイル",
+      "user": "ユーザープロファイルと設定",
+      "identity": "エージェントの名前とアバター",
+      "tools": "ローカルツールドキュメント",
+      "memory": "長期記憶と意思決定記録",
+      "heartbeat": "ハートビート実行チェックリスト",
+      "bootstrap": "初回実行ブートストラップ",
+      "boot": "ゲートウェイ再起動チェックリスト"
+    },
+    "editing": "{{filename}} を編集",
+    "saveSuccess": "保存しました",
+    "saveFailed": "保存に失敗しました",
+    "loadFailed": "読み込みに失敗しました",
+    "openDirectory": "ファイルマネージャーで開く",
+    "dailyMemory": {
+      "title": "デイリーメモリー",
+      "sectionTitle": "デイリーメモリー",
+      "cardTitle": "デイリーメモリーファイル",
+      "cardDescription": "デイリーメモリーの閲覧・管理",
+      "createToday": "メモリーを追加",
+      "empty": "デイリーメモリーファイルはまだありません",
+      "loadFailed": "デイリーメモリーファイルの読み込みに失敗しました",
+      "createFailed": "デイリーメモリーファイルの作成に失敗しました",
+      "deleteSuccess": "デイリーメモリーファイルを削除しました",
+      "deleteFailed": "デイリーメモリーファイルの削除に失敗しました",
+      "confirmDeleteTitle": "デイリーメモリーを削除",
+      "confirmDeleteMessage": "{{date}} のデイリーメモリーを削除しますか？この操作は取り消せません。",
+      "searchPlaceholder": "全文検索...",
+      "searchScopeHint": "すべてのデイリーメモリーを全文検索 ⌘F",
+      "searchCloseHint": "Escで閉じる",
+      "noSearchResults": "検索に一致するデイリーメモリーはありません。",
+      "searching": "検索中...",
+      "searchFailed": "検索に失敗しました",
+      "matchCount": "{{count}}件一致"
+    }
+  }
+}

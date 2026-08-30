@@ -1,0 +1,9 @@
+{
+  "health": {
+    "operational": "正常",
+    "degraded": "低下",
+    "failed": "失敗",
+    "circuitOpen": "サーキットオープン",
+    "consecutiveFailures": "{{count}} 回連続失敗"
+  }
+}

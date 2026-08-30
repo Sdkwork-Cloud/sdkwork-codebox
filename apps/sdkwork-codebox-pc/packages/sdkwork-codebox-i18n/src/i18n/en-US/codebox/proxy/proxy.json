@@ -1,0 +1,182 @@
+{
+  "proxy": {
+    "panel": {
+      "serviceAddress": "Service Address",
+      "addressCopied": "Address copied",
+      "currentProvider": "Current Provider:",
+      "waitingFirstRequest": "Current Provider: Waiting for first request...",
+      "stoppedTitle": "Proxy Service Stopped",
+      "stoppedDescription": "Use the toggle above to start the service",
+      "openSettings": "Configure Proxy Service",
+      "stats": {
+        "activeConnections": "Active Connections",
+        "totalRequests": "Total Requests",
+        "successRate": "Success Rate",
+        "uptime": "Uptime"
+      }
+    },
+    "settings": {
+      "title": "Proxy Service Settings",
+      "description": "Configure local proxy server listening address, port and runtime parameters. Changes take effect immediately after saving.",
+      "alert": {
+        "autoApply": "Changes will be automatically synced to the running proxy service without manual restart."
+      },
+      "basic": {
+        "title": "Basic Settings",
+        "description": "Configure proxy service listening address and port."
+      },
+      "advanced": {
+        "title": "Advanced Parameters",
+        "description": "Control request stability and logging."
+      },
+      "timeout": {
+        "title": "Timeout Settings",
+        "description": "Configure timeout for streaming and non-streaming requests."
+      },
+      "fields": {
+        "listenAddress": {
+          "label": "Listen Address",
+          "placeholder": "127.0.0.1",
+          "description": "IP address the proxy server listens on (recommended: 127.0.0.1)"
+        },
+        "listenPort": {
+          "label": "Listen Port",
+          "placeholder": "15721",
+          "description": "Port number the proxy server listens on (1024 ~ 65535)"
+        },
+        "maxRetries": {
+          "label": "Max Retries",
+          "placeholder": "3",
+          "description": "Number of retries on request failure (0 ~ 10)"
+        },
+        "requestTimeout": {
+          "label": "Request Timeout (sec)",
+          "placeholder": "0 (unlimited) or 300",
+          "description": "Maximum wait time for a single request (0 = unlimited, or 10 ~ 600 seconds)"
+        },
+        "enableLogging": {
+          "label": "Enable Logging",
+          "description": "Log all proxy requests for troubleshooting"
+        },
+        "streamingFirstByteTimeout": {
+          "label": "Streaming First Byte Timeout (sec)",
+          "description": "Maximum time to wait for the first data chunk"
+        },
+        "streamingIdleTimeout": {
+          "label": "Streaming Idle Timeout (sec)",
+          "description": "Maximum interval between data chunks"
+        },
+        "nonStreamingTimeout": {
+          "label": "Non-Streaming Timeout (sec)",
+          "description": "Total timeout for non-streaming requests"
+        }
+      },
+      "validation": {
+        "addressInvalid": "Please enter a valid IP address",
+        "portMin": "Port must be greater than 1024",
+        "portMax": "Port must be less than 65535",
+        "retryMin": "Retry count cannot be negative",
+        "retryMax": "Retry count cannot exceed 10",
+        "timeoutNonNegative": "Timeout cannot be negative",
+        "timeoutMax": "Timeout cannot exceed 600 seconds",
+        "timeoutRange": "Please enter 0 or a value between 10-600",
+        "streamingTimeoutMin": "Timeout must be at least 5 seconds",
+        "streamingTimeoutMax": "Timeout cannot exceed 300 seconds"
+      },
+      "actions": {
+        "save": "Save Configuration"
+      },
+      "toast": {
+        "saved": "Proxy configuration saved",
+        "saveFailed": "Save failed: {{error}}"
+      },
+      "invalidPort": "Invalid port, please enter a number between 1024-65535",
+      "invalidAddress": "Invalid address, please enter a valid IP address (e.g. 127.0.0.1) or localhost",
+      "configSaved": "Proxy configuration saved",
+      "configSaveFailed": "Failed to save configuration",
+      "restartRequired": "Restart proxy service for address or port changes to take effect"
+    },
+    "switchFailed": "Switch failed: {{error}}",
+    "takeover": {
+      "hint": "Select apps to take over — once enabled, requests from that app will be routed through the local proxy",
+      "enabled": "{{app}} takeover enabled",
+      "disabled": "{{app}} takeover disabled",
+      "failed": "Failed to toggle takeover",
+      "tooltip": {
+        "active": "{{appLabel}} is intercepting - {{address}}:{{port}}\nSwitch provider for hot switching",
+        "broken": "{{appLabel}} is intercepting, but proxy service is not running",
+        "inactive": "Intercept {{appLabel}}'s live config to route requests through local proxy"
+      }
+    },
+    "failover": {
+      "proxyRequired": "Proxy service must be started to configure failover",
+      "autoSwitch": "Auto Failover",
+      "autoSwitchDescription": "When enabled, switches to queue P1 immediately and automatically tries the next provider in the queue on failures"
+    },
+    "failoverQueue": {
+      "title": "Failover Queue",
+      "description": "Manage failover order for each app's providers",
+      "info": "When auto failover is enabled, requests follow the queue priority order (P1 first). On failures, the system will try the next provider in the queue.",
+      "selectProvider": "Select a provider to add to queue",
+      "noAvailableProviders": "No providers available to add",
+      "empty": "Failover queue is empty. Add providers to enable automatic failover.",
+      "orderHint": "Queue order matches the provider list order on the Home page. Reorder providers on the Home page to change priority.",
+      "dragHint": "Drag providers to adjust failover order. Lower numbers have higher priority.",
+      "toggleEnabled": "Enable/Disable",
+      "addSuccess": "Added to failover queue",
+      "addFailed": "Failed to add",
+      "removeSuccess": "Removed from failover queue",
+      "removeFailed": "Failed to remove",
+      "reorderSuccess": "Queue order updated",
+      "reorderFailed": "Failed to update order",
+      "toggleFailed": "Failed to update status"
+    },
+    "autoFailover": {
+      "info": "When the failover queue has multiple providers, the system will try them in priority order when requests fail. When a provider reaches the consecutive failure threshold, the circuit breaker will open and skip it temporarily.",
+      "configSaved": "Auto failover config saved",
+      "configSaveFailed": "Failed to save",
+      "validationFailed": "The following fields are out of valid range: {{fields}}",
+      "retrySettings": "Retry & Timeout Settings",
+      "failureThreshold": "Failure Threshold",
+      "failureThresholdHint": "Open circuit breaker after this many consecutive failures (recommended: 3-10)",
+      "timeout": "Recovery Wait Time (seconds)",
+      "timeoutHint": "Wait this long before trying to recover after circuit opens (recommended: 30-120)",
+      "circuitBreakerSettings": "Circuit Breaker Settings",
+      "successThreshold": "Recovery Success Threshold",
+      "successThresholdHint": "Close circuit breaker after this many successes in half-open state",
+      "errorRate": "Error Rate Threshold (%)",
+      "errorRateHint": "Open circuit breaker when error rate exceeds this value",
+      "minRequests": "Minimum Requests",
+      "minRequestsHint": "Minimum requests before calculating error rate",
+      "explanationTitle": "How It Works",
+      "failureThresholdLabel": "Failure Threshold",
+      "failureThresholdExplain": "Circuit breaker opens after this many consecutive failures, making the provider temporarily unavailable",
+      "timeoutLabel": "Recovery Wait Time",
+      "timeoutExplain": "After circuit opens, wait this long before trying half-open state",
+      "successThresholdLabel": "Recovery Success Threshold",
+      "successThresholdExplain": "In half-open state, close circuit breaker after this many successes, making provider available again",
+      "errorRateLabel": "Error Rate Threshold",
+      "errorRateExplain": "Open circuit breaker when error rate exceeds this value, even if failure threshold not reached",
+      "maxRetries": "Max Retries",
+      "timeoutSettings": "Timeout Settings",
+      "streamingFirstByte": "Streaming First Byte Timeout",
+      "streamingIdle": "Streaming Idle Timeout",
+      "nonStreaming": "Non-Streaming Timeout",
+      "maxRetriesHint": "Number of retries on request failure (0-10)",
+      "streamingFirstByteHint": "Max time to wait for first data chunk, range 1-120s, default 60s",
+      "streamingIdleHint": "Max interval between data chunks, range 60-600s, 0 to disable (prevents mid-stream stalls)",
+      "nonStreamingHint": "Total timeout for non-streaming requests, range 60-1200s, default 600s (10 min)"
+    },
+    "logging": {
+      "enabled": "Logging enabled",
+      "disabled": "Logging disabled",
+      "failed": "Failed to toggle logging"
+    },
+    "server": {
+      "started": "Proxy service started - {{address}}:{{port}}",
+      "startFailed": "Failed to start proxy service: {{detail}}"
+    },
+    "stoppedWithRestore": "Proxy service stopped, all takeover configs restored",
+    "stopWithRestoreFailed": "Stop failed: {{detail}}"
+  }
+}

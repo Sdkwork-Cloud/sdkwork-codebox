@@ -1,0 +1,6 @@
+{
+  "jsonEditor": {
+    "mustBeObject": "設定はオブジェクト形式の JSON で入力してください（配列や他の型は不可）",
+    "invalidJson": "JSON 形式が正しくありません"
+  }
+}

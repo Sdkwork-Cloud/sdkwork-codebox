@@ -1,0 +1,17 @@
+{
+  "claudeConfig": {
+    "configLabel": "Claude Code settings.json (JSON) *",
+    "writeCommonConfig": "Write Common Config",
+    "editCommonConfig": "Edit Common Config",
+    "editCommonConfigTitle": "Edit Common Config Snippet",
+    "commonConfigHint": "This snippet will be merged into settings.json when 'Write Common Config' is checked",
+    "fullSettingsHint": "Full Claude Code settings.json content",
+    "extractFromCurrent": "Extract from Editor",
+    "extractNoCommonConfig": "No common config available to extract from editor",
+    "extractFailed": "Extract failed: {{error}}",
+    "saveFailed": "Save failed: {{error}}",
+    "hideAttribution": "Hide AI Attribution",
+    "alwaysThinking": "Extended Thinking",
+    "enableTeammates": "Teammates Mode"
+  }
+}

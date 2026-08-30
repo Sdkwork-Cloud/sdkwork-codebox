@@ -1,0 +1,19 @@
+{
+  "streamCheck": {
+    "configSaved": "ヘルスチェック設定を保存しました",
+    "configSaveFailed": "保存に失敗しました",
+    "testModels": "テストモデル",
+    "claudeModel": "Claude モデル",
+    "codexModel": "Codex モデル",
+    "geminiModel": "Gemini モデル",
+    "checkParams": "チェックパラメーター",
+    "timeout": "タイムアウト（秒）",
+    "maxRetries": "最大リトライ回数",
+    "degradedThreshold": "劣化しきい値（ミリ秒）",
+    "testPrompt": "テストプロンプト",
+    "operational": "{{providerName}} は正常に動作しています ({{responseTimeMs}}ms)",
+    "degraded": "{{providerName}} の応答が遅いです ({{responseTimeMs}}ms)",
+    "failed": "{{providerName}} のチェックに失敗しました: {{message}}",
+    "error": "{{providerName}} のチェックでエラーが発生しました: {{error}}"
+  }
+}

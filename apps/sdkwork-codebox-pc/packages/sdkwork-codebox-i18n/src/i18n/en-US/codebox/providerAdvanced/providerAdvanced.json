@@ -1,0 +1,29 @@
+{
+  "providerAdvanced": {
+    "testConfig": "Model Test Config",
+    "useCustomConfig": "Use separate config",
+    "testConfigDesc": "Configure separate model testing parameters for this provider. Uses global settings when disabled.",
+    "testModel": "Test Model",
+    "testModelPlaceholder": "Leave empty to use global config",
+    "timeoutSecs": "Timeout (seconds)",
+    "testPrompt": "Test Prompt",
+    "degradedThreshold": "Degraded Threshold (ms)",
+    "maxRetries": "Max Retries",
+    "proxyConfig": "Proxy Config",
+    "useCustomProxy": "Use separate proxy",
+    "proxyConfigDesc": "Configure separate network proxy for this provider. Uses system proxy or global settings when disabled.",
+    "proxyUsername": "Username (optional)",
+    "proxyPassword": "Password (optional)",
+    "pricingConfig": "Pricing Config",
+    "useCustomPricing": "Use separate config",
+    "pricingConfigDesc": "Configure separate pricing parameters for this provider. Uses global defaults when disabled.",
+    "costMultiplier": "Cost Multiplier",
+    "costMultiplierPlaceholder": "Leave empty to use global default (1)",
+    "costMultiplierHint": "Actual cost = Base cost × Multiplier, supports decimals like 1.5",
+    "pricingModelSourceLabel": "Pricing Mode",
+    "pricingModelSourceInherit": "Inherit global default",
+    "pricingModelSourceRequest": "Request model",
+    "pricingModelSourceResponse": "Response model",
+    "pricingModelSourceHint": "Choose whether to match pricing by request model or response model"
+  }
+}

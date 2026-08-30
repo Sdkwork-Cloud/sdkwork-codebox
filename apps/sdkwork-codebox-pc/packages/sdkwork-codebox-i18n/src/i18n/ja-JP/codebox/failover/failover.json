@@ -1,0 +1,16 @@
+{
+  "failover": {
+    "enabled": "{{app}} フェイルオーバーが有効になりました",
+    "disabled": "{{app}} フェイルオーバーが無効になりました",
+    "toggleFailed": "操作に失敗しました: {{detail}}",
+    "inQueue": "キュー内",
+    "addQueue": "追加",
+    "priority": {
+      "tooltip": "フェイルオーバー優先度 {{priority}}"
+    },
+    "tooltip": {
+      "enabled": "{{app}} フェイルオーバーが有効\nキューの優先度（P1→P2→...）で使用します",
+      "disabled": "{{app}} フェイルオーバーを有効にする\nキューの P1 に即時切替し、失敗時は次を順に試行します"
+    }
+  }
+}

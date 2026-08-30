@@ -1,9 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import en from "./locales/en.json";
-import ja from "./locales/ja.json";
-import zh from "./locales/zh.json";
+import en from "./generated/en-US";
+import ja from "./generated/ja-JP";
+import zh from "./generated/zh-CN";
 
 type Language = "zh" | "en" | "ja";
 
@@ -56,14 +56,14 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: getInitialLanguage(), // 根据本地存储或系统语言选择默认语言
-  fallbackLng: "en", // 如果缺少中文翻译则退回英文
+  lng: getInitialLanguage(), // choose default language from stored preference or system language
+  fallbackLng: "en", // fall back to English when a translation is missing
 
   interpolation: {
-    escapeValue: false, // React 已经默认转义
+    escapeValue: false, // React already escapes by default
   },
 
-  // 开发模式下显示调试信息
+  // show debug info during development
   debug: false,
 });
 

@@ -1,0 +1,13 @@
+{
+  "iconPicker": {
+    "search": "アイコンを検索",
+    "searchPlaceholder": "アイコン名を入力...",
+    "noResults": "一致するアイコンが見つかりません",
+    "category": {
+      "aiProvider": "AI プロバイダー",
+      "cloud": "クラウドプラットフォーム",
+      "tool": "開発ツール",
+      "other": "その他"
+    }
+  }
+}

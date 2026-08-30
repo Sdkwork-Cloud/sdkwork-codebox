@@ -1,0 +1,17 @@
+{
+  "claudeConfig": {
+    "configLabel": "Claude Code 配置 (JSON) *",
+    "writeCommonConfig": "写入通用配置",
+    "editCommonConfig": "编辑通用配置",
+    "editCommonConfigTitle": "编辑通用配置片段",
+    "commonConfigHint": "该片段会在勾选\"写入通用配置\"时合并到 settings.json 中",
+    "fullSettingsHint": "完整的 Claude Code settings.json 配置内容",
+    "extractFromCurrent": "从编辑内容提取",
+    "extractNoCommonConfig": "当前编辑内容没有可提取的通用配置",
+    "extractFailed": "提取失败: {{error}}",
+    "saveFailed": "保存失败: {{error}}",
+    "hideAttribution": "隐藏 AI 署名",
+    "alwaysThinking": "扩展思考",
+    "enableTeammates": "Teammates 模式"
+  }
+}

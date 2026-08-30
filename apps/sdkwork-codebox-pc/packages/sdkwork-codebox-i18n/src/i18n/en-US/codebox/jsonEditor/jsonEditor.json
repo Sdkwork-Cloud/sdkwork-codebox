@@ -1,0 +1,6 @@
+{
+  "jsonEditor": {
+    "mustBeObject": "Configuration must be a JSON object, not an array or other type",
+    "invalidJson": "Invalid JSON format"
+  }
+}

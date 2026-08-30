@@ -1,0 +1,7 @@
+{
+  "apiKeyInput": {
+    "placeholder": "请输入API Key",
+    "show": "显示API Key",
+    "hide": "隐藏API Key"
+  }
+}

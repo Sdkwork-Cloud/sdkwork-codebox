@@ -1,0 +1,8 @@
+{
+  "migration": {
+    "success": "配置迁移成功",
+    "skillsSuccess": "已自动导入 {{count}} 个技能到统一管理",
+    "skillsFailed": "自动导入技能失败",
+    "skillsFailedDescription": "请打开 Skills 页面点击“导入已有”手动导入（或重启后再试）。"
+  }
+}

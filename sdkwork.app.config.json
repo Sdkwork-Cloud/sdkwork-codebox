@@ -77,19 +77,19 @@
       },
       "platform": [],
       "metadata": {
-        "generatedBy": "apps/scripts/initialize-sdkwork-app-standard-v3.mjs"
+        "generatedPlaceholder": true
       }
     },
     "screenshots": [
       {
-        "id": "sdkwork-codebox-desktop_windows-screenshot",
+        "id": "sdkwork-codebox-web-screenshot",
         "type": "SCREENSHOT",
         "purpose": "CATALOG_SCREENSHOT",
-        "url": "https://cdn.sdkwork.com/apps/sdkwork-codebox/media/desktop_windows-screenshot.png",
-        "platform": "DESKTOP_WINDOWS",
+        "url": "https://cdn.sdkwork.com/apps/sdkwork-codebox/media/web-screenshot.png",
+        "platform": "WEB",
         "locale": "en-US",
-        "deviceClass": "DESKTOP",
-        "displayType": "DESKTOP_16_10",
+        "deviceClass": "BROWSER",
+        "displayType": "WEB_DESKTOP",
         "width": 1920,
         "height": 1080,
         "format": "PNG",
@@ -110,7 +110,7 @@
         "type": "PREVIEW_IMAGE",
         "purpose": "CATALOG_PREVIEW",
         "url": "https://cdn.sdkwork.com/apps/sdkwork-codebox/media/preview-cover.png",
-        "platform": "DESKTOP_WINDOWS",
+        "platform": "WEB",
         "locale": "en-US",
         "width": 1600,
         "height": 900,
@@ -127,7 +127,7 @@
       }
     ],
     "metadata": {
-      "assetVersion": "3.12.1",
+      "assetVersion": "0.1.0",
       "defaultLocale": "en-US"
     }
   },
@@ -178,7 +178,10 @@
           "checksum": "d27afcd0d27afcd0d27afcd0d27afcd0d27afcd0d27afcd0d27afcd0d27afcd0",
           "architecture": "universal",
           "deploymentProfile": "cloud",
-          "runtimeTarget": "browser"
+          "runtimeTarget": "browser",
+          "profileBinding": "fixed",
+          "targetPlatform": "web",
+          "clientArchitecture": "pc-web"
         },
         {
           "id": "windows-x64-standalone-desktop-zip",
@@ -193,7 +196,10 @@
           "checksumAlgorithm": "SHA-256",
           "checksum": "b2a23194b2a23194b2a23194b2a23194b2a23194b2a23194b2a23194b2a23194",
           "deploymentProfile": "standalone",
-          "runtimeTarget": "desktop"
+          "runtimeTarget": "desktop",
+          "profileBinding": "fixed",
+          "targetPlatform": "windows",
+          "clientArchitecture": "tauri"
         },
         {
           "id": "macos-universal-standalone-desktop-dmg",
@@ -208,7 +214,10 @@
           "checksumAlgorithm": "SHA-256",
           "checksum": "b32abac4b32abac4b32abac4b32abac4b32abac4b32abac4b32abac4b32abac4",
           "deploymentProfile": "standalone",
-          "runtimeTarget": "desktop"
+          "runtimeTarget": "desktop",
+          "profileBinding": "fixed",
+          "targetPlatform": "macos",
+          "clientArchitecture": "tauri"
         },
         {
           "id": "linux-x64-standalone-desktop-appimage",
@@ -227,7 +236,10 @@
           "checksumAlgorithm": "SHA-256",
           "checksum": "b3207045b3207045b3207045b3207045b3207045b3207045b3207045b3207045",
           "deploymentProfile": "standalone",
-          "runtimeTarget": "desktop"
+          "runtimeTarget": "desktop",
+          "profileBinding": "fixed",
+          "targetPlatform": "linux",
+          "clientArchitecture": "tauri"
         }
       ],
       "metadata": {
@@ -283,7 +295,7 @@
   },
   "metadata": {
     "standardOwner": "sdkwork-platform",
-    "initializedAt": "2026-05-07T00:00:00Z"
-  },
-  "sdkDependencies": []
+    "initializedAt": "2026-05-07T00:00:00Z",
+    "deploymentConfig": "etc/sdkwork.deployment.config.json"
+  }
 }

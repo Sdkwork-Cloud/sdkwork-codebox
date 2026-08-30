@@ -1,0 +1,11 @@
+{
+  "providerIcon": {
+    "label": "图标",
+    "colorLabel": "图标颜色",
+    "selectIcon": "选择图标",
+    "preview": "预览",
+    "clickToChange": "点击更换图标",
+    "clickToSelect": "点击选择图标",
+    "color": "图标颜色"
+  }
+}

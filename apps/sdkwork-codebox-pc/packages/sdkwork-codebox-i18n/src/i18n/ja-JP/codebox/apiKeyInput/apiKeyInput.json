@@ -1,0 +1,7 @@
+{
+  "apiKeyInput": {
+    "placeholder": "API Key を入力",
+    "show": "API Key を表示",
+    "hide": "API Key を隠す"
+  }
+}

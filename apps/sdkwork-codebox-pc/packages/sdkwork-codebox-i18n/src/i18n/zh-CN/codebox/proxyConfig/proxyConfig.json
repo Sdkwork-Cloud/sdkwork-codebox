@@ -1,0 +1,18 @@
+{
+  "proxyConfig": {
+    "proxyEnabled": "代理总开关",
+    "appTakeover": "代理启用",
+    "perAppConfig": "应用配置",
+    "circuitBreaker": "熔断器配置",
+    "circuitBreakerSettings": "熔断器设置",
+    "failureThreshold": "失败阈值",
+    "successThreshold": "恢复阈值",
+    "recoveryTimeout": "恢复等待时间",
+    "errorRateThreshold": "错误率阈值",
+    "minRequests": "最小请求数",
+    "timeoutConfig": "超时配置",
+    "streamingFirstByte": "流式首字节超时",
+    "streamingIdle": "流式静默超时",
+    "nonStreaming": "非流式超时"
+  }
+}

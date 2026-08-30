@@ -1,0 +1,9 @@
+{
+  "presetSelector": {
+    "title": "选择配置类型",
+    "custom": "自定义",
+    "customDescription": "手动配置供应商，需要填写完整的配置信息",
+    "officialDescription": "官方登录，不需要填写 API Key",
+    "presetDescription": "使用预设配置，只需填写 API Key"
+  }
+}

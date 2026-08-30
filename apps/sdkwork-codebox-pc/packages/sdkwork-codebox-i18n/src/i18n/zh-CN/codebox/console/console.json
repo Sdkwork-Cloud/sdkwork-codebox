@@ -1,0 +1,21 @@
+{
+  "console": {
+    "providerSwitchReceived": "收到供应商切换事件:",
+    "setupListenerFailed": "设置供应商切换监听器失败:",
+    "updateProviderFailed": "更新供应商失败:",
+    "autoImportFailed": "自动导入默认配置失败:",
+    "openLinkFailed": "打开链接失败:",
+    "getVersionFailed": "获取版本信息失败:",
+    "loadSettingsFailed": "加载设置失败:",
+    "getConfigPathFailed": "获取配置路径失败:",
+    "getConfigDirFailed": "获取配置目录失败:",
+    "detectPortableFailed": "检测便携模式失败:",
+    "saveSettingsFailed": "保存设置失败:",
+    "updateFailed": "更新失败:",
+    "checkUpdateFailed": "检查更新失败:",
+    "openConfigFolderFailed": "打开配置文件夹失败:",
+    "selectConfigDirFailed": "选择配置目录失败:",
+    "getDefaultConfigDirFailed": "获取默认配置目录失败:",
+    "openReleaseNotesFailed": "打开更新日志失败:"
+  }
+}

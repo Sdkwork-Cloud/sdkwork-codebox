@@ -1,0 +1,182 @@
+{
+  "proxy": {
+    "panel": {
+      "serviceAddress": "サービスアドレス",
+      "addressCopied": "アドレスをコピーしました",
+      "currentProvider": "現在のプロバイダー:",
+      "waitingFirstRequest": "現在のプロバイダー: 最初のリクエスト待ち...",
+      "stoppedTitle": "プロキシサービス停止中",
+      "stoppedDescription": "上のトグルでサービスを開始できます",
+      "openSettings": "プロキシサービスを設定",
+      "stats": {
+        "activeConnections": "アクティブ接続",
+        "totalRequests": "総リクエスト数",
+        "successRate": "成功率",
+        "uptime": "稼働時間"
+      }
+    },
+    "settings": {
+      "title": "プロキシサービス設定",
+      "description": "ローカルプロキシサーバーのリッスンアドレス、ポート、実行パラメータを設定します。保存後すぐに反映されます。",
+      "alert": {
+        "autoApply": "変更は実行中のプロキシサービスに自動的に同期され、手動での再起動は不要です。"
+      },
+      "basic": {
+        "title": "基本設定",
+        "description": "プロキシサービスのリッスンアドレスとポートを設定します。"
+      },
+      "advanced": {
+        "title": "詳細パラメータ",
+        "description": "リクエストの安定性とログ記録を制御します。"
+      },
+      "timeout": {
+        "title": "タイムアウト設定",
+        "description": "ストリーミングと非ストリーミングリクエストのタイムアウトを設定します。"
+      },
+      "fields": {
+        "listenAddress": {
+          "label": "リッスンアドレス",
+          "placeholder": "127.0.0.1",
+          "description": "プロキシサーバーがリッスンするIPアドレス（推奨: 127.0.0.1）"
+        },
+        "listenPort": {
+          "label": "リッスンポート",
+          "placeholder": "15721",
+          "description": "プロキシサーバーがリッスンするポート番号（1024 ~ 65535）"
+        },
+        "maxRetries": {
+          "label": "最大リトライ回数",
+          "placeholder": "3",
+          "description": "リクエスト失敗時のリトライ回数（0 ~ 10）"
+        },
+        "requestTimeout": {
+          "label": "リクエストタイムアウト（秒）",
+          "placeholder": "0（無制限）または 300",
+          "description": "単一リクエストの最大待機時間（0 = 無制限、または 10 ~ 600 秒）"
+        },
+        "enableLogging": {
+          "label": "ログ記録を有効化",
+          "description": "トラブルシューティングのためにすべてのプロキシリクエストを記録"
+        },
+        "streamingFirstByteTimeout": {
+          "label": "ストリーミング初回バイトタイムアウト（秒）",
+          "description": "最初のデータチャンクを待つ最大時間"
+        },
+        "streamingIdleTimeout": {
+          "label": "ストリーミングアイドルタイムアウト（秒）",
+          "description": "データチャンク間の最大間隔"
+        },
+        "nonStreamingTimeout": {
+          "label": "非ストリーミングタイムアウト（秒）",
+          "description": "非ストリーミングリクエストの総タイムアウト"
+        }
+      },
+      "validation": {
+        "addressInvalid": "有効なIPアドレスを入力してください",
+        "portMin": "ポートは1024より大きい必要があります",
+        "portMax": "ポートは65535より小さい必要があります",
+        "retryMin": "リトライ回数は負の値にできません",
+        "retryMax": "リトライ回数は10を超えることはできません",
+        "timeoutNonNegative": "タイムアウトは負の値にできません",
+        "timeoutMax": "タイムアウトは600秒を超えることはできません",
+        "timeoutRange": "0または10-600の間の値を入力してください",
+        "streamingTimeoutMin": "タイムアウトは少なくとも5秒必要です",
+        "streamingTimeoutMax": "タイムアウトは300秒を超えることはできません"
+      },
+      "actions": {
+        "save": "設定を保存"
+      },
+      "toast": {
+        "saved": "プロキシ設定を保存しました",
+        "saveFailed": "保存に失敗しました: {{error}}"
+      },
+      "invalidPort": "無効なポートです。1024〜65535 の数値を入力してください",
+      "invalidAddress": "無効なアドレスです。有効な IP アドレス（例: 127.0.0.1）または localhost を入力してください",
+      "configSaved": "プロキシ設定を保存しました",
+      "configSaveFailed": "設定の保存に失敗しました",
+      "restartRequired": "アドレスまたはポートの変更を反映するにはプロキシサービスの再起動が必要です"
+    },
+    "switchFailed": "切り替えに失敗しました: {{error}}",
+    "takeover": {
+      "hint": "テイクオーバーするアプリを選択します。有効にすると、そのアプリのリクエストはローカルプロキシ経由で転送されます",
+      "enabled": "{{app}} テイクオーバー有効",
+      "disabled": "{{app}} テイクオーバー無効",
+      "failed": "テイクオーバーの切り替えに失敗しました",
+      "tooltip": {
+        "active": "{{appLabel}} がインターセプト中 - {{address}}:{{port}}\nホットスイッチングのためプロバイダを切り替え",
+        "broken": "{{appLabel}} がインターセプト中ですが、プロキシサービスが実行されていません",
+        "inactive": "{{appLabel}} のライブ設定をインターセプトしてリクエストをローカルプロキシ経由でルーティング"
+      }
+    },
+    "failover": {
+      "proxyRequired": "フェイルオーバーを設定するには、プロキシサービスを先に起動する必要があります",
+      "autoSwitch": "自動フェイルオーバー",
+      "autoSwitchDescription": "有効にするとキューの P1 に即時切り替え、リクエスト失敗時はキュー内の次のプロバイダーを自動で試行します"
+    },
+    "failoverQueue": {
+      "title": "フェイルオーバーキュー",
+      "description": "各アプリのプロバイダーのフェイルオーバー順序を管理します",
+      "info": "自動フェイルオーバーを有効にすると、キューの優先度順（P1 優先）でプロバイダーを使用します。失敗時はキュー内の次のプロバイダーを順に試行します。",
+      "selectProvider": "キューに追加するプロバイダーを選択",
+      "noAvailableProviders": "追加できるプロバイダーがありません",
+      "empty": "フェイルオーバーキューが空です。自動フェイルオーバーを有効にするにはプロバイダーを追加してください。",
+      "orderHint": "キューの順序はホームのプロバイダー一覧の順序と一致します。ホームでドラッグして順序を変更できます。",
+      "dragHint": "ドラッグでフェイルオーバー順序を調整します。番号が小さいほど優先度が高くなります。",
+      "toggleEnabled": "有効/無効",
+      "addSuccess": "フェイルオーバーキューに追加しました",
+      "addFailed": "追加に失敗しました",
+      "removeSuccess": "フェイルオーバーキューから削除しました",
+      "removeFailed": "削除に失敗しました",
+      "reorderSuccess": "キュー順序を更新しました",
+      "reorderFailed": "順序の更新に失敗しました",
+      "toggleFailed": "状態の更新に失敗しました"
+    },
+    "autoFailover": {
+      "info": "フェイルオーバーキューに複数のプロバイダーが設定されている場合、リクエストが失敗すると優先度順に試行します。プロバイダーが連続失敗のしきい値に達すると、サーキットブレーカーが開き、一時的にスキップされます。",
+      "configSaved": "自動フェイルオーバー設定を保存しました",
+      "configSaveFailed": "保存に失敗しました",
+      "validationFailed": "以下のフィールドが有効範囲外です: {{fields}}",
+      "retrySettings": "リトライとタイムアウト設定",
+      "failureThreshold": "失敗しきい値",
+      "failureThresholdHint": "この回数連続で失敗するとサーキットブレーカーが開きます（推奨: 3-10）",
+      "timeout": "回復待ち時間（秒）",
+      "timeoutHint": "サーキットが開いた後、回復を試みるまでの待ち時間（推奨: 30-120）",
+      "circuitBreakerSettings": "サーキットブレーカー設定",
+      "successThreshold": "回復成功しきい値",
+      "successThresholdHint": "半開状態でこの回数成功するとサーキットブレーカーが閉じます",
+      "errorRate": "エラー率しきい値 (%)",
+      "errorRateHint": "この値を超えるとサーキットブレーカーが開きます",
+      "minRequests": "最小リクエスト数",
+      "minRequestsHint": "エラー率を計算する前の最小リクエスト数",
+      "explanationTitle": "仕組み",
+      "failureThresholdLabel": "失敗しきい値",
+      "failureThresholdExplain": "この回数連続で失敗すると、サーキットブレーカーが開き、プロバイダーは一時的に利用不可になります",
+      "timeoutLabel": "回復待ち時間",
+      "timeoutExplain": "サーキットが開いた後、半開状態を試みるまでの待ち時間",
+      "successThresholdLabel": "回復成功しきい値",
+      "successThresholdExplain": "半開状態でこの回数成功するとサーキットブレーカーが閉じ、プロバイダーが再び利用可能になります",
+      "errorRateLabel": "エラー率しきい値",
+      "errorRateExplain": "失敗しきい値に達していなくても、エラー率がこの値を超えるとサーキットブレーカーが開きます",
+      "maxRetries": "最大リトライ回数",
+      "timeoutSettings": "タイムアウト設定",
+      "streamingFirstByte": "ストリーミング最初のバイトタイムアウト",
+      "streamingIdle": "ストリーミングアイドルタイムアウト",
+      "nonStreaming": "非ストリーミングタイムアウト",
+      "maxRetriesHint": "リクエスト失敗時のリトライ回数（0-10）",
+      "streamingFirstByteHint": "最初のデータチャンクを待つ最大時間、範囲 1-120 秒、デフォルト 60 秒",
+      "streamingIdleHint": "データチャンク間の最大間隔、範囲 60-600 秒、0 で無効化（途中停止を防止）",
+      "nonStreamingHint": "非ストリーミングリクエストの合計タイムアウト、範囲 60-1200 秒、デフォルト 600 秒（10 分）"
+    },
+    "logging": {
+      "enabled": "ログ記録が有効になりました",
+      "disabled": "ログ記録が無効になりました",
+      "failed": "ログ状態の切り替えに失敗しました"
+    },
+    "server": {
+      "started": "プロキシサービスが開始されました - {{address}}:{{port}}",
+      "startFailed": "プロキシサービスの開始に失敗しました: {{detail}}"
+    },
+    "stoppedWithRestore": "プロキシサービスが停止し、すべてのテイクオーバー設定が復元されました",
+    "stopWithRestoreFailed": "停止に失敗しました: {{detail}}"
+  }
+}

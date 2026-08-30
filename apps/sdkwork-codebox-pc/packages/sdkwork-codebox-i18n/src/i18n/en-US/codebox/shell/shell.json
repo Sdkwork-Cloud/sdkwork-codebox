@@ -1,0 +1,103 @@
+{
+  "shell": {
+    "domain": {
+      "products": "Products",
+      "productsDescription": "Manage providers, sessions, and workspace context.",
+      "productsHint": "Providers / Sessions / Workspace",
+      "runtime": "Runtime",
+      "runtimeDescription": "Control proxy entry, takeover, failover, usage, and diagnostics.",
+      "runtimeHint": "Proxy / Takeover / Failover / Usage / Diagnostics",
+      "extensions": "Extensions",
+      "extensionsDescription": "Organize Prompts, Skills, and MCP capabilities in one place.",
+      "extensionsHint": "Prompts / Skills / MCP / Agents / Universal",
+      "controlCenter": "Control Center",
+      "controlCenterDescription": "Maintain appearance, directories, sync, and desktop-level settings.",
+      "controlCenterHint": "Appearance / General / Data / Directories / About"
+    },
+    "runtime": {
+      "proxy": "Proxy",
+      "proxyDescription": "Maintain proxy entry points, listen address, and base runtime parameters.",
+      "proxyHint": "Proxy entry and base runtime parameters.",
+      "takeover": "Takeover",
+      "takeoverDescription": "Control traffic takeover per product so the proxy can own requests based on your runtime policy.",
+      "takeoverHint": "Control proxy takeover per product.",
+      "failover": "Failover",
+      "failoverDescription": "Maintain automatic failover and circuit-breaker recovery by queue and priority.",
+      "failoverHint": "Failover queue and switching policy.",
+      "usage": "Usage",
+      "usageDescription": "Review runtime usage across providers, models, and logs.",
+      "usageHint": "Runtime usage and log metrics.",
+      "diagnostics": "Diagnostics",
+      "diagnosticsDescription": "Centralize model testing, log level, and local runtime diagnostics.",
+      "diagnosticsHint": "Model checks and log configuration.",
+      "console": {
+        "overviewTitle": "Proxy, Takeover & Failover",
+        "overviewDescription": "This area centralizes runtime control surfaces while keeping the original behavior intact inside the Runtime domain.",
+        "overviewHelper": "Runtime control keeps the same capabilities, but is now reorganized into a clearer Runtime structure.",
+        "takeoverTitle": "Takeover Control",
+        "takeoverDescription": "Focus on per-product takeover switches so each product joins the proxy flow according to your runtime policy.",
+        "takeoverHelper": "This view is focused on takeover. Expand the Proxy panel to enable or disable takeover per product.",
+        "failoverTitle": "Failover",
+        "failoverDescription": "Focus on automatic failover queues, priority, and circuit-breaker recovery so the proxy chain can degrade gracefully.",
+        "failoverHelper": "This view is focused on failover. Inspect queues, priority, and switching policy directly here.",
+        "usageTitle": "Runtime Usage",
+        "usageDescription": "Inspect actual consumption across logs, providers, and models in the current workspace.",
+        "diagnosticsModelTitle": "Model Checks",
+        "diagnosticsModelDescription": "Maintain streaming check models, timeout strategy, and test prompts.",
+        "diagnosticsLogTitle": "Log Level",
+        "diagnosticsLogDescription": "Configure local log output levels for troubleshooting runtime and connection issues.",
+        "proxyCardTitle": "Proxy Runtime",
+        "proxyCardOnline": "Service is running",
+        "proxyCardStandby": "Currently in standby",
+        "takeoverCardTitle": "Takeover",
+        "takeoverCardActive": "{{app}} is currently taking over traffic",
+        "takeoverCardIdle": "{{app}} is not taking over traffic",
+        "activeTargetTitle": "Active Target",
+        "activeTargetEmpty": "No active target locked yet"
+      }
+    },
+    "products": {
+      "providersHint": "Switch, sort, and maintain providers for the current product.",
+      "sessionsHint": "Inspect session history and restore context.",
+      "workspaceHint": "Maintain workspace files and memory assets.",
+      "openclawEnvHint": "Environment variables and keys.",
+      "openclawToolsHint": "Tool permissions and execution scope.",
+      "openclawAgentsHint": "Default models and runtime parameters."
+    },
+    "extensions": {
+      "promptsHint": "High-frequency prompts and templates.",
+      "skillsHint": "Install, import, and discover skills.",
+      "mcpHint": "MCP services and connection settings.",
+      "agentsHint": "Agentic workflows and automation entry points.",
+      "universalHint": "A shared provider center across products."
+    },
+    "controlCenter": {
+      "appearanceDescription": "Adjust theme mode, palette, density, and motion preferences.",
+      "generalDescription": "Manage language, window behavior, product visibility, and desktop integration.",
+      "dataSyncDescription": "Manage import/export, backup strategy, and WebDAV sync.",
+      "directoriesDescription": "Maintain the app config directory and product-level overrides.",
+      "advancedDescription": "Manage terminal, skill sync, and other advanced desktop preferences.",
+      "aboutDescription": "View version, environment, and desktop runtime information."
+    },
+    "sidebar": {
+      "brandEyebrow": "Desktop Console",
+      "runtimeTakeover": "Proxy is running and the current product is already taken over",
+      "runtimeOnline": "Proxy is running and waiting for product takeover",
+      "runtimeStandby": "Proxy is on standby and the current workspace can be edited directly",
+      "statusOnline": "Online",
+      "statusStandby": "Standby",
+      "currentProduct": "Current Product",
+      "products": "Products",
+      "domainNav": "Domains",
+      "controlCenter": "Control Center",
+      "controlCenterHint": "Theme, directories, sync, and app-level settings",
+      "aboutHint": "Version, environment details, and update status"
+    },
+    "header": {
+      "activeProvider": "Active Target",
+      "takeoverActive": "Takeover active",
+      "proxyOnline": "Proxy online",
+      "proxyStandby": "Proxy standby"
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "shell": {
+    "domain": {
+      "products": "製品",
+      "productsDescription": "プロバイダー、セッション、ワークスペースの文脈を管理します。",
+      "productsHint": "Providers / Sessions / Workspace",
+      "runtime": "Runtime",
+      "runtimeDescription": "プロキシ入口、Takeover、Failover、利用状況、診断を管理します。",
+      "runtimeHint": "Proxy / Takeover / Failover / Usage / Diagnostics",
+      "extensions": "Extensions",
+      "extensionsDescription": "Prompts、Skills、MCP を一元管理します。",
+      "extensionsHint": "Prompts / Skills / MCP / Agents / Universal",
+      "controlCenter": "コントロールセンター",
+      "controlCenterDescription": "外観、ディレクトリ、同期、デスクトップ設定を管理します。",
+      "controlCenterHint": "Appearance / General / Data / Directories / About"
+    },
+    "runtime": {
+      "proxy": "Proxy",
+      "proxyDescription": "プロキシ入口、待受アドレス、基本実行パラメータを一元管理します。",
+      "proxyHint": "プロキシ入口と基本パラメータ。",
+      "takeover": "Takeover",
+      "takeoverDescription": "製品ごとにトラフィック引き継ぎを制御し、実行ポリシーに沿ってリクエストを処理します。",
+      "takeoverHint": "製品ごとのプロキシ引き継ぎ制御。",
+      "failover": "Failover",
+      "failoverDescription": "キューと優先度に基づく自動フェイルオーバーと復旧戦略を管理します。",
+      "failoverHint": "フェイルオーバーキューと切替ポリシー。",
+      "usage": "Usage",
+      "usageDescription": "プロバイダー、モデル、ログの観点から利用状況を確認します。",
+      "usageHint": "利用状況とログ指標。",
+      "diagnostics": "診断",
+      "diagnosticsDescription": "モデル検証、ログレベル、ローカル診断を集約します。",
+      "diagnosticsHint": "モデル検査とログ設定。",
+      "console": {
+        "overviewTitle": "Proxy・Takeover・Failover",
+        "overviewDescription": "この領域では Runtime ドメイン内に実行制御を集約しつつ、元の機能挙動はそのまま維持します。",
+        "overviewHelper": "実行制御の機能は維持したまま、より明確な Runtime 構造へ再編しています。",
+        "takeoverTitle": "Takeover 制御",
+        "takeoverDescription": "製品ごとの Takeover スイッチに集中し、実行ポリシーに沿って各製品をプロキシに接続します。",
+        "takeoverHelper": "このビューは Takeover にフォーカスしています。Proxy パネルを開いて製品ごとに切り替えられます。",
+        "failoverTitle": "Failover",
+        "failoverDescription": "自動フェイルオーバーキュー、優先度、サーキット回復戦略に集中し、安定した劣化動作を確保します。",
+        "failoverHelper": "このビューは Failover にフォーカスしています。キュー、優先度、切替設定をそのまま確認できます。",
+        "usageTitle": "Runtime 使用量",
+        "usageDescription": "現在のワークスペースにおける実際の消費量を、ログ・プロバイダー・モデルの観点から確認します。",
+        "diagnosticsModelTitle": "モデル検査",
+        "diagnosticsModelDescription": "ストリーミング検査モデル、タイムアウト戦略、テスト用プロンプトを管理します。",
+        "diagnosticsLogTitle": "ログレベル",
+        "diagnosticsLogDescription": "接続や実行時の問題調査に向けてローカルログ出力レベルを設定します。",
+        "proxyCardTitle": "Proxy Runtime",
+        "proxyCardOnline": "サービスは起動中です",
+        "proxyCardStandby": "現在は待機状態です",
+        "takeoverCardTitle": "Takeover",
+        "takeoverCardActive": "{{app}} は現在トラフィックを引き継いでいます",
+        "takeoverCardIdle": "{{app}} は現在トラフィックを引き継いでいません",
+        "activeTargetTitle": "Active Target",
+        "activeTargetEmpty": "まだアクティブターゲットは固定されていません"
+      }
+    },
+    "products": {
+      "providersHint": "現在の製品向けプロバイダーを切替・整列・管理します。",
+      "sessionsHint": "セッション履歴を確認し、文脈を復元します。",
+      "workspaceHint": "ワークスペースのファイルと記憶資産を管理します。",
+      "openclawEnvHint": "環境変数とキー。",
+      "openclawToolsHint": "ツール権限と実行範囲。",
+      "openclawAgentsHint": "デフォルトモデルと実行パラメータ。"
+    },
+    "extensions": {
+      "promptsHint": "高頻度プロンプトとテンプレート。",
+      "skillsHint": "Skill のインストール、インポート、探索。",
+      "mcpHint": "MCP サービスと接続設定。",
+      "agentsHint": "エージェント型ワークフローと自動化の入口。",
+      "universalHint": "製品をまたいで共有される統合プロバイダーセンター。"
+    },
+    "controlCenter": {
+      "appearanceDescription": "テーマ、色、密度、動きの設定を調整します。",
+      "generalDescription": "言語、ウィンドウ動作、製品表示、デスクトップ連携を管理します。",
+      "dataSyncDescription": "インポート/エクスポート、バックアップ、WebDAV 同期を管理します。",
+      "directoriesDescription": "アプリ設定ディレクトリと製品別上書きを管理します。",
+      "advancedDescription": "ターミナル、Skill 同期など高度な設定を管理します。",
+      "aboutDescription": "バージョン、環境、デスクトップ実行情報を確認します。"
+    },
+    "sidebar": {
+      "brandEyebrow": "Desktop Console",
+      "runtimeTakeover": "プロキシ稼働中。現在の製品はすでに引き継がれています",
+      "runtimeOnline": "プロキシ稼働中。製品の引き継ぎ待ちです",
+      "runtimeStandby": "プロキシ待機中。現在のワークスペースを直接編集できます",
+      "statusOnline": "Online",
+      "statusStandby": "Standby",
+      "currentProduct": "現在の製品",
+      "products": "Products",
+      "domainNav": "ドメイン",
+      "controlCenter": "コントロールセンター",
+      "controlCenterHint": "テーマ、ディレクトリ、同期、アプリ設定",
+      "aboutHint": "バージョン、環境情報、更新状態"
+    },
+    "header": {
+      "activeProvider": "現在のターゲット",
+      "takeoverActive": "Takeover active",
+      "proxyOnline": "Proxy online",
+      "proxyStandby": "Proxy standby"
+    }
+  }
+}

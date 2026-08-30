@@ -1,0 +1,8 @@
+{
+  "providerPreset": {
+    "label": "Provider Preset",
+    "custom": "Custom Configuration",
+    "other": "Other",
+    "hint": "You can continue to adjust the fields below after selecting a preset."
+  }
+}

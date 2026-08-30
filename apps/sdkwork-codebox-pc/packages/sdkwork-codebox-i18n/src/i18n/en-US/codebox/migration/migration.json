@@ -1,0 +1,8 @@
+{
+  "migration": {
+    "success": "Configuration migrated successfully",
+    "skillsSuccess": "Automatically imported {{count}} skill(s) into unified management",
+    "skillsFailed": "Failed to auto import skills",
+    "skillsFailedDescription": "Open the Skills page and click \"Import Existing\" to import manually (or restart and try again)."
+  }
+}

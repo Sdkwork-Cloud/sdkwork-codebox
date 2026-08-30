@@ -1,0 +1,28 @@
+{
+  "endpointTest": {
+    "title": "API Endpoint Management",
+    "endpoints": "endpoints",
+    "autoSelect": "Auto Select",
+    "testSpeed": "Test",
+    "testing": "Testing",
+    "addEndpointPlaceholder": "https://api.example.com",
+    "done": "Done",
+    "noEndpoints": "No endpoints",
+    "failed": "Failed",
+    "enterValidUrl": "Please enter a valid URL",
+    "invalidUrlFormat": "Invalid URL format",
+    "onlyHttps": "Only HTTP/HTTPS supported",
+    "urlExists": "This URL already exists",
+    "saveFailed": "Save failed, please try again",
+    "loadEndpointsFailed": "Failed to load custom endpoints:",
+    "addEndpointFailed": "Failed to add custom endpoint:",
+    "removeEndpointFailed": "Failed to remove custom endpoint:",
+    "removeFailed": "Remove failed: {{error}}",
+    "updateLastUsedFailed": "Failed to update endpoint last used time",
+    "pleaseAddEndpoint": "Please add an endpoint first",
+    "testUnavailable": "Speed test unavailable",
+    "noResult": "No result returned",
+    "testFailed": "Speed test failed: {{error}}",
+    "empty": "No endpoints"
+  }
+}

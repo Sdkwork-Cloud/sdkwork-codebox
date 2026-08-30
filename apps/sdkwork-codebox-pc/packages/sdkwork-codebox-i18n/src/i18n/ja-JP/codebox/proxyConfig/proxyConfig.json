@@ -1,0 +1,18 @@
+{
+  "proxyConfig": {
+    "proxyEnabled": "プロキシ有効",
+    "appTakeover": "プロキシ有効",
+    "perAppConfig": "アプリ別設定",
+    "circuitBreaker": "サーキットブレーカー",
+    "circuitBreakerSettings": "サーキットブレーカー設定",
+    "failureThreshold": "失敗閾値",
+    "successThreshold": "回復閾値",
+    "recoveryTimeout": "回復待機時間",
+    "errorRateThreshold": "エラー率閾値",
+    "minRequests": "最小リクエスト数",
+    "timeoutConfig": "タイムアウト設定",
+    "streamingFirstByte": "ストリーミング初回バイトタイムアウト",
+    "streamingIdle": "ストリーミングアイドルタイムアウト",
+    "nonStreaming": "非ストリーミングタイムアウト"
+  }
+}

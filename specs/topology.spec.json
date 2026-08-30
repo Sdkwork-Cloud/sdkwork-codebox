@@ -51,7 +51,8 @@
     "environment": "SDKWORK_CODEBOX_ENVIRONMENT",
     "profileId": "SDKWORK_CODEBOX_PROFILE_ID",
     "clientDeploymentProfile": "VITE_SDKWORK_CODEBOX_DEPLOYMENT_PROFILE",
-    "standaloneGatewayBind": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND"
+    "standaloneGatewayBind": "SDKWORK_CODEBOX_APPLICATION_PUBLIC_INGRESS_BIND",
+    "apiGatewayBaseUrl": "SDKWORK_CODEBOX_PLATFORM_API_GATEWAY_HTTP_URL"
   },
   "surfaces": {
     "application.public-ingress": {
@@ -114,7 +115,8 @@
         ],
         "healthSurfaces": [
           "application.public-ingress"
-        ]
+        ],
+        "browserDeliveries": []
       },
       "cloud.development": {
         "processes": [
@@ -138,7 +140,8 @@
       },
       "standalone.production": {
         "processes": [],
-        "healthSurfaces": []
+        "healthSurfaces": [],
+        "browserDeliveries": []
       },
       "cloud.production": {
         "processes": [],
@@ -173,11 +176,13 @@
         ],
         "healthSurfaces": [
           "application.public-ingress"
-        ]
+        ],
+        "browserDeliveries": []
       },
       "standalone.staging": {
         "processes": [],
-        "healthSurfaces": []
+        "healthSurfaces": [],
+        "browserDeliveries": []
       },
       "cloud.test": {
         "processes": [
@@ -205,7 +210,8 @@
       },
       "standalone.demo": {
         "processes": [],
-        "healthSurfaces": []
+        "healthSurfaces": [],
+        "browserDeliveries": []
       },
       "cloud.demo": {
         "processes": [],
@@ -310,6 +316,9 @@
         "codebox.86offer.com",
         "codebox.86offer.cn"
       ]
+    },
+    "platform.api-gateway": {
+      "httpHost": "api.sdkwork.com"
     }
   }
 }

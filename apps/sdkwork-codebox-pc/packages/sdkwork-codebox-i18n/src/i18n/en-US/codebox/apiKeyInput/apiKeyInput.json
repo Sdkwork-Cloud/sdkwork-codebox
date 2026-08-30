@@ -1,0 +1,7 @@
+{
+  "apiKeyInput": {
+    "placeholder": "Enter API Key",
+    "show": "Show API Key",
+    "hide": "Hide API Key"
+  }
+}
