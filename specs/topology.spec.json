@@ -12,7 +12,8 @@
         "development",
         "test",
         "staging",
-        "production"
+        "production",
+        "demo"
       ]
     },
     "connectivityPlane": {
@@ -40,8 +41,10 @@
     "cloud.production": "etc/topology/cloud.production.env",
     "standalone.test": "etc/topology/standalone.test.env",
     "standalone.staging": "etc/topology/standalone.staging.env",
+    "standalone.demo": "etc/topology/standalone.demo.env",
     "cloud.test": "etc/topology/cloud.test.env",
-    "cloud.staging": "etc/topology/cloud.staging.env"
+    "cloud.staging": "etc/topology/cloud.staging.env",
+    "cloud.demo": "etc/topology/cloud.demo.env"
   },
   "envKeys": {
     "deploymentProfile": "SDKWORK_CODEBOX_DEPLOYMENT_PROFILE",
@@ -199,6 +202,14 @@
       "cloud.staging": {
         "processes": [],
         "healthSurfaces": []
+      },
+      "standalone.demo": {
+        "processes": [],
+        "healthSurfaces": []
+      },
+      "cloud.demo": {
+        "processes": [],
+        "healthSurfaces": []
       }
     }
   },
@@ -262,6 +273,24 @@
             "codebox-staging.offer86.cn",
             "codebox-staging.86offer.com",
             "codebox-staging.86offer.cn"
+          ]
+        },
+        "demo": {
+          "httpHosts": [
+            "codebox-demo.sdkwork.com",
+            "codebox-demo.birdcoder.com",
+            "codebox-demo.dtupay.com",
+            "codebox-demo.sdkwork.cn",
+            "codebox-demo.birdcoder.cn",
+            "codebox-demo.dtupay.cn",
+            "codebox-demo.skubc.com",
+            "codebox-demo.skubc.cn",
+            "codebox-demo.zowalk.com",
+            "codebox-demo.zowalk.cn",
+            "codebox-demo.offer86.com",
+            "codebox-demo.offer86.cn",
+            "codebox-demo.86offer.com",
+            "codebox-demo.86offer.cn"
           ]
         }
       },
