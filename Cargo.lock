@@ -4883,6 +4883,7 @@ version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
  "sdkwork-web-bootstrap",
+ "sdkwork-web-core",
  "tokio",
 ]
 
@@ -4892,6 +4893,7 @@ version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
  "sdkwork-api-codebox-assembly",
+ "sdkwork-web-bootstrap",
  "tokio",
 ]
 
